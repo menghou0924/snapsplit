@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="DrawerTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:textSize">18sp</item><!-- text size in menu-->
+        <item name="android:listPreferredItemHeightSmall">50dp</item><!-- item size in menu-->
+    </style>
 </resources>
