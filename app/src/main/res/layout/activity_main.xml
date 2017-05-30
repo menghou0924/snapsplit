@@ -16,17 +16,24 @@
         android:visibility="visible"
         tools:context="com.rnd.snapsplit.MainActivity">
 
-        <include layout="@layout/tool_bar" />
+        <include layout="@layout/tool_bar_hamburger"
+            />
+
+        <include layout="@layout/tool_bar_process"
+            android:visibility="invisible"
+            />
 
         <FrameLayout
-            android:id="@+id/camera_fragment"
+            android:id="@+id/fragment_holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <FrameLayout
             android:id="@+id/fl_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+        </FrameLayout>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView

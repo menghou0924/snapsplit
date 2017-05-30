@@ -3,4 +3,27 @@
     <string name="take_picture">Take picture</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="payment_requests_will_be_sent_to">Payment Requests will be sent to</string>
+    <string name="send_requests">Send Requests</string>
+    <string name="shop_name">Starbucks</string>
+    <string name="total_amount">Total Amount: $38</string>
+    <string name="friend_name_1">Bryant Ryan</string>
+    <string name="friend_name_2">Roman Sherman</string>
+    <string name="friend_name_3">Herman Nash</string>
+    <string name="phone_number_1">6990 4671</string>
+    <string name="phone_number_2">7559 0909</string>
+    <string name="phone_number_3">9340 3878</string>
+    <string name="split_1">$9.50</string>
+    <string name="split_2">$9.50</string>
+    <string name="split_3">$9.50</string>
+    <string name="split_with">Split with&#8230;</string>
+    <string name="confirm">Confirmation</string>
+    <string name="requests">Requests</string>
+    <string name="selected_friends">Selected: </string>
+    <string name="selected_friends_no">3</string>
+    <string name="each">Each: </string>
+    <string name="each_price">$9.50</string>
+    <string name="search">\u0020\u0020Search &#8230;</string>
+    <string name="frequently_used">Frequently Used</string>
+    <string name="others">Others</string>
 </resources>

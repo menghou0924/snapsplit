@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // add toolbar and drawer
-        toolBar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the tool_bar object
+        toolBar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the tool_bar_hamburger object
         setSupportActionBar(toolBar);                   // Setting navigate_drawer as the ActionBar with setSupportActionBar() call
 
         mDrawer = (DrawerLayout) findViewById(R.id.root_layout);
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.camera_fragment, CameraFragment.newInstance(), "CameraFragment")
+                    .add(R.id.fragment_holder, CameraFragment.newInstance(), "CameraFragment")
                     .commit();
         }
 
