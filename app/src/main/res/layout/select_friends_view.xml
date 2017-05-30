@@ -176,7 +176,7 @@
             android:layout_weight="1"
             android:button="@null"
             android:checked="true"
-            android:background="@drawable/receipt_icon"
+            android:background="@drawable/damian"
             android:id="@+id/radio_1"
             android:scaleX="0.7"
             android:scaleY="0.7"
