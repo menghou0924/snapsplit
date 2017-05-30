@@ -13,4 +13,7 @@
         <item name="android:textSize">18sp</item><!-- text size in menu-->
         <item name="android:listPreferredItemHeightSmall">50dp</item><!-- item size in menu-->
     </style>
+
+    <item name="visible" type="id"/>
+    <item name="masked" type="id"/>
 </resources>
