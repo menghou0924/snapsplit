@@ -1,14 +1,17 @@
 package com.rnd.snapsplit;
 
+import java.io.Serializable;
+
 /**
  * Created by Damian on 29/5/2017.
  */
 
-public class Friend {
+public class Friend implements Serializable {
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String accountNumber;
+    private float amountToPay = 0f;
     private int displayPic;
 
     @Override
@@ -43,5 +46,9 @@ public class Friend {
     public String getAccountNo(){
         return accountNumber;
     }
+
+    public float getAmountToPay() { return amountToPay; }
+
+    public void setAmountToPay(float amt) { this.amountToPay = amt;}
 
 }

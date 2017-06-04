@@ -7,8 +7,8 @@ import java.io.Serializable;
  */
 
 public class Transaction implements Serializable {
-    private String transactionName;
-    private float transactionAmount;
+    private String transactionName = "";
+    private float transactionAmount = 0f;
 
 //    @Override
 //    public boolean equals(Object obj) {

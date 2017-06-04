@@ -42,6 +42,7 @@ public class FriendListAdapter extends ArrayAdapter<Friend>{
             holder.textView1 = (TextView)row.findViewById(R.id.firstName);
             holder.textView2 = (TextView)row.findViewById(R.id.lastName);
             holder.textView3 = (TextView)row.findViewById(R.id.phoneNumber);
+            holder.textView4 = (TextView)row.findViewById(R.id.splitAmount);
             holder.imageView1 = (ImageView)row.findViewById(R.id.friendIcon);
 
             row.setTag(holder);
@@ -56,6 +57,7 @@ public class FriendListAdapter extends ArrayAdapter<Friend>{
         holder.textView1.setText(friend.getFirstName());
         holder.textView2.setText(friend.getLastName());
         holder.textView3.setText(friend.getPhoneNumber());
+        holder.textView4.setText("HKD" + String.format("%.2f",friend.getAmountToPay()));
         holder.imageView1.setImageResource(friend.getDisplayPic());
 
         return row;
@@ -66,6 +68,7 @@ public class FriendListAdapter extends ArrayAdapter<Friend>{
         TextView textView1;
         TextView textView2;
         TextView textView3;
+        TextView textView4;
         ImageView imageView1;
     }
 
