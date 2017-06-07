@@ -17,6 +17,7 @@
         tools:context="com.rnd.snapsplit.MainActivity">
 
         <include layout="@layout/tool_bar_hamburger"
+            android:visibility="invisible"
             />
 
         <include layout="@layout/tool_bar_process"

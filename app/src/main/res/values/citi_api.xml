@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Citi API String Values-->
+    <!--Authorization-->
+    <string name="API_RETRIEVE_ACCESS_TOKEN">API_RETRIEVE_ACCESS_TOKEN</string>
+    <string name="API_RETRIEVE_ACCESS_TOKEN_KEY_ACCESS_CODE">access_code</string>
+    <string name="API_RETRIEVE_ACCESS_TOKEN_KEY_REFRESH_CODE">refresh_code</string>
+
+    <string name="API_REFRESH_ACCESS_TOKEN">API_REFRESH_ACCESS_TOKEN</string>
+    <string name="API_REFRESH_ACCESS_TOKEN_KEY_ACCESS_CODE">access_code</string>
+    <string name="API_REFRESH_ACCESS_TOKEN_KEY_REFRESH_CODE">refresh_code</string>
+    <!--Accounts-->
+    <string name="API_REFRESH_ACCOUNT_SUMMARY">API_REFRESH_ACCOUNT_SUMMARY</string>
+
+
+
+</resources>

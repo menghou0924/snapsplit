@@ -71,7 +71,6 @@
             android:layout_alignBottom="@+id/text_selected_friends"
             android:layout_alignParentEnd="true"
             android:paddingTop="18dp"
-            android:text="@string/selected_friends_no"
             android:textColor="@color/colorAccent"
             android:textSize="15sp" />
 
@@ -93,7 +92,6 @@
             android:layout_height="40dp"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/text_selected_friends"
-            android:text="@string/each_price"
             android:textAlignment="viewStart"
             android:textColor="@color/colorAccent"
             android:textSize="15sp" />
@@ -210,14 +208,12 @@
             android:layout_height="70dp"
             android:layout_alignParentEnd="true"
             android:paddingTop="26dp"
-            android:text="@string/split_1"
             android:textColor="@color/colorAccent"
             android:textSize="15sp" />
 
         <RadioButton
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_weight="1"
             android:button="@null"
             android:checked="true"
             android:background="@drawable/receipt_icon"
@@ -255,7 +251,6 @@
             android:layout_height="70dp"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/text_friend_1_split"
-            android:text="@string/split_2"
             android:paddingTop="26dp"
             android:textColor="@color/colorAccent" />
 
@@ -301,7 +296,6 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:paddingTop="26dp"
-            android:text="@string/split_3"
             android:textColor="@color/colorAccent" />
 
     </RelativeLayout>
@@ -388,7 +382,6 @@
             android:layout_height="70dp"
             android:layout_alignParentEnd="true"
             android:paddingTop="26dp"
-            android:text="@string/split_4"
             android:textColor="@color/colorAccent"
             android:textSize="15sp" />
 
@@ -478,7 +471,6 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:paddingTop="26dp"
-            android:text="@string/split_6"
             android:textColor="@color/colorAccent" />
 
     </RelativeLayout>

@@ -1,8 +1,17 @@
 <resources>
+    <!--Login View-->
     <string name="app_name">SnapSplit</string>
-    <string name="take_picture">Take picture</string>
+    <string name="login">Login to your Citi Bank account</string>
+    <string name="details">Get details</string>
+    <string name="tagline">Make bills splitting simple</string>
+    <string name="forget_password">Forget Password?</string>
+    <!--Navigation Drawer-->
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <!--Camera View-->
+    <string name="take_picture">Take picture</string>
+    <!--Select Friends View-->
+    <string name="split_with">Split with&#8230;</string>
     <string name="payment_requests_will_be_sent_to">Payment Requests will be sent to</string>
     <string name="send_requests">Send Requests</string>
     <string name="shop_name">Starbucks</string>
@@ -19,19 +28,11 @@
     <string name="phone_number_4">9422 7284</string>
     <string name="phone_number_5">9078 4420</string>
     <string name="phone_number_6">5773 0936</string>
-    <string name="split_1">$9.50</string>
-    <string name="split_2"></string>
-    <string name="split_3">$9.50</string>
-    <string name="split_4"></string>
-    <string name="split_5"></string>
-    <string name="split_6">$9.50</string>
-    <string name="split_with">Split with&#8230;</string>
+    <!--Confirmation View-->
     <string name="confirm">Confirmation</string>
     <string name="requests">Requests</string>
     <string name="selected_friends">Selected: </string>
-    <string name="selected_friends_no">3</string>
     <string name="each">Each: </string>
-    <string name="each_price">$9.50</string>
     <string name="search">\u0020\u0020Search &#8230;</string>
     <string name="frequently_used">Frequently Used</string>
     <string name="others">Others</string>

@@ -13,7 +13,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/logo_outline_white"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:id="@+id/imageView2" />

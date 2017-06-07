@@ -121,7 +121,6 @@
             android:layout_height="70dp"
             android:layout_alignParentEnd="true"
             android:paddingTop="26dp"
-            android:text="@string/split_1"
             android:textColor="@color/colorAccent"
             android:textSize="15sp" />
 
@@ -163,7 +162,6 @@
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/text_friend_1_split"
             android:paddingTop="26dp"
-            android:text="@string/split_3"
             android:textColor="@color/colorAccent" />
 
         <ImageView
@@ -204,7 +202,6 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:paddingTop="26dp"
-            android:text="@string/split_6"
             android:textColor="@color/colorAccent" />
 
     </RelativeLayout>

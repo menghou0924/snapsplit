@@ -17,8 +17,8 @@ import android.view.MenuItem;
 import android.content.res.Configuration;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
 
+    private static final String TAG = "MainActivity";
     private Toolbar toolBar;
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_holder, SelectFriendsFragment.newInstance(), "CameraFragment")
+                    .add(R.id.fragment_holder, CameraFragment.newInstance(), "CameraFragment")
                     .commit();
         }
 
