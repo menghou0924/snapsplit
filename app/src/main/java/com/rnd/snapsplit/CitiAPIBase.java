@@ -7,6 +7,7 @@ import android.util.Log;
 import android.net.Uri;
 
 import org.apache.http.auth.AUTH;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +32,7 @@ public class CitiAPIBase {
     // Class members
     private static final String TAG = "CitiAPIBase";
     private static final String BASE_URL = "https://sandbox.apihub.citi.com/gcb/api";
+    private static final int SUCCESSFUL_RESPONSE_CODE = 200;
     private StorageManager storageManager;
     private Context context;
     // Authorization members
@@ -77,13 +79,20 @@ public class CitiAPIBase {
     private static final String MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER_URL = BASE_URL + "/v1/moneyMovement/internalDomesticTransfers/preprocess";
     private static final String MONEY_MOVEMENT_CONFIRM_INTERNAL_TRANSFER_URL = BASE_URL + "/v1/moneyMovement/internalDomesticTransfers";
     private static final String MONEY_MOVEMENT_EXTERNAL_SOURCE_ACCOUNT_URL = BASE_URL + "/v1/moneyMovement/externalDomesticTransfers/payees/sourceAccounts%s";
-    private static final String MONEY_MOVEMENT_CREATE_EXTERNAL_TRANSFER_URL = BASE_URL + "/v1/moneyMovement/externalDomesticTransfers/preprocess";
+    private static final String MONEY_MOVEMENT_CREATE_EXTERNAL_TRANSFER_URL = BASE_URL + "/v1/moneyMovement/externalDomesticTransfer/preprocess";
     private static final String MONEY_MOVEMENT_CONFIRM_EXTERNAL_TRANSFER_URL = BASE_URL + "/v1/moneyMovement/externalDomesticTransfers";
     private static final String MONEY_MOVEMENT_BILL_PAYMENT_URL = BASE_URL + "/v1/moneyMovement/billPayments/payees/sourceAccounts%s";
     private static final String MONEY_MOVEMENT_CREATE_BILL_PAYMENT_URL = BASE_URL + "/v1/moneyMovement/billPayments/preprocess";
     private static final String MONEY_MOVEMENT_CONFIRM_BILL_PAYMENTR_URL = BASE_URL + "/v1/moneyMovement/billPayments";
-
     // Pay with points members
+    private static final String DATA_PAY_WITH_POINTS_ENROLL = "DATA_PAY_WITH_POINTS_ENROLL";
+    private static final String DATA_PAY_WITH_POINTS_TOKEN_ACTIVATION = "DATA_PAY_WITH_POINTS_TOKEN_ACTIVATION";
+    private static final String DATA_PAY_WITH_POINTS_RETRIEVE_REWARD_BALANCE = "DATA_PAY_WITH_POINTS_RETRIEVE_REWARD_BALANCE";
+    private static final String DATA_PAY_WITH_POINTS_SUBMIT_REDEMPTION_REQUEST = "DATA_PAY_WITH_POINTS_SUBMIT_REDEMPTION_REQUEST";
+    private static final String PAY_WITH_POINTS_ENROLL_URL = BASE_URL + "/v1/apac/rewards/linkage";
+    private static final String PAY_WITH_POINTS_TOKEN_ACTIVATION_URL = BASE_URL + "/v1/apac/rewards/%s/activations";
+    private static final String PAY_WITH_POINTS_RETRIEVE_REWARD_BALANCE_URL = BASE_URL + "/v1/apac/rewards/%s/pointBalance";
+    private static final String PAY_WITH_POINTS_SUBMIT_REDEMPTION_REQUEST_URL = BASE_URL + "/v1/apac/rewards/%s/redemption";
 
     // Reference Data members
     private static final String DATA_REFERENCE_DATA_RETRIEVE_VALID_VALUES = "DATA_REFERENCE_DATA_RETRIEVE_VALID_VALUES";
@@ -143,7 +152,7 @@ public class CitiAPIBase {
                     JSONObject data = null;
                     try {
                         data = new JSONObject(json);
-                        if (response.code() == 200) {
+                        if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                             storageManager.saveFile(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, data.toString());
                             Log.d(TAG, getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"));
                             Log.d(TAG, getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "refresh_token"));
@@ -186,7 +195,7 @@ public class CitiAPIBase {
                 JSONObject data = null;
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, data.toString());
                         Log.d(TAG, getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"));
                         Log.d(TAG, getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "refresh_token"));
@@ -240,7 +249,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_ACCOUNTS_RETRIEVE_ACCOUNTS_SUMMARY, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -278,7 +287,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_ACCOUNTS_RETRIEVE_ACCOUNT_DETAILS, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -327,7 +336,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_ACCOUNTS_RETRIEVE_ACCOUNT_TRANSACTIONS, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -367,7 +376,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_CUSTOMER_RETRIEVE_CUSTOMER_BASIC_NAME, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -410,7 +419,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -451,7 +460,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_RETRIEVE_PAYEE_LIST, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -489,7 +498,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_PERSONAL, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -545,7 +554,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CREATE_PERSONAL_TRANSFER, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -594,7 +603,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CONFIRM_PERSONAL_TRANSFER, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -633,7 +642,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_INTERNAL, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -690,7 +699,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -739,7 +748,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CONFIRM_INTERNAL_TRANSFER, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -778,7 +787,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_EXTERNAL, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -836,7 +845,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CREATE_EXTERNAL_TRANSFER, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -885,7 +894,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CONFIRM_EXTERNAL_TRANSFER, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -924,7 +933,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_BILL_PAYMENT, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -978,7 +987,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CREATE_BILL_PAYMENT, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
@@ -1027,8 +1036,212 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CONFIRM_BILL_PAYMENT, data.toString());
+                        Log.d(TAG, "JSON DATA = " + data.toString());
+                    }
+                    else {
+                        Log.e(TAG, "ERROR: " + data.toString());
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    // Pay with Points functions
+
+    void API_PayWithPoints_Enroll (String lastFourDigitsCardNumber, String citiCardHolderPhoneNumber, String merchantCustomerReferenceId) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("lastFourDigitsCardNumber", lastFourDigitsCardNumber);
+            jsonObject.put("citiCardHolderPhoneNumber", citiCardHolderPhoneNumber);
+            jsonObject.put("merchantCustomerReferenceId", merchantCustomerReferenceId);
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Request request = new Request.Builder()
+                .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
+                .addHeader("uuid", UUID.randomUUID().toString())
+                .addHeader("Accept", "application/json")
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept-Language", "en-us")
+                .addHeader("client_id", CLIENT_ID)
+                .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString()))
+                .url(PAY_WITH_POINTS_ENROLL_URL)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "ERROR: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+                JSONObject data = null;
+
+                try {
+                    data = new JSONObject(json);
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
+                        storageManager.saveFile(DATA_PAY_WITH_POINTS_ENROLL, data.toString());
+                        Log.d(TAG, "JSON DATA = " + data.toString());
+                    }
+                    else {
+                        Log.e(TAG, "ERROR: " + data.toString());
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    void API_PayWithPoints_TokenActivation (String rewardLinkCode, String linkageConfirmationCode) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("linkageConfirmationCode", linkageConfirmationCode);
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Request request = new Request.Builder()
+                .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
+                .addHeader("uuid", UUID.randomUUID().toString())
+                .addHeader("Accept", "application/json")
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept-Language", "en-us")
+                .addHeader("client_id", CLIENT_ID)
+                .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString()))
+                .url(String.format(PAY_WITH_POINTS_TOKEN_ACTIVATION_URL, rewardLinkCode))
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "ERROR: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+                JSONObject data = null;
+
+                try {
+                    data = new JSONObject(json);
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
+                        storageManager.saveFile(DATA_PAY_WITH_POINTS_TOKEN_ACTIVATION, data.toString());
+                        Log.d(TAG, "JSON DATA = " + data.toString());
+                    }
+                    else {
+                        Log.e(TAG, "ERROR: " + data.toString());
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    void API_PayWithPoints_RetrieveRewardBalance (String rewardLinkCode) {
+
+        Request request = new Request.Builder()
+                .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
+                .addHeader("uuid", UUID.randomUUID().toString())
+                .addHeader("Accept", "application/json")
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept-Language", "en-us")
+                .addHeader("client_id", CLIENT_ID)
+                .url(String.format(PAY_WITH_POINTS_RETRIEVE_REWARD_BALANCE_URL, rewardLinkCode))
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "ERROR: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+                JSONObject data = null;
+
+                try {
+                    data = new JSONObject(json);
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
+                        storageManager.saveFile(DATA_PAY_WITH_POINTS_RETRIEVE_REWARD_BALANCE, data.toString());
+                        Log.d(TAG, "JSON DATA = " + data.toString());
+                    }
+                    else {
+                        Log.e(TAG, "ERROR: " + data.toString());
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    void API_PayWithPoints_SubmitRedemptionRequest (String rewardLinkCode, String transactionReferenceNumber, String transactionAmount
+            , String currencyCode, String pointsToRedeem, String transactionDescription) {
+
+        JSONObject jsonObject = new JSONObject();
+        JSONObject childObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        try {
+            childObject.put("transactionAmount", transactionAmount);
+            childObject.put("currencyCode", currencyCode);
+            childObject.put("pointsToRedeem", pointsToRedeem);
+            childObject.put("transactionDescription", transactionDescription);
+            jsonArray.put(childObject);
+            jsonObject.put("transactionReferenceNumber", transactionReferenceNumber);
+            jsonObject.put("redemptionOrder", childObject);
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Request request = new Request.Builder()
+                .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
+                .addHeader("uuid", UUID.randomUUID().toString())
+                .addHeader("Accept", "application/json")
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept-Language", "en-us")
+                .addHeader("client_id", CLIENT_ID)
+                .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString()))
+                .url(String.format(PAY_WITH_POINTS_SUBMIT_REDEMPTION_REQUEST_URL, rewardLinkCode))
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "ERROR: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+                JSONObject data = null;
+
+                try {
+                    data = new JSONObject(json);
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
+                        storageManager.saveFile(DATA_PAY_WITH_POINTS_SUBMIT_REDEMPTION_REQUEST, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
                     else {
@@ -1067,7 +1280,7 @@ public class CitiAPIBase {
 
                 try {
                     data = new JSONObject(json);
-                    if (response.code() == 200) {
+                    if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_REFERENCE_DATA_RETRIEVE_VALID_VALUES, data.toString());
                         Log.d(TAG, "JSON DATA = " + data.toString());
                     }
