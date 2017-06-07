@@ -62,6 +62,8 @@ import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Activity for the Ocr Detecting app.  This app detects text and displays the value with the
@@ -75,6 +77,8 @@ public final class OcrCaptureActivity extends AppCompatActivity {
     private static final int RC_HANDLE_GMS = 9001;
     boolean shouldContinue = true;
 
+    int rotationAngle = 0;
+
     // Permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
 
@@ -87,6 +91,8 @@ public final class OcrCaptureActivity extends AppCompatActivity {
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
     private GraphicOverlay<OcrGraphic> mGraphicOverlay;
+
+    private Thread t;
 
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
@@ -106,6 +112,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        shouldContinue = true;
         setContentView(R.layout.ocr_capture);
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
@@ -127,43 +134,11 @@ public final class OcrCaptureActivity extends AppCompatActivity {
 
         // Set good defaults for capturing text.
         boolean autoFocus = true;
-        boolean useFlash = true;
+        boolean useFlash = false;
 
-        Thread t = new Thread() {
-
-            @Override
-            public void run() {
-                try {
-                    while (shouldContinue) {
-                        Thread.sleep(1);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(mGraphicOverlay.amountItem != null) {
-                                    onPause();
-
-                                    TextView amountTV = (TextView) findViewById(R.id.text_amount_value);
-                                    String amount = mGraphicOverlay.amountItem.getTextBlock().getValue();
-                                    amount = amount.replaceAll("\\s+","");
-                                    amount = amount.replaceAll("[$]","");
-                                    amountTV.setText(amount);
-                                    RelativeLayout box = (RelativeLayout) findViewById(R.id.recognition_box);
-                                    box.setVisibility(View.VISIBLE);
-                                    Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
-                                            R.anim.slide_up);
-
-                                    box.startAnimation(slide_up);
-                                    shouldContinue = false;
-                                }
-                            }
-                        });
-                    }
-                } catch (InterruptedException e) {
-                }
-            }
-        };
-
+        createNewThread();
         t.start();
+
 
         ImageView addButton = (ImageView) findViewById(R.id.add_icon);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +154,49 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                  bundle.putSerializable("splitTransaction", t);
                  intent.putExtras(bundle);
                  startActivity(intent);
+             }
+         });
+
+        final ImageView upArrow = (ImageView) findViewById(R.id.arrow_up);
+        upArrow.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 if (rotationAngle ==  0){ // arrow up
+                     //mGraphicOverlay.clear();
+                     mGraphicOverlay.clear();
+                     mGraphicOverlay.amountItem = null;
+                     upArrow.animate().rotation(180).setDuration(500).start();
+                     onPause();
+                     //shouldContinue = false;
+
+                     RelativeLayout box = (RelativeLayout) findViewById(R.id.recognition_box);
+                     box.setVisibility(View.VISIBLE);
+                     Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
+                             R.anim.slide_up);
+
+                     box.startAnimation(slide_up);
+                     rotationAngle = 180;
+
+                 }
+                 else {
+                     t.interrupt();
+                     t = null;
+                     RelativeLayout box = (RelativeLayout) findViewById(R.id.recognition_box);
+                     Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(),
+                             R.anim.slide_down);
+
+                     upArrow.animate().rotation(0).setDuration(500).start();
+
+                     box.startAnimation(slide_down);
+                     box.setVisibility(View.INVISIBLE);
+                     //shouldContinue = true;
+                     mGraphicOverlay.clear();
+                     mGraphicOverlay.amountItem = null;
+                     onResume();
+                     createNewThread();
+                     t.start();
+                     rotationAngle = 0;
+                 }
              }
          });
 
@@ -219,6 +237,45 @@ public final class OcrCaptureActivity extends AppCompatActivity {
      * showing a "Snackbar" message of why the permission is needed then
      * sending the request.
      */
+
+    private void createNewThread(){
+        t = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    while (shouldContinue) {
+                        Thread.sleep(1);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(mGraphicOverlay.amountItem != null) {
+                                    final ImageView upArrow = (ImageView) findViewById(R.id.arrow_up);
+                                    upArrow.animate().rotation(180).setDuration(500).start();
+                                    rotationAngle = 180;
+                                    TextView amountTV = (TextView) findViewById(R.id.text_amount_value);
+                                    String amount = mGraphicOverlay.amountItem.getTextBlock().getValue();
+                                    amount = amount.replaceAll("\\s+","");
+                                    amount = amount.replaceAll("[$]","");
+                                    amountTV.setText(amount);
+                                    RelativeLayout box = (RelativeLayout) findViewById(R.id.recognition_box);
+                                    box.setVisibility(View.VISIBLE);
+                                    Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
+                                            R.anim.slide_up);
+
+                                    box.startAnimation(slide_up);
+                                    onPause();
+                                    t.interrupt();
+
+                                }
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

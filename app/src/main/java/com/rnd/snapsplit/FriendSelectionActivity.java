@@ -47,6 +47,7 @@ public class FriendSelectionActivity extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
         final Context context = this;
