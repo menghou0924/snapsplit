@@ -33,7 +33,7 @@ public class LoginActivity extends Activity {
         storageManager = new StorageManager(this);
         citiApiManagerBase = new CitiAPIBase(this);
 
-        storageManager.clearFile(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN);
+//        storageManager.clearFile(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN);
         citiApiManagerBase.API_Authorization_RefreshAccessToken();
         if (storageManager.isFileEmpty(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN)) {
             Intent intent = new Intent(this, MainActivity.class);
