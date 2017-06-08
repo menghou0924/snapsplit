@@ -1,15 +1,27 @@
 <resources>
+
+    <!--Navigation Drawer-->
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
     <!--Login View-->
     <string name="app_name">SnapSplit</string>
     <string name="login">Login to your Citi Bank account</string>
     <string name="details">Get details</string>
     <string name="tagline">Make bills splitting simple</string>
     <string name="forget_password">Forget Password?</string>
-    <!--Navigation Drawer-->
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-    <!--Camera View-->
-    <string name="take_picture">Take picture</string>
+    <!--OCR camera View-->
+    <string name="ok">OK</string>
+    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
+    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
+    <string name="low_storage_error">Ocr dependencies cannot be downloaded due to low device storage</string>
+    <string name="title_activity_main">Ocr Detector Sample</string>
+    <string name="ocr_header">Click &quot;Detect Text&quot; to detect text</string>
+    <string name="read_text">Detect Text</string>
+    <string name="auto_focus">Auto Focus</string>
+    <string name="use_flash">Use Flash</string>
+    <string name="ocr_success">Text read successfully</string>
+    <string name="ocr_failure">No text captured</string>
+    <string name="ocr_error">"Error reading text: %1$s"</string>
     <!--Select Friends View-->
     <string name="split_with">Split with&#8230;</string>
     <string name="payment_requests_will_be_sent_to">Payment Requests will be sent to</string>

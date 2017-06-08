@@ -1,4 +1,4 @@
-package com.rnd.snapsplit;
+package com.rnd.snapsplit.view;
 
 /**
  * Created by menghou0924 on 27/5/2017.
@@ -15,6 +15,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 import android.content.res.Configuration;
+
+import com.rnd.snapsplit.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
         // add fragments
         if (savedInstanceState == null) {
-            getSupportFragmentManager()
+            getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_holder, CameraFragment.newInstance(), "CameraFragment")
+                    .add(R.id.fragment_holder, OcrCaptureFragment.newInstance(), "OcrCaptureFragment")
                     .commit();
         }
 
@@ -68,17 +70,17 @@ public class MainActivity extends AppCompatActivity {
         Class fragmentClass;
         switch(menuItem.getItemId()) {
             case R.id.nav_home:
-                fragmentClass = CameraFragment.class;
+                fragmentClass = OcrCaptureFragment.class;
                 break;
-            case R.id.nav_history:
-                fragmentClass = MainActivity.class; //TODO: change to fragment class
-                break;
-            case R.id.nav_settings:
-                fragmentClass = MainActivity.class;
-                break;
-            case R.id.nav_about:
-                fragmentClass = MainActivity.class; //TODO: change to fragment class
-                break;
+//            case R.id.nav_history:
+//                fragmentClass = MainActivity.class; //TODO: change to fragment class
+//                break;
+//            case R.id.nav_settings:
+//                fragmentClass = MainActivity.class;
+//                break;
+//            case R.id.nav_about:
+//                fragmentClass = MainActivity.class; //TODO: change to fragment class
+//                break;
             default:
                 fragmentClass = MainActivity.class;
         }
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case android.R.id.home:
                 mDrawer.openDrawer(GravityCompat.START);
                 return true;

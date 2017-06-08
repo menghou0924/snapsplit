@@ -14,7 +14,7 @@
         android:background="@android:color/transparent"
         android:orientation="vertical"
         android:visibility="visible"
-        tools:context="com.rnd.snapsplit.MainActivity">
+        tools:context="com.rnd.snapsplit.view.MainActivity">
 
         <include layout="@layout/tool_bar_hamburger"
             android:visibility="invisible"

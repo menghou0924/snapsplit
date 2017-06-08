@@ -1,4 +1,4 @@
-package com.rnd.snapsplit;
+package com.rnd.snapsplit.view;
 
 import android.Manifest;
 import android.app.Activity;
@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+
+import com.rnd.snapsplit.CitiAPIBase;
+import com.rnd.snapsplit.R;
+import com.rnd.snapsplit.StorageManager;
 
 
 /**
@@ -19,15 +22,25 @@ import android.widget.ImageView;
 public class LoginActivity extends Activity {
 
     private static final String TAG = "LoginActivity";
-    private CitiAPIBase citiApiManagerBase;
+    private static final String DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN = "DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN";
     private static final int REQUEST_INTERNET_PERMISSION = 200;
+    private CitiAPIBase citiApiManagerBase;
+    private StorageManager storageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_view);
-
+        storageManager = new StorageManager(this);
         citiApiManagerBase = new CitiAPIBase(this);
+
+        storageManager.clearFile(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN);
+        citiApiManagerBase.API_Authorization_RefreshAccessToken();
+        if (storageManager.isFileEmpty(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+
+        setContentView(R.layout.login_view);
 
         Button loginButton = (Button) findViewById(R.id.btn_login);
         assert loginButton != null;
@@ -52,7 +65,7 @@ public class LoginActivity extends Activity {
     public void onResume() {
         super.onResume();
 
-        if(getIntent() != null && getIntent().getAction().equals(Intent.ACTION_VIEW)) {
+        if (getIntent() != null && getIntent().getAction().equals(Intent.ACTION_VIEW)) {
             Uri uri = getIntent().getData();
             citiApiManagerBase.API_Authorization_RetrieveAccessToken(uri);
         }
@@ -63,8 +76,8 @@ public class LoginActivity extends Activity {
             requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_PERMISSION);
             return;
         }
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(citiApiManagerBase.getAuthURL()));
-        startActivity(intent);
+        Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse(citiApiManagerBase.getAuthURL()));
+        startActivity(intent1);
     }
 
     public void getDetails() {
@@ -75,11 +88,11 @@ public class LoginActivity extends Activity {
 //        citiApiManagerBase.API_MoneyMovement_RetrieveDestSrcAcct("ALL", "");
 //        citiApiManagerBase.API_MoneyMovement_RetrievePayeeList("ALL", "");
 //        citiApiManagerBase.API_MoneyMovement_RetrieveDestSrcAcctPersonal();
-//        citiApiManagerBase.API_MoneyMovement_CreatePersonalTransfer ("355a515030616a53576b6a65797359506a634175764a734a3238314e4668627349486a676f7449463949453d"
+//        citiApiManagerBase.API_MoneyMovement_CreatePersonalTransfer("355a515030616a53576b6a65797359506a634175764a734a3238314e4668627349486a676f7449463949453d"
 //                , "3000", "SOURCE_ACCOUNT_CURRENCY", "57706472614c786a31716f5855743050597473703259494179505959776a377370614b364167516a57336b3d", "BENEFICIARY", "123456", "remark");
 //        citiApiManagerBase.API_MoneyMovement_ConfirmPersonalTransfer("584b303659755a337a6238544b776d696c526d435a68695774574f4f48464f47526d4d59373337507234493d");
 //        citiApiManagerBase.API_MoneyMovement_RetrieveDestSrcAcctInternal("");
-//        citiApiManagerBase.API_MoneyMovement_CreateInternalTransfer ("355a515030616a53576b6a65797359506a634175764a734a3238314e4668627349486a676f7449463949453d"
+//        citiApiManagerBase.API_MoneyMovement_CreateInternalTransfer("355a515030616a53576b6a65797359506a634175764a734a3238314e4668627349486a676f7449463949453d"
 //                , "3000", "SOURCE_ACCOUNT_CURRENCY", "7977557255484c7345546c4e53424766634b6c53756841672b556857626e395253334b70416449676b42673d", "BENEFICIARY", "123456", "remark", "MEDICAL_SERVICES");
 //        citiApiManagerBase.API_MoneyMovement_ConfirmInternalTransfer("45534b7438634c567a566777354c5861486d59616c4665467a624e61724c73574b4c50494f386664306d6f3d");
 //        citiApiManagerBase.API_MoneyMovement_RetrieveDestSrcAcctExternal("");

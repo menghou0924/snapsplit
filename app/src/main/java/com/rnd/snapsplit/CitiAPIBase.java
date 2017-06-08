@@ -1,10 +1,13 @@
 package com.rnd.snapsplit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.Log;
 import android.net.Uri;
+
+import com.rnd.snapsplit.view.MainActivity;
 
 import org.apache.http.auth.AUTH;
 import org.json.JSONArray;
@@ -100,18 +103,18 @@ public class CitiAPIBase {
 
     // Class functions
 
-    CitiAPIBase(Context ctx) {
+    public CitiAPIBase(Context ctx) {
         context = ctx;
         storageManager = new StorageManager(ctx);
     }
 
-    private String getStoredValues (String functionality, String key) {
+    private String getStoredValues(String functionality, String key) {
         return storageManager.getValueFromFile(functionality, key);
     }
 
     // Authorization functions
 
-    String getAuthURL() {
+    public String getAuthURL() {
         return String.format(AUTH_URL
                 , "code" // response_type
                 , CLIENT_ID // client_id
@@ -124,7 +127,7 @@ public class CitiAPIBase {
                 , REDIRECT_URI); // redirect_url
     }
 
-    void API_Authorization_RetrieveAccessToken (Uri uri) {
+    public void API_Authorization_RetrieveAccessToken(Uri uri) {
 
         if (checkState(uri)) {
             String code = uri.getQueryParameter("code");
@@ -156,6 +159,11 @@ public class CitiAPIBase {
                             storageManager.saveFile(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, data.toString());
                             Log.d(TAG, getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"));
                             Log.d(TAG, getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "refresh_token"));
+
+                            // TODO: Create another layer CitiAPI instead of using api directly
+                            // TODO: move the intent to that layer, currently limiting this function only usable in login activity
+                            Intent intent2 = new Intent(context, MainActivity.class);
+                            context.startActivity(intent2);
                         }
                         else {
                             Log.e(TAG, "ERROR: " + data.toString());
@@ -171,7 +179,7 @@ public class CitiAPIBase {
         }
     }
 
-    private void API_Authorization_RefreshAccessToken () {
+    public void API_Authorization_RefreshAccessToken() {
 
         Request request = new Request.Builder()
                 .addHeader("Authorization", "Basic " + ENCODED_AUTH_STRING)
@@ -211,13 +219,13 @@ public class CitiAPIBase {
     }
 
     @NonNull
-    private Boolean checkState (Uri uri) {
-        if(uri.getQueryParameter("error") != null) {
+    private Boolean checkState(Uri uri) {
+        if (uri.getQueryParameter("error") != null) {
             String error = uri.getQueryParameter("error");
             Log.e(TAG, "An error has occurred : " + error);
         } else {
             String state = uri.getQueryParameter("state");
-            if(state.equals(STATE)) {
+            if (state.equals(STATE)) {
                 return true;
             }
         }
@@ -226,7 +234,7 @@ public class CitiAPIBase {
 
     // Accounts functions
 
-    void API_Accounts_RetrieveAccountsSummary () {
+    public void API_Accounts_RetrieveAccountsSummary() {
         Request request = new Request.Builder()
                 .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
                 .addHeader("uuid", UUID.randomUUID().toString())
@@ -264,7 +272,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_Accounts_RetrieveAccountDetails (String accountId) {
+    public void API_Accounts_RetrieveAccountDetails(String accountId) {
         Request request = new Request.Builder()
                 .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
                 .addHeader("uuid", UUID.randomUUID().toString())
@@ -302,7 +310,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_Accounts_RetrieveAccountTransactions (String accountId, String transactionStatus, String nextStartIndex
+    public void API_Accounts_RetrieveAccountTransactions(String accountId, String transactionStatus, String nextStartIndex
             , String requestSize, String transactionFromDate, String transactionToDate, String amountFrom, String amountTo) {
         String param = "";
         param = param.concat(transactionStatus.isEmpty() ? "" : (param.isEmpty() ? "transactionStatus=" + transactionStatus : "&transactionStatus=" + transactionStatus));
@@ -353,7 +361,7 @@ public class CitiAPIBase {
 
     // Customer functions
 
-    void API_Customers_RetrieveCustomerBasicName () {
+    public void API_Customers_RetrieveCustomerBasicName() {
         Request request = new Request.Builder()
                 .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
                 .addHeader("uuid", UUID.randomUUID().toString())
@@ -393,7 +401,7 @@ public class CitiAPIBase {
 
     // Money Movement functions
 
-    void API_MoneyMovement_RetrieveDestSrcAcct (String paymentType, String nextStartIndex) {
+    public void API_MoneyMovement_RetrieveDestSrcAcct(String paymentType, String nextStartIndex) {
         String param = "";
         param = param.concat(paymentType.isEmpty() ? "" : (param.isEmpty() ? "paymentType=" + paymentType : "&paymentType=" + paymentType));
         param = param.concat(nextStartIndex.isEmpty() ? "" : (param.isEmpty() ? "nextStartIndex=" + nextStartIndex : "&nextStartIndex=" + nextStartIndex));
@@ -434,7 +442,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_RetrievePayeeList (String paymentType, String nextStartIndex) {
+    public void API_MoneyMovement_RetrievePayeeList(String paymentType, String nextStartIndex) {
         String param = "";
         param = param.concat(paymentType.isEmpty() ? "" : (param.isEmpty() ? "paymentType=" + paymentType : "&paymentType=" + paymentType));
         param = param.concat(nextStartIndex.isEmpty() ? "" : (param.isEmpty() ? "nextStartIndex=" + nextStartIndex : "&nextStartIndex=" + nextStartIndex));
@@ -475,7 +483,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_RetrieveDestSrcAcctPersonal () {
+    public void API_MoneyMovement_RetrieveDestSrcAcctPersonal() {
         Request request = new Request.Builder()
                 .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
                 .addHeader("uuid", UUID.randomUUID().toString())
@@ -513,7 +521,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_CreatePersonalTransfer (String sourceAccountId, String transactionAmount, String transferCurrencyIndicator
+    public void API_MoneyMovement_CreatePersonalTransfer(String sourceAccountId, String transactionAmount, String transferCurrencyIndicator
             , String destinationAccountId, String chargeBearer, String fxDealReferenceNumber, String remark) {
 
         JSONObject jsonObject = new JSONObject();
@@ -569,7 +577,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_ConfirmPersonalTransfer (String controlFlowId) {
+    public void API_MoneyMovement_ConfirmPersonalTransfer(String controlFlowId) {
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -618,7 +626,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_RetrieveDestSrcAcctInternal (String nextStartIndex) {
+    public void API_MoneyMovement_RetrieveDestSrcAcctInternal(String nextStartIndex) {
         String param = nextStartIndex.isEmpty() ? "" : "?nextStartIndex=" + nextStartIndex;
         Request request = new Request.Builder()
                 .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
@@ -657,7 +665,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_CreateInternalTransfer (String sourceAccountId, String transactionAmount, String transferCurrencyIndicator
+    public void API_MoneyMovement_CreateInternalTransfer(String sourceAccountId, String transactionAmount, String transferCurrencyIndicator
             , String payeeId, String chargeBearer, String fxDealReferenceNumber, String remark, String transferPurpose) {
 
         JSONObject jsonObject = new JSONObject();
@@ -714,7 +722,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_ConfirmInternalTransfer (String controlFlowId) {
+    public void API_MoneyMovement_ConfirmInternalTransfer(String controlFlowId) {
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -763,7 +771,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_RetrieveDestSrcAcctExternal (String nextStartIndex) {
+    public void API_MoneyMovement_RetrieveDestSrcAcctExternal(String nextStartIndex) {
         String param = nextStartIndex.isEmpty() ? "" : "?nextStartIndex=" + nextStartIndex;
         Request request = new Request.Builder()
                 .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
@@ -802,7 +810,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_CreateExternalTransfer (String sourceAccountId, String transactionAmount, String transferCurrencyIndicator
+    public void API_MoneyMovement_CreateExternalTransfer(String sourceAccountId, String transactionAmount, String transferCurrencyIndicator
             , String payeeId, String chargeBearer,String paymentMethod, String fxDealReferenceNumber, String remark, String transferPurpose) {
 
         JSONObject jsonObject = new JSONObject();
@@ -860,7 +868,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_ConfirmExternalTransfer (String controlFlowId) {
+    public void API_MoneyMovement_ConfirmExternalTransfer(String controlFlowId) {
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -909,7 +917,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_RetrieveDestSrcAcctBillPayment (String nextStartIndex) {
+    public void API_MoneyMovement_RetrieveDestSrcAcctBillPayment(String nextStartIndex) {
         String param = nextStartIndex.isEmpty() ? "" : "?nextStartIndex=" + nextStartIndex;
         Request request = new Request.Builder()
                 .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
@@ -948,7 +956,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_CreateBillPaymentTransfer (String sourceAccountId, String transactionAmount, String transferCurrencyIndicator
+    public void API_MoneyMovement_CreateBillPaymentTransfer(String sourceAccountId, String transactionAmount, String transferCurrencyIndicator
             , String payeeId, String remark) {
 
         JSONObject jsonObject = new JSONObject();
@@ -1002,7 +1010,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_MoneyMovement_ConfirmBillPayment (String controlFlowId) {
+    public void API_MoneyMovement_ConfirmBillPayment(String controlFlowId) {
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -1053,7 +1061,7 @@ public class CitiAPIBase {
 
     // Pay with Points functions
 
-    void API_PayWithPoints_Enroll (String lastFourDigitsCardNumber, String citiCardHolderPhoneNumber, String merchantCustomerReferenceId) {
+    public void API_PayWithPoints_Enroll(String lastFourDigitsCardNumber, String citiCardHolderPhoneNumber, String merchantCustomerReferenceId) {
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -1105,7 +1113,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_PayWithPoints_TokenActivation (String rewardLinkCode, String linkageConfirmationCode) {
+    public void API_PayWithPoints_TokenActivation(String rewardLinkCode, String linkageConfirmationCode) {
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -1155,7 +1163,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_PayWithPoints_RetrieveRewardBalance (String rewardLinkCode) {
+    public void API_PayWithPoints_RetrieveRewardBalance(String rewardLinkCode) {
 
         Request request = new Request.Builder()
                 .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
@@ -1196,7 +1204,7 @@ public class CitiAPIBase {
         });
     }
 
-    void API_PayWithPoints_SubmitRedemptionRequest (String rewardLinkCode, String transactionReferenceNumber, String transactionAmount
+    public void API_PayWithPoints_SubmitRedemptionRequest(String rewardLinkCode, String transactionReferenceNumber, String transactionAmount
             , String currencyCode, String pointsToRedeem, String transactionDescription) {
 
         JSONObject jsonObject = new JSONObject();
@@ -1257,7 +1265,7 @@ public class CitiAPIBase {
 
     // Reference Data functions
 
-    void API_ReferenceData_RetrieveValidValues (String referenceCode) {
+    public void API_ReferenceData_RetrieveValidValues(String referenceCode) {
         Request request = new Request.Builder()
                 .addHeader("Authorization", "Bearer " + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"))
                 .addHeader("uuid", UUID.randomUUID().toString())

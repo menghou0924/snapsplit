@@ -13,7 +13,9 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
@@ -31,7 +33,7 @@ public class StorageManager {
         context = ctx;
     }
 
-    public void saveFile (String filename, String text) {
+    public void saveFile(String filename, String text) {
         try {
             FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
             outputStream.write(text.getBytes());
@@ -41,7 +43,7 @@ public class StorageManager {
         }
     }
 
-    public String getFile (String filename) {
+    public String getFile(String filename) {
         StringBuilder sb = new StringBuilder();
         String line;
 
@@ -55,17 +57,19 @@ public class StorageManager {
                 sb.append(line);
             }
 
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
+            this.saveFile(filename, "");
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return sb.toString();
     }
 
-    public String getValueFromFile (String filename, String key) {
+    public String getValueFromFile(String filename, String key) {
         String value = "";
         try {
-            JSONObject obj = new JSONObject(this.getFile(filename).toString());
+            JSONObject obj = new JSONObject(this.getFile(filename));
             value = obj.optString(key);
         }
         catch (JSONException e) {
@@ -75,9 +79,23 @@ public class StorageManager {
         return value;
     }
 
-    public Boolean removeFile (String filename) {
+    public Boolean removeFile(String filename) {
         File dir = context.getFilesDir();
         File file = new File(dir, filename);
         return file.delete();
+    }
+
+    public void clearFile(String filename) {
+        this.saveFile(filename, "");
+    }
+
+    public Boolean isFileEmpty(String filename) {
+        String file = this.getFile(filename);
+        if (file.isEmpty()) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }
