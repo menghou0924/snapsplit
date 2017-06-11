@@ -5,10 +5,16 @@
             android:id="@+id/nav_home"
             android:title="Home" />
         <item
-            android:id="@+id/nav_history"
-            android:title="History" />
+            android:id="@+id/nav_requests"
+            android:title="Payment Requests" />
         <item
-            android:id="@+id/nav_settings"
-            android:title="Settings" />
+            android:id="@+id/nav_Friends"
+            android:title="Friends" />
+        <item
+            android:id="@+id/nav_myAcc"
+            android:title="My Account" />
+        <item
+            android:id="@+id/nav_signOut"
+            android:title="Sign out" />
     </group>
 </menu>

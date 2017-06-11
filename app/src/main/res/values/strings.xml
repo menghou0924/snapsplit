@@ -1,8 +1,29 @@
 <resources>
-    <string name="app_name">SnapSplit</string>
-    <string name="take_picture">Take picture</string>
+
+    <!--Navigation Drawer-->
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <!--Login View-->
+    <string name="app_name">SnapSplit</string>
+    <string name="login">Login to your Citi Bank account</string>
+    <string name="details">Get details</string>
+    <string name="tagline">Make bills splitting simple</string>
+    <string name="forget_password">Forget Password?</string>
+    <!--OCR camera View-->
+    <string name="ok">OK</string>
+    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
+    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
+    <string name="low_storage_error">Ocr dependencies cannot be downloaded due to low device storage</string>
+    <string name="title_activity_main">Ocr Detector Sample</string>
+    <string name="ocr_header">Click &quot;Detect Text&quot; to detect text</string>
+    <string name="read_text">Detect Text</string>
+    <string name="auto_focus">Auto Focus</string>
+    <string name="use_flash">Use Flash</string>
+    <string name="ocr_success">Text read successfully</string>
+    <string name="ocr_failure">No text captured</string>
+    <string name="ocr_error">"Error reading text: %1$s"</string>
+    <!--Select Friends View-->
+    <string name="split_with">Split with&#8230;</string>
     <string name="payment_requests_will_be_sent_to">Payment Requests will be sent to</string>
     <string name="send_requests">Send Requests</string>
     <string name="shop_name">Starbucks</string>
@@ -19,32 +40,39 @@
     <string name="phone_number_4">9422 7284</string>
     <string name="phone_number_5">9078 4420</string>
     <string name="phone_number_6">5773 0936</string>
-    <string name="split_1">$9.50</string>
-    <string name="split_2"></string>
-    <string name="split_3">$9.50</string>
-    <string name="split_4"></string>
-    <string name="split_5"></string>
-    <string name="split_6">$9.50</string>
-    <string name="split_with">Split with&#8230;</string>
+    <!--Confirmation View-->
     <string name="confirm">Confirmation</string>
     <string name="requests">Requests</string>
     <string name="selected_friends">Selected: </string>
-    <string name="selected_friends_no">3</string>
     <string name="each">Each: </string>
-    <string name="each_price">$9.50</string>
     <string name="search">\u0020\u0020Search &#8230;</string>
     <string name="frequently_used">Frequently Used</string>
     <string name="others">Others</string>
-    <string name="ok">OK</string>
-    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
-    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
-    <string name="low_storage_error">Ocr dependencies cannot be downloaded due to low device storage</string>
-    <string name="title_activity_main">Ocr Detector Sample</string>
-    <string name="ocr_header">Click &quot;Detect Text&quot; to detect text</string>
-    <string name="read_text">Detect Text</string>
-    <string name="auto_focus">Auto Focus</string>
-    <string name="use_flash">Use Flash</string>
-    <string name="ocr_success">Text read successfully</string>
-    <string name="ocr_failure">No text captured</string>
-    <string name="ocr_error">"Error reading text: %1$s"</string>
+    <string name="action_settings">Settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="use_password">Use password</string>
+    <string name="sign_in">Confirm payment</string>
+
+    <string name="password">Password</string>
+    <string name="fingerprint_description">Confirm fingerprint to continue</string>
+    <string name="fingerprint_hint">Touch sensor</string>
+    <string name="password_description">Enter your store password to continue</string>
+    <string name="purchase">Purchase</string>
+    <string name="purchase_not_invalidated">Purchase not invalidated</string>
+    <string name="purchase_button_not_invalidated_description">
+        You can proceed to purchase with this button \n even if a new fingerprint is enrolled
+    </string>
+    <string name="fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
+    <string name="fingerprint_success">Fingerprint recognized</string>
+    <string name="item_title">White Mesh Pluto Backpack</string>
+    <string name="item_price">$62.68</string>
+    <string name="item_description">Mesh backpack in white. Black textile trim throughout.</string>
+    <string name="purchase_done">Purchase successful</string>
+    <string name="new_fingerprint_enrolled_description">A new fingerprint was added to this device, so your password is required.</string>
+    <string name="use_fingerprint_in_future">Use fingerprint in the future</string>
+    <string name="use_fingerprint_to_authenticate_title">Use fingerprint to authenticate</string>
+    <string name="use_fingerprint_to_authenticate_key" >use_fingerprint_to_authenticate_key</string>
+    <string name="description_bugdroid_icon">Android bugdroid image</string>
+    <string name="description_fingerprint_icon">Fingerprint icon</string>
+
 </resources>
