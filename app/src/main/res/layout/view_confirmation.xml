@@ -7,9 +7,7 @@
     android:visibility="visible"
     android:focusableInTouchMode="true"
     android:focusable="true"
-    tools:context="com.rnd.snapsplit.view.ConfirmationFragment" >
-
-    <!--<include layout="@layout/tool_bar_process" />-->
+    tools:context="com.rnd.snapsplit.view.FriendsSelectionFragment" >
 
     <include layout="@layout/tool_bar_process"
         android:id="@+id/tool_bar_process" />
@@ -38,7 +36,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="15dp"
             android:paddingTop="13dp"
-            android:text="@string/shop_name"
+            android:text=""
             android:textColor="@android:color/black"
             android:textSize="22sp"
             android:layout_toEndOf="@+id/imageView" />
@@ -60,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_summary_shop"
             android:textSize="16sp"
+            android:text=""
             android:textColor="#696969"
             android:layout_toEndOf="@+id/text_summary_amount" />
 
@@ -86,7 +85,7 @@
             android:layout_alignParentRight="true"
             android:paddingTop="18dp"
             android:paddingRight="20dp"
-            android:text="0"
+            android:text=""
             android:textColor="@color/colorAccent2"
             android:textSize="16sp" />
 
@@ -111,16 +110,16 @@
             android:layout_alignBottom="@+id/text_summary_amount"
             android:layout_toStartOf="@+id/text_selected_friends_no"
             android:layout_alignParentRight="true"
-            android:text="HKD0.00"
+            android:text=""
             android:paddingRight="20dp"
             android:textAlignment="viewStart"
             android:textColor="@color/colorAccent2"
             android:textSize="16sp" />
+
     </RelativeLayout>
 
-
     <RelativeLayout
-        android:id="@+id/relative_fdList"
+        android:id="@+id/relative_fd_list"
         android:layout_width="350dp"
         android:layout_height="400dp"
         android:layout_centerHorizontal="true"
@@ -141,9 +140,41 @@
 
         <ListView
             android:id="@+id/android:list"
+            android:divider="@null"
             android:layout_below="@+id/text_payment"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative_request_sent"
+        android:layout_width="350dp"
+        android:layout_height="400dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@color/colorBackground"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:paddingStart="20dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/checkmark"
+            android:id="@+id/confirmation_tick" />
+
+        <TextView
+            android:id="@+id/text_confirm_sent"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/confirmation_tick"
+            android:text="@string/payment_request_sent"
+            android:paddingTop="20dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#696969" />
+
     </RelativeLayout>
 
     <Button
@@ -155,7 +186,7 @@
         android:layout_marginBottom="56dp"
         android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/relative_fdList"
+        android:layout_below="@+id/relative_request_sent"
         android:textSize="18sp"
         android:textColor="@android:color/white"/>
 

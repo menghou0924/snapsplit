@@ -52,6 +52,8 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     private int mFacing = CameraSource.CAMERA_FACING_BACK;
     public Set<T> mGraphics = new HashSet<>();
     public OcrGraphic amountItem = null;
+    public float amountItemAfterFormat = 0f;
+    public String description  = "";
 
     /**
      * Base class for a custom graphics object to be rendered within the graphic overlay.  Subclass

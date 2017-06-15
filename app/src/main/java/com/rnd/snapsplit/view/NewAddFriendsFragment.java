@@ -43,6 +43,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
@@ -136,7 +137,7 @@ public class NewAddFriendsFragment extends Fragment {
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
         }
 
-        desuNoto = (new Friend(getContext())).getFriendsList();
+        desuNoto = (new Friend(getContext())).getFriendsListFromFile();
 //        Cursor cur = getContacts();
 //
 //        ListView lv = getListView();

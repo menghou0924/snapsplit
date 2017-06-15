@@ -8,17 +8,20 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Damian on 29/5/2017.
  */
 
 public class Friend implements Serializable {
+    private String id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String accountNumber;
     private float amountToPay = 0f;
+    public HashMap<String, Object> timestampNow = new HashMap<>();
     private int displayPic;
     private StorageManager storageManager;
     private Context context;
@@ -28,6 +31,9 @@ public class Friend implements Serializable {
     public boolean equals(Object obj) {
         Friend other = (Friend) obj;
         return other.getPhoneNumber().equals(phoneNumber);
+    }
+
+    public Friend() {
     }
 
     public Friend(Context ctx) {
@@ -41,6 +47,14 @@ public class Friend implements Serializable {
         this.phoneNumber = phoneNumber;
         this.accountNumber = accountNumber;
         this.displayPic = displayPic;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -89,7 +103,9 @@ public class Friend implements Serializable {
 
     public void setAmountToPay(float amt) { this.amountToPay = amt; }
 
-    public void saveFriend() {
+    // access from files
+
+    public void saveFriendToFile() {
         JSONObject friend = new JSONObject();
         JSONArray array = new JSONArray();
         JSONObject friendsList = new JSONObject();
@@ -109,7 +125,7 @@ public class Friend implements Serializable {
         storageManager.appendFile(STORAGE_FILE_NAME, friendsList.toString());
     }
 
-    public ArrayList<Friend> getFriendsList() {
+    public ArrayList<Friend> getFriendsListFromFile() {
         ArrayList<Friend> resultList = new ArrayList<Friend>();
         JSONObject friendObj = new JSONObject();
         try {
@@ -130,5 +146,30 @@ public class Friend implements Serializable {
             e.printStackTrace();
         }
         return resultList;
+    }
+
+    public Friend getFriendByPhoneNumber(String phoneNumber) {
+        Friend result = new Friend();
+        JSONObject friendObj = new JSONObject();
+        try {
+            friendObj = new JSONObject(storageManager.getFile(STORAGE_FILE_NAME));
+            JSONArray friendsArray = friendObj.getJSONArray("friends");
+            for (int i = 0; i < friendsArray.length(); i++) {
+                JSONObject temp = friendsArray.getJSONObject(i);
+                if (temp.optString("phoneNumber").equals(phoneNumber)) {
+                    result = new Friend(
+                            temp.optString("firstName")
+                            , temp.optString("lastName")
+                            , temp.optString("phoneNumber")
+                            , temp.optString("accountNumber")
+                            , temp.optInt("displayPic")
+                    );
+                }
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

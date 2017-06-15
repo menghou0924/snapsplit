@@ -31,6 +31,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -53,6 +54,7 @@ import com.rnd.snapsplit.OcrDetectorProcessor;
 import com.rnd.snapsplit.OcrGraphic;
 import com.rnd.snapsplit.R;
 import com.rnd.snapsplit.StorageManager;
+import com.rnd.snapsplit.Summary;
 import com.rnd.snapsplit.Transaction;
 import com.rnd.snapsplit.camera.CameraSource;
 import com.rnd.snapsplit.camera.CameraSourcePreview;
@@ -109,8 +111,6 @@ public final class OcrCaptureFragment extends Fragment {
         super.onAttach(context);
         final Resources resources = context.getResources();
         storageManager = new StorageManager(context);
-
-        ((Toolbar) getActivity().findViewById(R.id.tool_bar_hamburger)).setVisibility(View.VISIBLE);
     }
 
     /**
@@ -123,7 +123,9 @@ public final class OcrCaptureFragment extends Fragment {
         final Activity activity = getActivity();
         final Context context = getContext();
 
-        shouldContinue = true;
+        ((Toolbar) activity.findViewById(R.id.tool_bar_hamburger)).setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
+
+//        shouldContinue = true;
 
         mPreview = (CameraSourcePreview) view.findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<OcrGraphic>) view.findViewById(R.id.graphicOverlay);
@@ -132,8 +134,8 @@ public final class OcrCaptureFragment extends Fragment {
         boolean autoFocus = true;
         boolean useFlash = false;
 
-        createNewThread();
-        t.start();
+//        createNewThread();
+//        t.start();
 
         final ImageView upArrow = (ImageView) view.findViewById(R.id.arrow_up);
         upArrow.setOnClickListener(new View.OnClickListener() {
@@ -141,11 +143,21 @@ public final class OcrCaptureFragment extends Fragment {
             public void onClick(View v) {
                 if (rotationAngle ==  0){ // arrow up
                     //mGraphicOverlay.clear();
-                    mGraphicOverlay.clear();
-                    mGraphicOverlay.amountItem = null;
-                    upArrow.animate().rotation(180).setDuration(500).start();
+//                    mGraphicOverlay.clear();
+//                    mGraphicOverlay.amountItem = null;
                     onPause();
+                    upArrow.animate().rotation(180).setDuration(500).start();
                     //shouldContinue = false;
+
+                    TextView amount = (TextView) view.findViewById(R.id.text_amount_value);
+                    if (mGraphicOverlay.amountItem == null){
+                        amount.setText("0.00");
+                    }
+                    else{
+                        amount.setText(String.format("%.2f",mGraphicOverlay.amountItemAfterFormat));
+                    }
+                    TextView desc = (TextView) view.findViewById(R.id.text_name_value);
+                    desc.setText(mGraphicOverlay.description);
 
                     RelativeLayout box = (RelativeLayout) view.findViewById(R.id.recognition_box);
                     box.setVisibility(View.VISIBLE);
@@ -157,8 +169,8 @@ public final class OcrCaptureFragment extends Fragment {
 
                 }
                 else {
-                    t.interrupt();
-                    t = null;
+//                    t.interrupt();
+//                    t = null;
                     RelativeLayout box = (RelativeLayout) view.findViewById(R.id.recognition_box);
                     Animation slide_down = AnimationUtils.loadAnimation(activity.getApplicationContext(),
                             R.anim.slide_down);
@@ -168,11 +180,12 @@ public final class OcrCaptureFragment extends Fragment {
                     box.startAnimation(slide_down);
                     box.setVisibility(View.INVISIBLE);
                     //shouldContinue = true;
-                    mGraphicOverlay.clear();
                     mGraphicOverlay.amountItem = null;
+                    mGraphicOverlay.amountItemAfterFormat = 0f;
+                    mGraphicOverlay.description = "";
                     onResume();
-                    createNewThread();
-                    t.start();
+//                    createNewThread();
+//                    t.start();
                     rotationAngle = 0;
                 }
             }
@@ -185,8 +198,8 @@ public final class OcrCaptureFragment extends Fragment {
                  // takePicture();
                  EditText description = (EditText) view.findViewById(R.id.text_name_value);
                  EditText amount = (EditText) view.findViewById(R.id.text_amount_value);
-                 float floatAmount = java.lang.Float.parseFloat(amount.getText().toString());
-                 Transaction t = new Transaction(description.getText().toString(), floatAmount);
+                 float floatAmount = Float.parseFloat(amount.getText().toString());
+                 Summary t = new Summary(description.getText().toString(), floatAmount);
 
                  Bundle bundle = new Bundle();
                  bundle.putSerializable("splitTransaction", t);
@@ -215,9 +228,9 @@ public final class OcrCaptureFragment extends Fragment {
         gestureDetector = new GestureDetector(context, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
 
-        Snackbar.make(mGraphicOverlay, "Tap to Speak. Pinch/Stretch to zoom",
-                Snackbar.LENGTH_LONG)
-                .show();
+//        Snackbar.make(mGraphicOverlay, "Tap to Speak. Pinch/Stretch to zoom",
+//                Snackbar.LENGTH_LONG)
+//                .show();
 
         // Set up the Text To Speech engine.
         TextToSpeech.OnInitListener listener =

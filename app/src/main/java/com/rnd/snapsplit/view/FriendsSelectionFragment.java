@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.content.res.Resources;
 import android.app.Activity;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,6 +21,8 @@ import com.rnd.snapsplit.Friend;
 import com.rnd.snapsplit.FriendListAdapter;
 import com.rnd.snapsplit.R;
 import com.rnd.snapsplit.Transaction;
+import com.rnd.snapsplit.StorageManager;
+import com.rnd.snapsplit.Summary;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,10 +37,10 @@ import java.util.ArrayList;
 public class FriendsSelectionFragment extends ListFragment {
 
     private static final String TAG = "FriendsSelectionFragment";
-    private Toolbar toolBarProcess;
 
     ArrayList<Friend> selectedFriends = new ArrayList<Friend>();
-    Transaction splitTransaction;
+    Summary splitTransaction;
+    StorageManager storageManager;
 
     public static FriendsSelectionFragment newInstance() {
         return new FriendsSelectionFragment();
@@ -46,6 +50,14 @@ public class FriendsSelectionFragment extends ListFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         final Resources resources = context.getResources();
+        storageManager = new StorageManager(context);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
 
     @Nullable
@@ -56,29 +68,31 @@ public class FriendsSelectionFragment extends ListFragment {
         final Activity activity = getActivity();
         final Context context = getContext();
 
-        Bundle bundle = this.getArguments();
-        splitTransaction = (Transaction) bundle.getSerializable("splitTransaction");
-
         ((Toolbar) activity.findViewById(R.id.tool_bar_hamburger)).setVisibility(View.INVISIBLE);
-        toolBarProcess = (Toolbar) view.findViewById(R.id.tool_bar_process);
-        toolBarProcess.setVisibility(View.VISIBLE);
+        ((Toolbar) view.findViewById(R.id.tool_bar_process)).setVisibility(View.VISIBLE);
         ((TextView) view.findViewById(R.id.text_title)).setText(R.string.friends_selection);
+
+        Bundle bundle = this.getArguments();
+        splitTransaction = (Summary) bundle.getSerializable("splitTransaction");
 
         TextView description = (TextView) view.findViewById(R.id.text_summary_shop);
         description.setText(splitTransaction.getTransactionName());
 
         TextView amount = (TextView) view.findViewById(R.id.text_summary_amount_value);
+        TextView myShare = (TextView) view.findViewById(R.id.myShare_value);
         String s = Float.toString(splitTransaction.getTransactionAmount());
         amount.setText(s);
+        myShare.setText("HKD"+s);
 
-        ArrayList<Friend> friendsList = (new Friend(getContext())).getFriendsList();
+        ArrayList<Friend> friendsList = (new Friend(getContext())).getFriendsListFromFile();
 
-//         TODO: Move forward back button to Main activity
         final ImageButton backButton = (ImageButton) view.findViewById(R.id.btn_back);
         backButton.setOnClickListener(new View.OnClickListener() {
                                           @Override
                                           public void onClick(View v) {
                                               ((Toolbar) activity.findViewById(R.id.tool_bar_hamburger)).setVisibility(View.VISIBLE);
+                                              ((Toolbar) getActivity().findViewById(R.id.tool_bar_hamburger)).setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                                              ((Toolbar) getActivity().findViewById(R.id.tool_bar_hamburger)).setTitle(R.string.app_name);
                                               getFragmentManager().popBackStack();
                                           }
                                       }
@@ -93,6 +107,7 @@ public class FriendsSelectionFragment extends ListFragment {
                                                  bundle.putSerializable("selectedFriends", selectedFriends);
                                                  bundle.putFloat("each", getSplitAmount());
                                                  bundle.putFloat("total", splitTransaction.getTransactionAmount());
+                                                 bundle.putString("description", splitTransaction.getTransactionName());
 
                                                  ConfirmationFragment fragment = new ConfirmationFragment();
                                                  fragment.setArguments(bundle);
@@ -140,6 +155,9 @@ public class FriendsSelectionFragment extends ListFragment {
         selectCount.setText(String.valueOf(selectedFriends.size()));
         TextView each = (TextView)getView().findViewById(R.id.text_each_price);
         each.setText(newSplitAmount);
+
+        TextView myShare = (TextView) getView().findViewById(R.id.myShare_value);
+        myShare.setText(newSplitAmount);
 
         for (int pos=0; pos < l.getCount(); pos++) {
             Friend f = (Friend)l.getItemAtPosition(pos);

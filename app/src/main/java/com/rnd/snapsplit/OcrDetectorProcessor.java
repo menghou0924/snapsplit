@@ -15,6 +15,7 @@
  */
 package com.rnd.snapsplit;
 
+import android.graphics.Color;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -57,33 +58,67 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
         SparseArray<TextBlock> items = detections.getDetectedItems();
         for (int i = 0; i < items.size(); ++i) {
             TextBlock item = items.valueAt(i);
-            if (item != null && item.getValue().contains("Total")) {
+             OcrGraphic graphic = null;
+//            if (item != null && item.getValue().contains("Total")) {
+             if (item.getValue().toLowerCase().contains("starbucks")) {
+                 graphic = new OcrGraphic(mGraphicOverlay, item, Color.GREEN);
+                 mGraphicOverlay.add(graphic);
+             }
+              if (item!= null && (getFloatAmount(item) != 0f)){
                 Log.d("OcrDetectorProcessor", "Text detected! " + item.getValue());
-                OcrGraphic graphic = new OcrGraphic(mGraphicOverlay, item);
-                mGraphicOverlay.add(graphic);
-                TextBlock item2 = findAmount(item, items);
-                if (item2 != null) {
-                    OcrGraphic graphic2 = new OcrGraphic(mGraphicOverlay, item2);
-                    mGraphicOverlay.amountItem = graphic2;
-                    mGraphicOverlay.add(graphic2);
-                }
+
+                  if (isTotalAmount(item,items)){
+                      graphic = new OcrGraphic(mGraphicOverlay, item, Color.GREEN);
+                      mGraphicOverlay.amountItem = graphic;
+                      mGraphicOverlay.amountItemAfterFormat = getFloatAmount(item);
+                      mGraphicOverlay.description = "STARBUCKS";
+                      mGraphicOverlay.add(graphic);
+                  }
+
+                  else{
+                      graphic = new OcrGraphic(mGraphicOverlay, item, Color.WHITE);
+                      mGraphicOverlay.add(graphic);
+                  }
+//               TextBlock item2 = findAmount(item, items);
+//                if (item2 != null){
+//                    OcrGraphic graphic2 = new OcrGraphic(mGraphicOverlay, item2);
+//                    mGraphicOverlay.amountItem = graphic2;
+//                    mGraphicOverlay.add(graphic2);
+//                }
             }
         }
     }
 
-    protected TextBlock findAmount(TextBlock totalItem, SparseArray<TextBlock> items) {
-        int topLeftVerticalPostion = totalItem.getCornerPoints()[0].y;
-        int topLeftHorizontalPostion = totalItem.getCornerPoints()[0].x;
+    protected float getFloatAmount(TextBlock item){
+        String text = item.getValue();
+        text = text.replaceAll("\\s+","");
+        text = text.replaceAll("[$]","");
+        text = text.replaceAll("[s]", "");
+        try {
+            float f = Float.parseFloat(text);
+            return f;
+        }
+        catch (NumberFormatException nfe){
+            return 0f;
+        }
+    }
+
+
+    protected boolean isTotalAmount(TextBlock amountItem, SparseArray<TextBlock> items) {
+        int topLeftVerticalPostion = amountItem.getCornerPoints()[0].y;
+        int topLeftHorizontalPostion = amountItem.getCornerPoints()[0].x;
         for (int i = 0; i < items.size(); ++i) {
             TextBlock item = items.valueAt(i);
-            if (item.getCornerPoints()[0].x > (topLeftHorizontalPostion + 100)) { // setting x axis threshold as 100 to avoid checking items from the same vertical axis
-                int positionDiff = topLeftVerticalPostion - item.getCornerPoints()[0].y;
-                if ((positionDiff < 15) && (positionDiff > -15)) {
-                    return item;
+            if (item.getValue().toLowerCase().contains("total")){
+                if (topLeftHorizontalPostion  > (item.getCornerPoints()[0].x+100)) { // setting x axis threshold as 100 to avoid checking items from the same vertical axis
+                    int positionDiff = topLeftVerticalPostion - item.getCornerPoints()[0].y;
+                    if ((positionDiff < 15) && (positionDiff > -15)) {
+                        return true;
+                    }
                 }
             }
         }
-        return null;
+        return false;
     }
 
     /**

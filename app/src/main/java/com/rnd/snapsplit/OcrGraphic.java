@@ -30,19 +30,19 @@ import java.util.List;
  * Graphic instance for rendering TextBlock position, size, and ID within an associated graphic
  * overlay view.
  */
-
 public class OcrGraphic extends GraphicOverlay.Graphic {
 
     private int mId;
 
-    private static final int TEXT_COLOR = Color.WHITE;
+    private int TEXT_COLOR;
 
-    private static Paint sRectPaint;
-    private static Paint sTextPaint;
+    private Paint sRectPaint;
+    private Paint sTextPaint;
     private final TextBlock mText;
 
-    OcrGraphic(GraphicOverlay overlay, TextBlock text) {
+    OcrGraphic(GraphicOverlay overlay, TextBlock text, int color) {
         super(overlay);
+        TEXT_COLOR = color;
 
         mText = text;
 

@@ -12,7 +12,7 @@
     <string name="app_name">SnapSplit</string>
     <string name="login">Login to your Citi Bank account</string>
     <string name="details">Get details</string>
-    <string name="tagline">Make bills splitting simple</string>
+    <string name="tagline">Splitting bills made simple</string>
     <string name="forget_password">Forget Password?</string>
     <!--OCR camera View-->
     <string name="ok">OK</string>
@@ -53,6 +53,7 @@
     <string name="search">\u0020\u0020Search &#8230;</string>
     <string name="frequently_used">Frequently Used</string>
     <string name="others">Others</string>
+    <string name="payment_request_sent">Payment requests sent</string>
     <!--Google Async Signin -->
     <string name="action_settings">Settings</string>
     <string name="cancel">Cancel</string>
@@ -104,5 +105,6 @@
     <string name="search_match_other">Matches Other Field</string>
     <string name="no_address">No addresses found</string>
     <string name="no_intent_found">No application found to handle this action</string>
-
+    <!--Logout view-->
+    <string name="logout">Logout</string>
 </resources>

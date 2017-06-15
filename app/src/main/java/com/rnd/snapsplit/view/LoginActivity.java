@@ -10,6 +10,9 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import com.rnd.snapsplit.CitiAPIBase;
 import com.rnd.snapsplit.R;
 import com.rnd.snapsplit.StorageManager;
@@ -26,10 +29,22 @@ public class LoginActivity extends Activity {
     private static final int REQUEST_INTERNET_PERMISSION = 200;
     private CitiAPIBase citiApiManagerBase;
     private StorageManager storageManager;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+
+//        if (mFirebaseUser == null) {
+//            // Not signed in, launch the Sign In activity
+//            startActivity(new Intent(this, GoogleAccSignInActivity.class));
+//            //finish();
+//            //return;
+//        }
+
         storageManager = new StorageManager(this);
         citiApiManagerBase = new CitiAPIBase(this);
 
@@ -65,9 +80,13 @@ public class LoginActivity extends Activity {
     public void onResume() {
         super.onResume();
 
-        if (getIntent() != null && getIntent().getAction().equals(Intent.ACTION_VIEW)) {
-            Uri uri = getIntent().getData();
-            citiApiManagerBase.API_Authorization_RetrieveAccessToken(uri);
+        if (getIntent() != null) {
+           if (getIntent().getAction() != null) {
+               if (getIntent().getAction().equals(Intent.ACTION_VIEW)) {
+                   Uri uri = getIntent().getData();
+                   citiApiManagerBase.API_Authorization_RetrieveAccessToken(uri);
+                }
+            }
         }
     }
 

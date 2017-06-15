@@ -171,7 +171,7 @@ public class CameraSourcePreview extends ViewGroup {
             childXOffset = (childWidth - viewWidth) / 2;
         }
 
-        for(int i = 0; i < getChildCount(); ++i) {
+        for (int i = 0; i < getChildCount(); ++i) {
             // One dimension will be cropped.  We shift child over or up by this offset and adjust
             // the size to maintain the proper aspect ratio.
             getChildAt(i).layout(

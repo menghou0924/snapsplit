@@ -31,7 +31,7 @@ import com.rnd.snapsplit.R;
 public class GoogleAccSignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
 
-    private static final String TAG = "SignInActivity";
+    private static final String TAG = "GoogleAccSignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private SignInButton mSignInButton;
 
@@ -103,6 +103,7 @@ public class GoogleAccSignInActivity extends AppCompatActivity implements Google
             } else {
                 // Google Sign In failed
                 Log.e(TAG, "Google Sign In failed.");
+                startActivity(new Intent(this, LoginActivity.class));
             }
         }
     }

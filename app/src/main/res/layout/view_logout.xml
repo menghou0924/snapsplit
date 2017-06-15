@@ -50,14 +50,14 @@
         android:id="@+id/relativeLayout">
 
         <Button
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="77dp"
             android:background="@drawable/roundedbutton"
             android:paddingEnd="35dp"
             android:paddingStart="35dp"
-            android:text="@string/login"
+            android:text="@string/logout"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:layout_alignParentTop="true"
@@ -74,20 +74,10 @@
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:layout_marginTop="10dp"
-            android:layout_below="@+id/btn_login"
+            android:layout_below="@+id/btn_logout"
             android:layout_centerHorizontal="true"
             android:visibility="invisible"/>
 
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="151dp"
-        android:text="@string/forget_password"
-        android:textSize="22sp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
