@@ -23,6 +23,13 @@ android {
     useLibrary 'org.apache.http.legacy'
 }
 
+allprojects {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -35,6 +42,36 @@ dependencies {
     compile 'com.parse:parse-android:1.13.1'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.google.android.gms:play-services-vision:10.2.6'
+    compile 'com.google.android.gms:play-services-auth:10.2.6'
     testCompile 'junit:junit:4.12'
     compile 'org.jetbrains:annotations-java5:15.0'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.google.android.gms:play-services-auth:10.2.6'
+    // Firebase
+    compile 'com.google.firebase:firebase-analytics:10.2.6'
+    compile 'com.google.firebase:firebase-database:10.2.6'
+    compile 'com.google.firebase:firebase-storage:10.2.6'
+    compile 'com.google.firebase:firebase-auth:10.2.6'
+    compile 'com.google.firebase:firebase-config:10.2.6'
+    compile 'com.google.android.gms:play-services-appinvite:10.2.6'
+    compile 'com.google.firebase:firebase-messaging:10.2.6'
+    compile 'com.google.android.gms:play-services-ads:10.2.6'
+    compile 'com.google.android.gms:play-services-plus:10.2.6'
+    compile 'com.google.firebase:firebase-appindexing:10.2.6'
+    compile 'com.google.firebase:firebase-crash:10.2.6'
+    compile 'com.google.firebase:firebase-analytics:10.2.6'
+
+    // Firebase UI
+    compile 'com.firebaseui:firebase-ui-database:1.2.0'
+
+    compile 'com.parse:parse-android:1.13.1'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+
+    // icon
+    compile 'com.github.ivbaranov:materiallettericon:0.2.2'
 }
+
+apply plugin: 'com.google.gms.google-services'

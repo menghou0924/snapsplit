@@ -29,28 +29,6 @@
 
         </com.rnd.snapsplit.camera.CameraSourcePreview>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tool_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:elevation="4dp"
-            android:fitsSystemWindows="true"
-            android:minHeight="?attr/actionBarSize"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="20dp"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        </android.support.v7.widget.Toolbar>
-
-        <ImageView
-            android:id="@+id/citi_logo"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="330dp"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/citi" />
-
         <RelativeLayout
             android:id="@+id/recognition_box"
             android:layout_width="350dp"
@@ -131,14 +109,8 @@
     <FrameLayout
         android:id="@+id/fl_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nvView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@android:color/white"
-        app:menu="@menu/drawer_view"
-        app:headerLayout="@layout/nav_header" />
+    </FrameLayout>
+
 </android.support.v4.widget.DrawerLayout>

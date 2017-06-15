@@ -35,12 +35,12 @@ public class LoginActivity extends Activity {
 
 //        storageManager.clearFile(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN);
         citiApiManagerBase.API_Authorization_RefreshAccessToken();
-        if (storageManager.isFileEmpty(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN)) {
+        if (!storageManager.isFileEmpty(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN)) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
 
-        setContentView(R.layout.login_view);
+        setContentView(R.layout.view_login);
 
         Button loginButton = (Button) findViewById(R.id.btn_login);
         assert loginButton != null;
@@ -76,8 +76,8 @@ public class LoginActivity extends Activity {
             requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_PERMISSION);
             return;
         }
-        Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse(citiApiManagerBase.getAuthURL()));
-        startActivity(intent1);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(citiApiManagerBase.getAuthURL()));
+        startActivity(intent);
     }
 
     public void getDetails() {

@@ -3,7 +3,8 @@ package com.rnd.snapsplit.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.app.ListFragment;
+import android.support.v4.app.ListFragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import android.widget.TextView;
 import com.rnd.snapsplit.Friend;
 import com.rnd.snapsplit.FriendListAdapter;
 import com.rnd.snapsplit.R;
-import com.rnd.snapsplit.StorageManager;
 import com.rnd.snapsplit.Transaction;
 
 import org.json.JSONArray;
@@ -25,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by Damian on 28/5/2017.
@@ -34,10 +33,10 @@ import java.util.Iterator;
 public class FriendsSelectionFragment extends ListFragment {
 
     private static final String TAG = "FriendsSelectionFragment";
+    private Toolbar toolBarProcess;
 
     ArrayList<Friend> selectedFriends = new ArrayList<Friend>();
     Transaction splitTransaction;
-    StorageManager storageManager;
 
     public static FriendsSelectionFragment newInstance() {
         return new FriendsSelectionFragment();
@@ -47,20 +46,23 @@ public class FriendsSelectionFragment extends ListFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         final Resources resources = context.getResources();
-        storageManager = new StorageManager(context);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.friend_selection_activity, container, false);
+        final View view = inflater.inflate(R.layout.view_friend_selection, container, false);
         final Activity activity = getActivity();
         final Context context = getContext();
 
         Bundle bundle = this.getArguments();
         splitTransaction = (Transaction) bundle.getSerializable("splitTransaction");
-//        splitTransaction = new Transaction("test", 123.5f);
+
+        ((Toolbar) activity.findViewById(R.id.tool_bar_hamburger)).setVisibility(View.INVISIBLE);
+        toolBarProcess = (Toolbar) view.findViewById(R.id.tool_bar_process);
+        toolBarProcess.setVisibility(View.VISIBLE);
+        ((TextView) view.findViewById(R.id.text_title)).setText(R.string.friends_selection);
 
         TextView description = (TextView) view.findViewById(R.id.text_summary_shop);
         description.setText(splitTransaction.getTransactionName());
@@ -69,56 +71,42 @@ public class FriendsSelectionFragment extends ListFragment {
         String s = Float.toString(splitTransaction.getTransactionAmount());
         amount.setText(s);
 
-        ArrayList<Friend> friendsList = new ArrayList<Friend>();
+        ArrayList<Friend> friendsList = (new Friend(getContext())).getFriendsList();
 
-        try {
-            JSONObject friendsObj = new JSONObject(storageManager.getFile("FRIENDS_LIST"));
-            JSONArray friendsArray = friendsObj.getJSONArray("friends");
-            for (int i = 0; i < friendsArray.length(); i++) {
-                JSONObject temp = friendsArray.getJSONObject(i);
-                friendsList.add(new Friend(temp.optString("firstName")
-                        , temp.optString("lastName")
-                        , temp.optString("phoneNumber")
-                        , temp.optString("accountNumber")
-                        , temp.optInt("displayPic")));
-            }
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+//         TODO: Move forward back button to Main activity
         final ImageButton backButton = (ImageButton) view.findViewById(R.id.btn_back);
         backButton.setOnClickListener(new View.OnClickListener() {
                                           @Override
                                           public void onClick(View v) {
+                                              ((Toolbar) activity.findViewById(R.id.tool_bar_hamburger)).setVisibility(View.VISIBLE);
                                               getFragmentManager().popBackStack();
                                           }
                                       }
         );
 
-        // TODO: Move it to Main activity
-        final ImageButton frontButton = (ImageButton) view.findViewById(R.id.btn_next);
-        frontButton.setOnClickListener(new View.OnClickListener() {
-                                           @Override
-                                           public void onClick(View v) {
-                                               Bundle bundle = new Bundle();
-                                               setFriendSplitAmount();
-                                               bundle.putSerializable("selectedFriends", selectedFriends);
-                                               bundle.putFloat("each", getSplitAmount());
-                                               bundle.putFloat("total", splitTransaction.getTransactionAmount());
+        final ImageButton forwardButton = (ImageButton) view.findViewById(R.id.btn_next);
+        forwardButton.setOnClickListener(new View.OnClickListener() {
+                                             @Override
+                                             public void onClick(View v) {
+                                                 Bundle bundle = new Bundle();
+                                                 setFriendSplitAmount();
+                                                 bundle.putSerializable("selectedFriends", selectedFriends);
+                                                 bundle.putFloat("each", getSplitAmount());
+                                                 bundle.putFloat("total", splitTransaction.getTransactionAmount());
 
-                                               ConfirmationFragment fragment = new ConfirmationFragment();
-                                               fragment.setArguments(bundle);
+                                                 ConfirmationFragment fragment = new ConfirmationFragment();
+                                                 fragment.setArguments(bundle);
 
-                                               getFragmentManager()
-                                                       .beginTransaction()
-                                                       .add(R.id.fragment_holder, fragment, "ConfirmationFragment")
-                                                       .addToBackStack(null)
-                                                       .commit();
-                                           }
-                                       }
+                                                 ((Toolbar) activity.findViewById(R.id.tool_bar_hamburger)).setVisibility(View.INVISIBLE);
+                                                 getActivity().getSupportFragmentManager()
+                                                         .beginTransaction()
+                                                         .add(R.id.fragment_holder, fragment, "ConfirmationFragment")
+                                                         .addToBackStack(null)
+                                                         .commit();
+                                             }
+                                         }
         );
-        this.setListAdapter(new FriendListAdapter(context, R.layout.friend_list, friendsList));
+        this.setListAdapter(new FriendListAdapter(context, R.layout.list_friend, friendsList));
 
         return view;
     }

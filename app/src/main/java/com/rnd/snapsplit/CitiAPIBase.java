@@ -3,6 +3,7 @@ package com.rnd.snapsplit;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.net.Uri;
@@ -99,7 +100,7 @@ public class CitiAPIBase {
 
     // Reference Data members
     private static final String DATA_REFERENCE_DATA_RETRIEVE_VALID_VALUES = "DATA_REFERENCE_DATA_RETRIEVE_VALID_VALUES";
-    private static final String RETRIEVE_VALID_VALUES_URL = "https://sandbox.apihub.citi.com/gcb/api/v1/apac/utilities/referenceData/%s";
+    private static final String RETRIEVE_VALID_VALUES_URL = BASE_URL + "/v1/apac/utilities/referenceData/%s";
 
     // Class functions
 

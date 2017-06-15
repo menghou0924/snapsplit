@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "539004383107",
+    "firebase_url": "https://snapsplit-855b6.firebaseio.com",
+    "project_id": "snapsplit-855b6",
+    "storage_bucket": "snapsplit-855b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539004383107:android:02d4508560dfe6f5",
+        "android_client_info": {
+          "package_name": "com.rnd.snapsplit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539004383107-4fotv7o2q65iphtjnnl0vjkulr10h27b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rnd.snapsplit",
+            "certificate_hash": "d209279482cb2e76c40d5b8b1aadb2226a1d3f81"
+          }
+        },
+        {
+          "client_id": "539004383107-tte5iveti19g2urktk65galcbce8ouhr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaOl8lSh39xzE-vjcQIscQGkDHMClHE2A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539004383107-tte5iveti19g2urktk65galcbce8ouhr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

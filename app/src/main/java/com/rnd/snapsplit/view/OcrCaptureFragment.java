@@ -30,7 +30,8 @@ import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -108,6 +109,8 @@ public final class OcrCaptureFragment extends Fragment {
         super.onAttach(context);
         final Resources resources = context.getResources();
         storageManager = new StorageManager(context);
+
+        ((Toolbar) getActivity().findViewById(R.id.tool_bar_hamburger)).setVisibility(View.VISIBLE);
     }
 
     /**
@@ -116,7 +119,7 @@ public final class OcrCaptureFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.ocr_capture, container, false);
+        final View view = inflater.inflate(R.layout.view_ocr_capture, container, false);
         final Activity activity = getActivity();
         final Context context = getContext();
 
@@ -191,9 +194,10 @@ public final class OcrCaptureFragment extends Fragment {
                  FriendsSelectionFragment fragment = new FriendsSelectionFragment();
                  fragment.setArguments(bundle);
 
-                 getFragmentManager()
+                 ((Toolbar) activity.findViewById(R.id.tool_bar_hamburger)).setVisibility(View.INVISIBLE);
+                 getActivity().getSupportFragmentManager()
                          .beginTransaction()
-                         .add(R.id.fragment_holder, fragment, "ConfirmationFragment")
+                         .add(R.id.fragment_holder, fragment, "FriendsSelectionFragment")
                          .addToBackStack(null)
                          .commit();
              }
@@ -247,6 +251,10 @@ public final class OcrCaptureFragment extends Fragment {
                 try {
                     while (shouldContinue) {
                         Thread.sleep(1);
+
+                        if (getActivity() == null) {
+                            return;
+                        }
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -374,6 +382,7 @@ public final class OcrCaptureFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         startCameraSource();
     }
 

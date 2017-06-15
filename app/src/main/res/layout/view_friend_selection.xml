@@ -9,7 +9,9 @@
     android:focusable="true"
     tools:context="com.rnd.snapsplit.view.FriendsSelectionFragment" >
 
-    <include layout="@layout/tool_bar_process" />
+    <!--<include layout="@layout/tool_bar_process" />-->
+    <include layout="@layout/tool_bar_process"
+        android:id="@+id/tool_bar_process" />
 
     <RelativeLayout
         android:id="@+id/relative_summary"
@@ -20,7 +22,6 @@
         android:visibility="visible"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="56dp">
-
 
         <ImageView
             android:layout_width="80dp"
@@ -70,7 +71,7 @@
             android:layout_toStartOf="@+id/text_selected_friends_no"
             android:paddingTop="18dp"
             android:paddingRight="4dp"
-            android:text="@string/selected_friends"
+            android:text="@string/friends_selection"
             android:textColor="@color/colorAccent2"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -168,7 +169,6 @@
             android:inputType="none" />
 
     </RelativeLayout>
-
 
     <RelativeLayout
         android:id="@+id/relative_fdList"

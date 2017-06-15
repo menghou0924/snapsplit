@@ -16,13 +16,9 @@
         android:visibility="visible"
         tools:context="com.rnd.snapsplit.view.MainActivity">
 
-        <include layout="@layout/tool_bar_hamburger"
-            android:visibility="invisible"
-            />
-
-        <include layout="@layout/tool_bar_process"
-            android:visibility="invisible"
-            />
+        <include
+            android:id="@+id/tool_bar_hamburger"
+            layout="@layout/tool_bar_hamburger" />
 
         <FrameLayout
             android:id="@+id/fragment_holder"

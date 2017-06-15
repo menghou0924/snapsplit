@@ -43,6 +43,16 @@ public class StorageManager {
         }
     }
 
+    public void appendFile(String filename, String text) {
+        try {
+            FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_APPEND);
+            outputStream.write(text.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getFile(String filename) {
         StringBuilder sb = new StringBuilder();
         String line;
@@ -91,11 +101,6 @@ public class StorageManager {
 
     public Boolean isFileEmpty(String filename) {
         String file = this.getFile(filename);
-        if (file.isEmpty()) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return file.isEmpty();
     }
 }
