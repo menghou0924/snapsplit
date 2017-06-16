@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 
 public class FriendsSelectionFragment extends ListFragment {
 
-    private static final String TAG = "FriendsSelectionFragment";
+    private static final String TAG = "FriendSelectionFragment";
 
     ArrayList<Friend> selectedFriends = new ArrayList<Friend>();
     Summary splitTransaction;
@@ -72,6 +73,21 @@ public class FriendsSelectionFragment extends ListFragment {
         ((Toolbar) view.findViewById(R.id.tool_bar_process)).setVisibility(View.VISIBLE);
         ((TextView) view.findViewById(R.id.text_title)).setText(R.string.friends_selection);
 
+        storageManager.clearFile("FRIENDS_LIST");
+        if (storageManager.isFileEmpty("FRIENDS_LIST")) {
+            Friend fd = new Friend("Damian", "Dutkiewicz", "5937 2478", "", R.drawable.damian);
+            Friend fd1 = new Friend("Raymond", "Sak", "3423 5435", "", R.drawable.raymond);
+            Friend fd2 = new Friend("Megan", "Gibbs", "9053 24438", "", 0);
+            Friend fd3 = new Friend("Bryant", "Ryan", "5587 2988", "", 0);
+            Friend fd4 = new Friend("Drew", "Jennings", "3557 7837", "", 0);
+            fd.saveSelfToFile(context);
+            fd1.saveSelfToFile(context);
+            fd2.saveSelfToFile(context);
+            fd3.saveSelfToFile(context);
+            fd4.saveSelfToFile(context);
+//            Log.d(TAG, storageManager.getFile("FRIENDS_LIST"));
+        }
+
         Bundle bundle = this.getArguments();
         splitTransaction = (Summary) bundle.getSerializable("splitTransaction");
 
@@ -84,7 +100,7 @@ public class FriendsSelectionFragment extends ListFragment {
         amount.setText(s);
         myShare.setText("HKD"+s);
 
-        ArrayList<Friend> friendsList = (new Friend(getContext())).getFriendsListFromFile();
+        ArrayList<Friend> friendsList = Friend.getFriendsListFromFile(context);
 
         final ImageButton backButton = (ImageButton) view.findViewById(R.id.btn_back);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +108,7 @@ public class FriendsSelectionFragment extends ListFragment {
                                           public void onClick(View v) {
                                               ((Toolbar) activity.findViewById(R.id.tool_bar_hamburger)).setVisibility(View.VISIBLE);
                                               ((Toolbar) getActivity().findViewById(R.id.tool_bar_hamburger)).setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                                              ((Toolbar) getActivity().findViewById(R.id.tool_bar_hamburger)).setTitle(R.string.app_name);
+                                              ((Toolbar) getActivity().findViewById(R.id.tool_bar_hamburger)).setTitle("");
                                               getFragmentManager().popBackStack();
                                           }
                                       }
@@ -121,7 +137,7 @@ public class FriendsSelectionFragment extends ListFragment {
                                              }
                                          }
         );
-        this.setListAdapter(new FriendListAdapter(context, R.layout.list_friend, friendsList));
+        this.setListAdapter(new FriendListAdapter(context, R.layout.list_friend, friendsList, TAG));
 
         return view;
     }

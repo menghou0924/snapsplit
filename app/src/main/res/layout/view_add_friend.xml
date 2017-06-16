@@ -14,27 +14,36 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
+    android:visibility="visible"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    tools:context="com.rnd.snapsplit.view.AddFriendsFragment"
+    android:layout_marginTop="?attr/actionBarSize">
 
-    <!-- Use standard android.R class list id instead of app specific id. This is just useful for
-         consistency. -->
-    <ListView android:id="@id/android:list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="@style/ContactListView"/>
+    <RelativeLayout
+        android:id="@+id/relative_fd_list"
+        android:layout_width="350dp"
+        android:layout_height="400dp"
+        android:background="@color/colorBackground"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true">
 
-    <!-- Use standard android.R class empty id instead of app specific id. This is just useful for
-     consistency. -->
-    <TextView android:id="@id/android:empty"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/no_contacts"
-        android:fontFamily="sans-serif-light"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        <ListView
+            android:id="@+id/android:list"
+            android:divider="@null"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true" />
+    </RelativeLayout>
 
-</FrameLayout>
+</RelativeLayout>

@@ -43,16 +43,6 @@ public class StorageManager {
         }
     }
 
-    public void appendFile(String filename, String text) {
-        try {
-            FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_APPEND);
-            outputStream.write(text.getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public String getFile(String filename) {
         StringBuilder sb = new StringBuilder();
         String line;

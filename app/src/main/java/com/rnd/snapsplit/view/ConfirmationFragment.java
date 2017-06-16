@@ -125,7 +125,7 @@ public class ConfirmationFragment extends ListFragment {
             }
         });
 
-        this.setListAdapter(new FriendListAdapter(context, R.layout.list_confirmation, selectedFriends));
+        this.setListAdapter(new FriendListAdapter(context, R.layout.list_confirmation, selectedFriends, TAG));
 
         return view;
     }

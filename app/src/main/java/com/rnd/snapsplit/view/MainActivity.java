@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         // add first fragment
         if (savedInstanceState == null) {
             ((Toolbar) findViewById(R.id.tool_bar_hamburger)).setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
+            setTitle("");
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.fragment_holder, OcrCaptureFragment.newInstance(), "OcrCaptureFragment")
@@ -86,12 +87,12 @@ public class MainActivity extends AppCompatActivity {
                 setTitle(menuItem.getTitle());
                 break;
             case R.id.nav_my_account:
-                fragmentClass = NewAddFriendsFragment.class;
+                fragmentClass = AddFriendsFragment.class;
                 ((Toolbar) findViewById(R.id.tool_bar_hamburger)).setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 setTitle(menuItem.getTitle());
                 break;
             case R.id.nav_friends:
-                fragmentClass = NewAddFriendsFragment.class;
+                fragmentClass = AddFriendsFragment.class;
                 ((Toolbar) findViewById(R.id.tool_bar_hamburger)).setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 setTitle(menuItem.getTitle());
                 break;
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
             fragmentManager.popBackStack();
         }
-        fragmentManager.beginTransaction().replace(R.id.fl_content, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_holder, fragment).commit();
 
         // Highlight the selected item has been done by NavigationView
         menuItem.setChecked(true);

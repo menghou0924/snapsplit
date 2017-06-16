@@ -23,8 +23,6 @@ public class Friend implements Serializable {
     private float amountToPay = 0f;
     public HashMap<String, Object> timestampNow = new HashMap<>();
     private int displayPic;
-    private StorageManager storageManager;
-    private Context context;
     private final static String STORAGE_FILE_NAME = "FRIENDS_LIST";
 
     @Override
@@ -34,11 +32,6 @@ public class Friend implements Serializable {
     }
 
     public Friend() {
-    }
-
-    public Friend(Context ctx) {
-        context = ctx;
-        storageManager = new StorageManager(ctx);
     }
 
     public Friend(String firstName, String lastName, String phoneNumber, String accountNumber, int displayPic) {
@@ -77,8 +70,8 @@ public class Friend implements Serializable {
 
     public float getAmountToPay() { return amountToPay; }
 
-    public String getValueWithKey(String key) {
-        String result = "";
+    public Object getValueWithKey(String key) {
+        Object result = "";
         switch (key) {
             case "firstName":
                 result = this.getFirstName();
@@ -95,6 +88,9 @@ public class Friend implements Serializable {
             case "accountNo":
                 result = this.getAccountNo();
                 break;
+            case "displayPic":
+                result = this.getDisplayPic();
+                break;
             default:
                 result = this.getFirstName() + " " + this.getLastName();
         }
@@ -105,31 +101,36 @@ public class Friend implements Serializable {
 
     // access from files
 
-    public void saveFriendToFile() {
-        JSONObject friend = new JSONObject();
-        JSONArray array = new JSONArray();
-        JSONObject friendsList = new JSONObject();
+    public void saveSelfToFile(Context ctx) {
+        JSONObject friendListObj = new JSONObject();
+        JSONArray friendArray = new JSONArray();
+        JSONObject newFriendObj = new JSONObject();
+
         try {
-            friend.put("firstName", firstName);
-            friend.put("lastName", lastName);
-            friend.put("phoneNumber", phoneNumber);
-            friend.put("accountNumber", accountNumber);
-            friend.put("displayPic", displayPic);
-            array.put(friend);
-            friendsList.put("friends", friend);
+            if ((new StorageManager(ctx)).getFile(STORAGE_FILE_NAME).isEmpty() == false) {
+                friendListObj = new JSONObject((new StorageManager(ctx)).getFile(STORAGE_FILE_NAME));
+                friendArray = friendListObj.getJSONArray("friends");
+            }
+            newFriendObj.put("firstName", firstName);
+            newFriendObj.put("lastName", lastName);
+            newFriendObj.put("phoneNumber", phoneNumber);
+            newFriendObj.put("accountNumber", accountNumber);
+            newFriendObj.put("displayPic", displayPic);
+            friendArray.put(newFriendObj);
+
+            friendListObj.put("friends", friendArray);
         }
         catch (JSONException e) {
             e.printStackTrace();
         }
-
-        storageManager.appendFile(STORAGE_FILE_NAME, friendsList.toString());
+        (new StorageManager(ctx)).saveFile(STORAGE_FILE_NAME, friendListObj.toString());
     }
 
-    public ArrayList<Friend> getFriendsListFromFile() {
+    public static ArrayList<Friend> getFriendsListFromFile(Context ctx) {
         ArrayList<Friend> resultList = new ArrayList<Friend>();
         JSONObject friendObj = new JSONObject();
         try {
-            friendObj = new JSONObject(storageManager.getFile(STORAGE_FILE_NAME));
+            friendObj = new JSONObject((new StorageManager(ctx)).getFile(STORAGE_FILE_NAME));
             JSONArray friendsArray = friendObj.getJSONArray("friends");
             for (int i = 0; i < friendsArray.length(); i++) {
                 JSONObject temp = friendsArray.getJSONObject(i);
@@ -148,11 +149,11 @@ public class Friend implements Serializable {
         return resultList;
     }
 
-    public Friend getFriendByPhoneNumber(String phoneNumber) {
+    public static Friend getFriendByPhoneNumber(Context ctx, String phoneNumber) {
         Friend result = new Friend();
         JSONObject friendObj = new JSONObject();
         try {
-            friendObj = new JSONObject(storageManager.getFile(STORAGE_FILE_NAME));
+            friendObj = new JSONObject((new StorageManager(ctx)).getFile(STORAGE_FILE_NAME));
             JSONArray friendsArray = friendObj.getJSONArray("friends");
             for (int i = 0; i < friendsArray.length(); i++) {
                 JSONObject temp = friendsArray.getJSONObject(i);

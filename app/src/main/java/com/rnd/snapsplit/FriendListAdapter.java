@@ -3,6 +3,7 @@ package com.rnd.snapsplit;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.ivbaranov.mli.MaterialLetterIcon;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Damian on 29/5/2017.
@@ -19,14 +23,22 @@ import java.util.List;
 
 public class FriendListAdapter extends ArrayAdapter<Friend>{
     private Context context;
+    private String fragmentTag;
     private ArrayList<Friend> data;
     private int layoutResourceId;
+    private int[] mMaterialColors;
+    private static final Random RANDOM = new Random();
+    private final TypedValue mTypedValue = new TypedValue();
 
-    public FriendListAdapter(Context context, int layoutResourceId, ArrayList<Friend> data)  {
+    public FriendListAdapter(Context context, int layoutResourceId, ArrayList<Friend> data, String tag)  {
         super(context, layoutResourceId, data);
         this.context = context;
+        this.fragmentTag = tag;
         this.data = data;
         this.layoutResourceId = layoutResourceId;
+        this.mMaterialColors = context.getResources().getIntArray(R.array.colors);
+//        context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
+
     }
 
     @NonNull
@@ -41,11 +53,12 @@ public class FriendListAdapter extends ArrayAdapter<Friend>{
             row = inflater.inflate(layoutResourceId, parent, false);
 
             holder = new ViewHolder();
-            holder.textView1 = (TextView)row.findViewById(R.id.firstName);
-            holder.textView2 = (TextView)row.findViewById(R.id.lastName);
-            holder.textView3 = (TextView)row.findViewById(R.id.phoneNumber);
-            holder.textView4 = (TextView)row.findViewById(R.id.splitAmount);
-            holder.imageView1 = (ImageView)row.findViewById(R.id.friendIcon);
+            holder.mFirstName = (TextView)row.findViewById(R.id.firstName);
+            holder.mLastName = (TextView)row.findViewById(R.id.lastName);
+            holder.mPhoneNumber = (TextView)row.findViewById(R.id.phoneNumber);
+            holder.mAmount = (TextView)row.findViewById(R.id.splitAmount);
+            holder.mImageIcon = (ImageView)row.findViewById(R.id.image_icon);
+            holder.mTextIcon = (MaterialLetterIcon) row.findViewById(R.id.text_icon);
 
             row.setTag(holder);
         }
@@ -56,21 +69,41 @@ public class FriendListAdapter extends ArrayAdapter<Friend>{
 
         Friend friend = data.get(position);
 
-        holder.textView1.setText(friend.getFirstName());
-        holder.textView2.setText(friend.getLastName());
-        holder.textView3.setText(friend.getPhoneNumber());
-        holder.textView4.setText(String.format("HKD%.2f",friend.getAmountToPay()));
-        holder.imageView1.setImageResource(friend.getDisplayPic());
+        holder.mFirstName.setText(friend.getFirstName());
+        holder.mLastName.setText(friend.getLastName());
+        holder.mPhoneNumber.setText(friend.getPhoneNumber());
+
+        holder.mTextIcon.setInitials(true);
+        holder.mTextIcon.setInitialsNumber(2);
+        holder.mTextIcon.setLetterSize(18);
+        holder.mTextIcon.setShapeColor(mMaterialColors[RANDOM.nextInt(mMaterialColors.length)]);
+        holder.mTextIcon.setLetter((String) friend.getValueWithKey("name"));
+
+        if (friend.getDisplayPic() == 0) {
+            holder.mTextIcon.setVisibility(View.VISIBLE);
+            holder.mImageIcon.setVisibility(View.INVISIBLE);
+        }
+        else {
+            holder.mTextIcon.setVisibility(View.INVISIBLE);
+            holder.mImageIcon.setVisibility(View.VISIBLE);
+            holder.mImageIcon.setImageResource(friend.getDisplayPic());
+        }
+
+        if (!fragmentTag.equals("AddFriendsFragment")) {
+            holder.mAmount.setText(String.format("HKD%.2f",friend.getAmountToPay()));
+        }
 
         return row;
     }
 
     private static class ViewHolder
     {
-        TextView textView1;
-        TextView textView2;
-        TextView textView3;
-        TextView textView4;
-        ImageView imageView1;
+        TextView mFirstName;
+        TextView mLastName;
+        TextView mPhoneNumber;
+        TextView mAmount;
+        ImageView mImageIcon;
+        MaterialLetterIcon mTextIcon;
+
     }
 }
