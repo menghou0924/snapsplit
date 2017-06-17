@@ -30,6 +30,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Damian on 28/5/2017.
@@ -39,7 +46,8 @@ public class FriendsSelectionFragment extends ListFragment {
 
     private static final String TAG = "FriendSelectionFragment";
 
-    ArrayList<Friend> selectedFriends = new ArrayList<Friend>();
+    ArrayList<Friend> selectedFriendsArray = new ArrayList<Friend>();
+    Map<Friend, Integer> selectedFriendsMap = new HashMap<>();
     Summary splitTransaction;
     StorageManager storageManager;
 
@@ -69,24 +77,13 @@ public class FriendsSelectionFragment extends ListFragment {
         final Activity activity = getActivity();
         final Context context = getContext();
 
+        if (Friend.isFriendListEmpty(context)) {
+            Friend.resetFriends(context);
+        }
+
         ((Toolbar) activity.findViewById(R.id.tool_bar_hamburger)).setVisibility(View.INVISIBLE);
         ((Toolbar) view.findViewById(R.id.tool_bar_process)).setVisibility(View.VISIBLE);
         ((TextView) view.findViewById(R.id.text_title)).setText(R.string.friends_selection);
-
-        storageManager.clearFile("FRIENDS_LIST");
-        if (storageManager.isFileEmpty("FRIENDS_LIST")) {
-            Friend fd = new Friend("Damian", "Dutkiewicz", "5937 2478", "", R.drawable.damian);
-            Friend fd1 = new Friend("Raymond", "Sak", "3423 5435", "", R.drawable.raymond);
-            Friend fd2 = new Friend("Megan", "Gibbs", "9053 24438", "", 0);
-            Friend fd3 = new Friend("Bryant", "Ryan", "5587 2988", "", 0);
-            Friend fd4 = new Friend("Drew", "Jennings", "3557 7837", "", 0);
-            fd.saveSelfToFile(context);
-            fd1.saveSelfToFile(context);
-            fd2.saveSelfToFile(context);
-            fd3.saveSelfToFile(context);
-            fd4.saveSelfToFile(context);
-//            Log.d(TAG, storageManager.getFile("FRIENDS_LIST"));
-        }
 
         Bundle bundle = this.getArguments();
         splitTransaction = (Summary) bundle.getSerializable("splitTransaction");
@@ -120,7 +117,8 @@ public class FriendsSelectionFragment extends ListFragment {
                                              public void onClick(View v) {
                                                  Bundle bundle = new Bundle();
                                                  setFriendSplitAmount();
-                                                 bundle.putSerializable("selectedFriends", selectedFriends);
+                                                 setFriendOrder();
+                                                 bundle.putSerializable("selectedFriends", selectedFriendsArray);
                                                  bundle.putFloat("each", getSplitAmount());
                                                  bundle.putFloat("total", splitTransaction.getTransactionAmount());
                                                  bundle.putString("description", splitTransaction.getTransactionName());
@@ -147,8 +145,8 @@ public class FriendsSelectionFragment extends ListFragment {
         // Log.d("myTag", splitTransaction.getTransactionAmount() +"  " + splitTransaction.getTransactionName());
         // Toast.makeText(this, "Item #" + position + " clicked", Toast.LENGTH_SHORT).show();
         Friend f = (Friend)l.getItemAtPosition(position);
-        if (selectedFriends.contains(f)) {
-            selectedFriends.remove(f);
+        if (selectedFriendsMap.containsKey(f)) {
+            selectedFriendsMap.remove(f);
             updateAmounts(l);
             TextView tv = (TextView) v.findViewById(R.id.splitAmount);
             tv.setVisibility(View.INVISIBLE);
@@ -156,7 +154,7 @@ public class FriendsSelectionFragment extends ListFragment {
             iv.setImageResource(R.drawable.tick_black);
         }
         else{
-            selectedFriends.add(f);
+            selectedFriendsMap.put(f, position);
             updateAmounts(l);
             TextView tv = (TextView) v.findViewById(R.id.splitAmount);
             tv.setVisibility(View.VISIBLE);
@@ -168,7 +166,7 @@ public class FriendsSelectionFragment extends ListFragment {
     protected void updateAmounts(ListView l) {
         String newSplitAmount = String.format("HKD%.2f",getSplitAmount());
         TextView selectCount = (TextView)getView().findViewById(R.id.text_selected_friends_no);
-        selectCount.setText(String.valueOf(selectedFriends.size()));
+        selectCount.setText(String.valueOf(selectedFriendsMap.size()));
         TextView each = (TextView)getView().findViewById(R.id.text_each_price);
         each.setText(newSplitAmount);
 
@@ -177,7 +175,7 @@ public class FriendsSelectionFragment extends ListFragment {
 
         for (int pos=0; pos < l.getCount(); pos++) {
             Friend f = (Friend)l.getItemAtPosition(pos);
-            if (selectedFriends.contains(f)) {
+            if (selectedFriendsMap.containsKey(f)) {
                 View v= l.getChildAt(pos);
                 TextView tv = (TextView) v.findViewById(R.id.splitAmount);
                 tv.setText(newSplitAmount);
@@ -186,14 +184,37 @@ public class FriendsSelectionFragment extends ListFragment {
     }
 
     protected float getSplitAmount() {
-        return splitTransaction.getTransactionAmount() / (selectedFriends.size()+1);
+        return splitTransaction.getTransactionAmount() / (selectedFriendsMap.size()+1);
     }
 
     protected void setFriendSplitAmount() {
-        for(int i = 0; i < selectedFriends.size(); i++) {
-            Friend fdWithAmount = selectedFriends.get(i);
-            fdWithAmount.setAmountToPay(getSplitAmount());
-            selectedFriends.set(i,fdWithAmount);
+        for(Friend f: selectedFriendsMap.keySet()) {
+            f.setAmountToPay(getSplitAmount());
         }
+    }
+
+    protected void setFriendOrder() {
+        selectedFriendsArray = new ArrayList<Friend>(sortByValue(selectedFriendsMap).keySet());
+    }
+
+    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue( Map<K, V> map )
+    {
+        List<Map.Entry<K, V>> list =
+                new LinkedList<>( map.entrySet() );
+        Collections.sort( list, new Comparator<Map.Entry<K,V>>()
+        {
+            @Override
+            public int compare( Map.Entry<K, V> o1, Map.Entry<K, V> o2 )
+            {
+                return ( o1.getValue() ).compareTo( o2.getValue() );
+            }
+        } );
+
+        Map<K, V> result = new LinkedHashMap<>();
+        for (Map.Entry<K, V> entry : list)
+        {
+            result.put( entry.getKey(), entry.getValue() );
+        }
+        return result;
     }
 }

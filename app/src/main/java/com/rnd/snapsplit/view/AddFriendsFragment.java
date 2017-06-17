@@ -30,8 +30,16 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +47,7 @@ import com.github.ivbaranov.mli.MaterialLetterIcon;
 import com.rnd.snapsplit.Friend;
 import com.rnd.snapsplit.FriendListAdapter;
 import com.rnd.snapsplit.R;
+import com.rnd.snapsplit.StorageManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +78,8 @@ public class AddFriendsFragment extends ListFragment {
 
     private static final Random RANDOM = new Random();
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+    private Context context;
+    private ArrayAdapter adapter;
 
     private ArrayList<Friend> friendsList = new ArrayList<>();
 
@@ -80,10 +91,21 @@ public class AddFriendsFragment extends ListFragment {
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
         }
+        context = getContext();
+        if (Friend.isFriendListEmpty(context)) {
+            Friend.resetFriends(context);
+        }
 
         friendsList = Friend.getFriendsListFromFile(getContext());
+        adapter = new FriendListAdapter(getContext(), R.layout.list_add_friend, friendsList, TAG);
+        this.setListAdapter(adapter);
 
-        this.setListAdapter(new FriendListAdapter(getContext(), R.layout.list_add_friend, friendsList, TAG));
+        ImageButton addButton = (ImageButton) view.findViewById(R.id.btn_add_friend);
+        ImageButton confirmButton = (ImageButton) view.findViewById(R.id.btn_confirm);
+        ImageButton closeButton = (ImageButton) view.findViewById(R.id.btn_close);
+        addButton.setOnClickListener(addFriend);
+        confirmButton.setOnClickListener(confirmAddFriend);
+        closeButton.setOnClickListener(closeBox);
 
         return view;
     }
@@ -106,6 +128,57 @@ public class AddFriendsFragment extends ListFragment {
         }
     }
 
+    final View.OnClickListener addFriend = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            onPause();
 
+            RelativeLayout box = (RelativeLayout) getView().findViewById(R.id.recognition_box);
+            box.setVisibility(View.VISIBLE);
+            Animation slide_up = AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                    R.anim.slide_up);
 
+            box.startAnimation(slide_up);
+        }
+    };
+
+    final View.OnClickListener confirmAddFriend = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            EditText name = (EditText) getView().findViewById(R.id.text_name_value);
+            EditText phone = (EditText) getView().findViewById(R.id.text_number_value);
+
+            String [] nameSplit = name.getText().toString().split(" ", 2);
+            String firstName = nameSplit[0];
+            String lastName = nameSplit.length < 2 ? "" : nameSplit[1];
+            String phoneNumber = phone.getText().toString().substring(0, 4) + " " + phone.getText().toString().substring(4);
+
+            Friend newFriend = new Friend(firstName, lastName, phoneNumber, Integer.toString(RANDOM.nextInt(99999999)+10000000), 0);
+
+            newFriend.saveSelfToFile(getContext());
+
+            RelativeLayout box = (RelativeLayout) getView().findViewById(R.id.recognition_box);
+            Animation slide_down = AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                    R.anim.slide_down);
+            box.startAnimation(slide_down);
+            box.setVisibility(View.INVISIBLE);
+
+            final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+            adapter.add(newFriend);
+            adapter.notifyDataSetChanged();
+        }
+    };
+
+    final View.OnClickListener closeBox = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            RelativeLayout box = (RelativeLayout) getView().findViewById(R.id.recognition_box);
+            Animation slide_down = AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                    R.anim.slide_down);
+            box.startAnimation(slide_down);
+            box.setVisibility(View.INVISIBLE);
+        }
+    };
 }

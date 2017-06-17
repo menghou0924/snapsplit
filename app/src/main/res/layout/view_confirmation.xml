@@ -121,11 +121,11 @@
     <RelativeLayout
         android:id="@+id/relative_fd_list"
         android:layout_width="350dp"
-        android:layout_height="400dp"
-        android:layout_centerHorizontal="true"
+        android:layout_height="600dp"
         android:layout_below="@+id/relative_summary"
-        android:background="@color/colorBackground"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
+        android:background="@color/colorBackground"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -140,10 +140,11 @@
 
         <ListView
             android:id="@+id/android:list"
-            android:divider="@null"
-            android:layout_below="@+id/text_payment"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/text_payment"
+            android:divider="@null" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -183,11 +184,10 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:text="@string/send_requests"
-        android:layout_marginBottom="56dp"
-        android:layout_marginTop="40dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/relative_request_sent"
+        android:layout_marginBottom="55dp"
         android:textSize="18sp"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/relative_fd_list" />
 
 </RelativeLayout>

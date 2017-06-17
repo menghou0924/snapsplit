@@ -173,4 +173,27 @@ public class Friend implements Serializable {
         }
         return result;
     }
+
+    public static Boolean isFriendListEmpty(Context ctx) {
+
+        return (new StorageManager(ctx)).isFileEmpty("FRIENDS_LIST");
+    }
+
+    public static void removeAllFriends(Context ctx) {
+        (new StorageManager(ctx)).clearFile("FRIENDS_LIST");
+    }
+
+    public static void resetFriends(Context ctx) {
+        removeAllFriends(ctx);
+        Friend fd = new Friend("Damian", "Dutkiewicz", "5937 2478", "", R.drawable.damian);
+        Friend fd1 = new Friend("Raymond", "Sak", "3423 5435", "", R.drawable.raymond);
+        Friend fd2 = new Friend("Megan", "Gibbs", "9053 24438", "", 0);
+        Friend fd3 = new Friend("Bryant", "Ryan", "5587 2988", "", 0);
+        Friend fd4 = new Friend("Drew", "Jennings", "3557 7837", "", 0);
+        fd.saveSelfToFile(ctx);
+        fd1.saveSelfToFile(ctx);
+        fd2.saveSelfToFile(ctx);
+        fd3.saveSelfToFile(ctx);
+        fd4.saveSelfToFile(ctx);
+    }
 }

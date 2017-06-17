@@ -91,7 +91,10 @@
     <string name="menu_edit_contact">Edit Contact</string>
     <string name="no_contacts">No Contacts Found</string>
     <string name="no_contact_selected">No Contact Selected</string>
-    <string name="search_hint">Find contacts</string>
+    <string name="name_hint">Name</string>
+    <string name="phone_hint">Phone Number</string>
+    <string name="search_hint">Find Contact</string>
+
     <!-- Used for the AlphabetIndexer in ContactsListFragment to provide quick navigation by
          alphabet using ListView fast scroll. -->
     <string name="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
