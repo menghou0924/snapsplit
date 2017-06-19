@@ -20,4 +20,18 @@
     <color name="color_9">#3F51B5</color>
     <color name="color_10">#673AB7</color>
     <color name="color_11">#757575</color>
+
+    <integer-array name="colors_icon">
+        <item>@color/color_1</item>
+        <item>@color/color_2</item>
+        <item>@color/color_3</item>
+        <item>@color/color_4</item>
+        <item>@color/color_5</item>
+        <item>@color/color_6</item>
+        <item>@color/color_7</item>
+        <item>@color/color_8</item>
+        <item>@color/color_9</item>
+        <item>@color/color_10</item>
+        <item>@color/color_11</item>
+    </integer-array>
 </resources>

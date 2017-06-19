@@ -51,8 +51,9 @@
         android:layout_marginLeft="20dip"
         android:id="@+id/relativeLayout2">
 
+
         <TextView
-            android:id="@+id/firstName"
+            android:id="@+id/txt_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -60,21 +61,11 @@
             android:textSize="16dip" />
 
         <TextView
-            android:id="@+id/lastName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_toEndOf="@+id/firstName"
-            android:paddingLeft="3dp"
-            android:text="Dutkiewicz"
-            android:textSize="16dip" />
-
-        <TextView
-            android:id="@+id/phoneNumber"
+            android:id="@+id/txt_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/firstName"
+            android:layout_below="@+id/txt_name"
             android:paddingTop="1dp"
             android:text="5660 0981"
             android:textSize="15dip" />

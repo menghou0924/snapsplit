@@ -1,12 +1,15 @@
 package com.rnd.snapsplit.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +32,14 @@ import com.google.firebase.database.ServerValue;
 
 import com.rnd.snapsplit.Friend;
 import com.rnd.snapsplit.FriendListAdapter;
+import com.rnd.snapsplit.History;
 import com.rnd.snapsplit.R;
 import com.rnd.snapsplit.PaymentRequest;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Damian on 28/5/2017.
@@ -45,6 +52,8 @@ public class ConfirmationFragment extends ListFragment {
     private FirebaseAnalytics mFirebaseAnalytics;
     private View view;
     private String description ="";
+    private Bitmap bm;
+    private History history;
 
     ArrayList<Friend> selectedFriends = new ArrayList<Friend>();
 
@@ -72,6 +81,7 @@ public class ConfirmationFragment extends ListFragment {
         view = inflater.inflate(R.layout.view_confirmation, container, false);
         final Activity activity = getActivity();
         final Context context = getContext();
+        history = new History(context);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -79,6 +89,11 @@ public class ConfirmationFragment extends ListFragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             selectedFriends = (ArrayList<Friend>) bundle.getSerializable("selectedFriends");
+            String picPath = bundle.getString("receiptPicture");
+            bm = BitmapFactory.decodeFile(picPath);
+
+            CircleImageView receipt = (CircleImageView) view.findViewById(R.id.receipt_image);
+            receipt.setImageBitmap(bm);
         }
 
         ((Toolbar) activity.findViewById(R.id.tool_bar_hamburger)).setVisibility(View.INVISIBLE);
@@ -93,12 +108,12 @@ public class ConfirmationFragment extends ListFragment {
         TextView desc = (TextView) view.findViewById(R.id.text_summary_shop);
         desc.setText(description);
 
-        TextView each = (TextView) view.findViewById(R.id.text_each_price);
-        each.setText(String.format("HKD%.2f", bundle.getSerializable("each")));
+        TextView myShareVal = (TextView) view.findViewById(R.id.text_myShare_value);
+        myShareVal.setText(bundle.getString("myShare"));
         TextView selectedNo = (TextView) view.findViewById(R.id.text_selected_friends_no);
         selectedNo.setText(String.valueOf(selectedFriends.size()));
-        TextView total = (TextView) view.findViewById(R.id.text_summary_amount);
-        total.setText(String.format("HKD%.2f", bundle.getSerializable("total")));
+        TextView total = (TextView) view.findViewById(R.id.text_summary_amount_value);
+        total.setText(String.format("%.2f", bundle.getSerializable("total")));
 
         final ImageButton backButton = (ImageButton) view.findViewById(R.id.btn_back);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -131,19 +146,31 @@ public class ConfirmationFragment extends ListFragment {
     }
 
     protected void sendRequestsToFirebase() {
+        String receiptStr = getStrFromReceiptBitmap(bm);
+        Bundle bundle = this.getArguments();
         if (selectedFriends != null) {
             for (int i = 0; i < selectedFriends.size(); i++) {
                 Friend fd = selectedFriends.get(i); // .timestampNow.put("timestamp", ServerValue.TIMESTAMP);
                 PaymentRequest pr = new PaymentRequest();
                 pr.setReceipientPhoneNo(fd.getPhoneNumber());
-                pr.setReceiptPicture(null);
+                pr.setStrReceiptPic(receiptStr);
                 pr.setRequestEpochDate(String.valueOf(System.currentTimeMillis()*(-1)));
                 pr.setRequestorName("Damian Dutkiewicz");
-                pr.setRequestorPhoneNumber("7849 8484");
+                pr.setRequestorPhoneNumber("5937 2478");
                 pr.setShareAmount(fd.getAmountToPay());
+                pr.setTotalAmount(bundle.getFloat("total"));
                 pr.setDesription(description);
                 mFirebaseDatabaseReference.child(fd.getPhoneNumber()).push().setValue(pr);
             }
+
+            PaymentRequest pr = new PaymentRequest();
+            pr.setStrReceiptPic(receiptStr);
+            pr.setRequestEpochDate(String.valueOf(System.currentTimeMillis()*(-1)));
+            pr.setRequestorName("Damian Dutkiewicz");
+            pr.setRequestorPhoneNumber("7849 8484");
+            pr.setTotalAmount(bundle.getFloat("total"));
+            pr.setDesription(description);
+            history.setRequestHistory(selectedFriends, pr);
 
             RelativeLayout rl1 = (RelativeLayout) view.findViewById(R.id.relative_summary);
             RelativeLayout rl2 = (RelativeLayout) view.findViewById(R.id.relative_fd_list);
@@ -162,5 +189,14 @@ public class ConfirmationFragment extends ListFragment {
             mFirebaseAnalytics.logEvent("message_sent", null);
 
         }
+    }
+
+    public static String getStrFromReceiptBitmap(Bitmap bmp){
+        ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
+        bmp.recycle();
+        byte[] byteArray = bYtE.toByteArray();
+        String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        return imageFile;
     }
 }

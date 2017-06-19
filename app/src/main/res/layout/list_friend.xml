@@ -36,43 +36,62 @@
         android:id="@+id/relativeLayout2">
 
         <TextView
-            android:id="@+id/firstName"
+            android:id="@+id/txt_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
             android:text="Dutkiewicz"
-            android:textSize="16dip" />
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/lastName"
+            android:id="@+id/txt_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_toEndOf="@+id/firstName"
-            android:paddingLeft="3dp"
-            android:text="Dutkiewicz"
-            android:textSize="16dip" />
-
-
-        <TextView
-            android:id="@+id/phoneNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lastName"
+            android:layout_below="@+id/txt_name"
             android:paddingTop="1dp"
             android:text="5660 0981"
-            android:textSize="13dip" />
+            android:textSize="13sp" />
 
-        <TextView
+        <EditText
             android:id="@+id/splitAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/phoneNumber"
-            android:paddingTop="1dp"
-            android:text="HKD100.00"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/txt_phone"
+            android:layout_marginBottom="10dp"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="numberDecimal"
+            android:textAlignment="viewStart"
             android:textColor="#27ae60"
-            android:textSize="13dip"
-            android:visibility="invisible" />
+            android:textSize="14sp"
+            android:visibility="invisible"
+            android:background="@android:color/transparent" />
+
+        <EditText
+            android:id="@+id/currencyOrPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/splitAmount"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@+id/splitAmount"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="numberDecimal"
+            android:text="HKD"
+            android:textAlignment="viewStart"
+            android:textColor="#27ae60"
+            android:textSize="14sp"
+            android:visibility="invisible"
+            android:background="@android:color/transparent" />
 
         <ImageView
             android:id="@+id/fdTick"
@@ -85,5 +104,6 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="5dp"
             android:src="@drawable/tick_black" />
+
     </RelativeLayout>
 </RelativeLayout>

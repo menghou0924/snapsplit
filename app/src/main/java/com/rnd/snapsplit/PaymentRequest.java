@@ -1,5 +1,10 @@
 package com.rnd.snapsplit;
 
+import android.content.Context;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
@@ -11,10 +16,11 @@ public class PaymentRequest implements Serializable {
     private String description = "";
     private String requestorPhoneNumber = "";
     private String requestEpochDate = "";
-    private String receiptPicture = "";
     private String receipientPhoneNo = "";
     private String id ="";
+    private String strReceiptPic="";
     private float shareAmount = 0f;
+    private float totalAmount = 0f;
 
     public PaymentRequest() {
     }
@@ -39,16 +45,16 @@ public class PaymentRequest implements Serializable {
         this.requestEpochDate = requestEpochDate;
     }
 
-    public void setReceiptPicture(String receiptPicture) {
-        this.receiptPicture = receiptPicture;
-    }
-
     public void setReceipientPhoneNo(String receipientPhoneNo) {
         this.receipientPhoneNo = receipientPhoneNo;
     }
 
     public void setShareAmount(float shareAmount) {
         this.shareAmount = shareAmount;
+    }
+
+    public void setTotalAmount(float totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public String getDescription() {
@@ -71,10 +77,6 @@ public class PaymentRequest implements Serializable {
         return requestEpochDate;
     }
 
-    public String getReceiptPicture() {
-        return receiptPicture;
-    }
-
     public String getReceipientPhoneNo() {
         return receipientPhoneNo;
     }
@@ -83,5 +85,52 @@ public class PaymentRequest implements Serializable {
         return shareAmount;
     }
 
+    public float getTotalAmount() {
+        return totalAmount;
+    }
 
+    public String getStrReceiptPic() {
+        return strReceiptPic;
+    }
+
+    public void setStrReceiptPic(String strReceiptPic) {
+        this.strReceiptPic = strReceiptPic;
+    }
+
+    public JSONObject getSelfWithTotalAsJsonObject(Context context) {
+            JSONObject request = new JSONObject();
+            try {
+                request.put("paymentrequest_id", id);
+                request.put("paymentrequest_totalAmount", totalAmount);
+                request.put("paymentrequest_description", description);
+                request.put("paymentrequest_requestEpochDate", requestEpochDate);
+                request.put("paymentrequest_strReceiptPic", strReceiptPic);
+                request.put("paymentrequest_requestorName", requestorName);
+                request.put("paymentrequest_requestorPhoneNumber", requestorPhoneNumber);
+
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return request;
+    }
+
+    public JSONObject getSelfWithIndividualSplitAsJsonObject(Context context) {
+        JSONObject request = new JSONObject();
+        try {
+            request.put("paymentrequest_id", id);
+            request.put("paymentrequest_totalAmount", totalAmount);
+            request.put("paymentrequest_description", description);
+            request.put("paymentrequest_requestEpochDate", requestEpochDate);
+            request.put("paymentrequest_strReceiptPic", strReceiptPic);
+            request.put("paymentrequest_requestorName", requestorName);
+            request.put("paymentrequest_requestorPhoneNumber", requestorPhoneNumber);
+            request.put("paymentrequest_shareAmount", shareAmount);
+            request.put("paymentrequest_receipientPhoneNo", receipientPhoneNo);
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return request;
+    }
 }

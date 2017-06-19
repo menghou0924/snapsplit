@@ -23,6 +23,7 @@ public class Friend implements Serializable {
     private float amountToPay = 0f;
     public HashMap<String, Object> timestampNow = new HashMap<>();
     private int displayPic;
+    private int displayColor;
     private final static String STORAGE_FILE_NAME = "FRIENDS_LIST";
 
     @Override
@@ -34,12 +35,13 @@ public class Friend implements Serializable {
     public Friend() {
     }
 
-    public Friend(String firstName, String lastName, String phoneNumber, String accountNumber, int displayPic) {
+    public Friend(String firstName, String lastName, String phoneNumber, String accountNumber, int displayPic, int displayColor) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.accountNumber = accountNumber;
         this.displayPic = displayPic;
+        this.displayColor = displayColor;
     }
 
     public String getId() {
@@ -67,6 +69,8 @@ public class Friend implements Serializable {
     }
 
     public int getDisplayPic() { return displayPic; }
+
+    public int getDisplayColor() { return displayColor; }
 
     public float getAmountToPay() { return amountToPay; }
 
@@ -102,28 +106,24 @@ public class Friend implements Serializable {
     // access from files
 
     public void saveSelfToFile(Context ctx) {
-        JSONObject friendListObj = new JSONObject();
-        JSONArray friendArray = new JSONArray();
-        JSONObject newFriendObj = new JSONObject();
+        (new StorageManager(ctx)).appendFile(STORAGE_FILE_NAME, "friends", getSelfAsJSONObject(ctx));
+    }
 
+    public JSONObject getSelfAsJSONObject(Context ctx) {
+        JSONObject friend = new JSONObject();
         try {
-            if ((new StorageManager(ctx)).getFile(STORAGE_FILE_NAME).isEmpty() == false) {
-                friendListObj = new JSONObject((new StorageManager(ctx)).getFile(STORAGE_FILE_NAME));
-                friendArray = friendListObj.getJSONArray("friends");
-            }
-            newFriendObj.put("firstName", firstName);
-            newFriendObj.put("lastName", lastName);
-            newFriendObj.put("phoneNumber", phoneNumber);
-            newFriendObj.put("accountNumber", accountNumber);
-            newFriendObj.put("displayPic", displayPic);
-            friendArray.put(newFriendObj);
-
-            friendListObj.put("friends", friendArray);
+            friend.put("friend_id", id);
+            friend.put("friend_firstName", firstName);
+            friend.put("friend_lastName", lastName);
+            friend.put("friend_phoneNumber", phoneNumber);
+            friend.put("friend_accountNumber", accountNumber);
+            friend.put("friend_displayPic", displayPic);
+            friend.put("friend_displayColor", displayColor);
         }
         catch (JSONException e) {
             e.printStackTrace();
         }
-        (new StorageManager(ctx)).saveFile(STORAGE_FILE_NAME, friendListObj.toString());
+        return friend;
     }
 
     public static ArrayList<Friend> getFriendsListFromFile(Context ctx) {
@@ -135,11 +135,12 @@ public class Friend implements Serializable {
             for (int i = 0; i < friendsArray.length(); i++) {
                 JSONObject temp = friendsArray.getJSONObject(i);
                 resultList.add(new Friend(
-                        temp.optString("firstName")
-                        , temp.optString("lastName")
-                        , temp.optString("phoneNumber")
-                        , temp.optString("accountNumber")
-                        , temp.optInt("displayPic")
+                        temp.optString("friend_firstName")
+                        , temp.optString("friend_lastName")
+                        , temp.optString("friend_phoneNumber")
+                        , temp.optString("friend_accountNumber")
+                        , temp.optInt("friend_displayPic")
+                        , temp.optInt("friend_displayColor")
                 ));
             }
         }
@@ -159,11 +160,12 @@ public class Friend implements Serializable {
                 JSONObject temp = friendsArray.getJSONObject(i);
                 if (temp.optString("phoneNumber").equals(phoneNumber)) {
                     result = new Friend(
-                            temp.optString("firstName")
-                            , temp.optString("lastName")
-                            , temp.optString("phoneNumber")
-                            , temp.optString("accountNumber")
-                            , temp.optInt("displayPic")
+                            temp.optString("friend_firstName")
+                            , temp.optString("friend_lastName")
+                            , temp.optString("friend_phoneNumber")
+                            , temp.optString("friend_accountNumber")
+                            , temp.optInt("friend_displayPic")
+                            , temp.optInt("friend_displayColor")
                     );
                 }
             }
@@ -176,22 +178,27 @@ public class Friend implements Serializable {
 
     public static Boolean isFriendListEmpty(Context ctx) {
 
-        return (new StorageManager(ctx)).isFileEmpty("FRIENDS_LIST");
+        return (new StorageManager(ctx)).isFileEmpty(STORAGE_FILE_NAME);
     }
 
     public static void removeAllFriends(Context ctx) {
-        (new StorageManager(ctx)).clearFile("FRIENDS_LIST");
+        (new StorageManager(ctx)).clearFile(STORAGE_FILE_NAME);
     }
 
     public static void resetFriends(Context ctx) {
         removeAllFriends(ctx);
-        Friend fd = new Friend("Damian", "Dutkiewicz", "5937 2478", "", R.drawable.damian);
-        Friend fd1 = new Friend("Raymond", "Sak", "3423 5435", "", R.drawable.raymond);
-        Friend fd2 = new Friend("Megan", "Gibbs", "9053 24438", "", 0);
-        Friend fd3 = new Friend("Bryant", "Ryan", "5587 2988", "", 0);
-        Friend fd4 = new Friend("Drew", "Jennings", "3557 7837", "", 0);
-        fd.saveSelfToFile(ctx);
-        fd1.saveSelfToFile(ctx);
+        Profile profile = new Profile(ctx);
+        if (profile.getName().equals("Damian Dutkiewicz")) {
+            Friend fd1 = new Friend("Raymond", "Sak", "3423 5435", "51327a46437565374770547776786c4348367545397331453164414177505a4e6d2b7131566d39476942303d", R.drawable.raymond, 0);
+            fd1.saveSelfToFile(ctx);
+        }
+        else if (profile.getName().equals("Raymond Sak")) {
+            Friend fd = new Friend("Damian", "Dutkiewicz", "5937 2478", "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d", R.drawable.damian, 0);
+            fd.saveSelfToFile(ctx);
+        }
+        Friend fd2 = new Friend("Megan", "Gibbs", "9053 24438", "", 0, ctx.getResources().getIntArray(R.array.colors_icon)[0]);
+        Friend fd3 = new Friend("Bryant", "Ryan", "5587 2988", "", 0, ctx.getResources().getIntArray(R.array.colors_icon)[5]);
+        Friend fd4 = new Friend("Drew", "Jennings", "3557 7837", "", 0, ctx.getResources().getIntArray(R.array.colors_icon)[9]);
         fd2.saveSelfToFile(ctx);
         fd3.saveSelfToFile(ctx);
         fd4.saveSelfToFile(ctx);

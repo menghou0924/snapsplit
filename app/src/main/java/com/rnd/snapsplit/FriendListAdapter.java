@@ -5,9 +5,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,12 +23,11 @@ import java.util.Random;
  * Created by Damian on 29/5/2017.
  */
 
-public class FriendListAdapter extends ArrayAdapter<Friend>{
+public class FriendListAdapter extends ArrayAdapter<Friend> implements View.OnTouchListener{
     private Context context;
     private String fragmentTag;
     private ArrayList<Friend> data;
     private int layoutResourceId;
-    private int[] mMaterialColors;
     private static final Random RANDOM = new Random();
     private final TypedValue mTypedValue = new TypedValue();
 
@@ -36,7 +37,7 @@ public class FriendListAdapter extends ArrayAdapter<Friend>{
         this.fragmentTag = tag;
         this.data = data;
         this.layoutResourceId = layoutResourceId;
-        this.mMaterialColors = context.getResources().getIntArray(R.array.colors);
+
 //        context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
 
     }
@@ -53,9 +54,8 @@ public class FriendListAdapter extends ArrayAdapter<Friend>{
             row = inflater.inflate(layoutResourceId, parent, false);
 
             holder = new ViewHolder();
-            holder.mFirstName = (TextView)row.findViewById(R.id.firstName);
-            holder.mLastName = (TextView)row.findViewById(R.id.lastName);
-            holder.mPhoneNumber = (TextView)row.findViewById(R.id.phoneNumber);
+            holder.mName = (TextView)row.findViewById(R.id.txt_name);
+            holder.mPhoneNumber = (TextView)row.findViewById(R.id.txt_phone);
             holder.mAmount = (TextView)row.findViewById(R.id.splitAmount);
             holder.mImageIcon = (ImageView)row.findViewById(R.id.image_icon);
             holder.mTextIcon = (MaterialLetterIcon) row.findViewById(R.id.text_icon);
@@ -67,16 +67,40 @@ public class FriendListAdapter extends ArrayAdapter<Friend>{
             holder = (ViewHolder)row.getTag();
         }
 
+        row.setOnTouchListener((new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                EditText editText = (EditText) view.findViewById(R.id.splitAmount);
+                editText.setFocusable(false);
+                editText.setFocusableInTouchMode(false);
+                return false;
+            }
+        }));
+        if (holder.mAmount != null){
+            holder.mAmount.setOnTouchListener((new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent event) {
+                    EditText editText = (EditText) view;
+                    editText.setFocusable(true);
+                    editText.setFocusableInTouchMode(true);
+                    return false;
+                }
+            }));
+
+        }
+
         Friend friend = data.get(position);
 
-        holder.mFirstName.setText(friend.getFirstName());
-        holder.mLastName.setText(friend.getLastName());
+        holder.mName.setText(friend.getFirstName() + " " + friend.getLastName());
         holder.mPhoneNumber.setText(friend.getPhoneNumber());
+        if (fragmentTag.equals("ConfirmationFragment")){
+            holder.mAmount.setText(String.format("%.2f",friend.getAmountToPay())+"HKD");
+        }
 
         holder.mTextIcon.setInitials(true);
         holder.mTextIcon.setInitialsNumber(2);
         holder.mTextIcon.setLetterSize(18);
-        holder.mTextIcon.setShapeColor(mMaterialColors[RANDOM.nextInt(mMaterialColors.length)]);
+        holder.mTextIcon.setShapeColor(friend.getDisplayColor());
         holder.mTextIcon.setLetter((String) friend.getValueWithKey("name"));
 
         if (friend.getDisplayPic() == 0) {
@@ -90,16 +114,30 @@ public class FriendListAdapter extends ArrayAdapter<Friend>{
         }
 
         if (!fragmentTag.equals("AddFriendsFragment")) {
+            holder.mAmount.setShowSoftInputOnFocus(false);
             holder.mAmount.setText(String.format("HKD%.2f",friend.getAmountToPay()));
         }
 
         return row;
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view instanceof EditText) {
+            EditText editText = (EditText) view;
+            editText.setFocusable(true);
+            editText.setFocusableInTouchMode(true);
+        } else {
+            ViewHolder holder = (ViewHolder) view.getTag();
+            holder.mAmount.setFocusable(false);
+            holder.mAmount.setFocusableInTouchMode(false);
+        }
+        return false;
+    }
+
     private static class ViewHolder
     {
-        TextView mFirstName;
-        TextView mLastName;
+        TextView mName;
         TextView mPhoneNumber;
         TextView mAmount;
         ImageView mImageIcon;

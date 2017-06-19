@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import com.rnd.snapsplit.CitiAPIBase;
+import com.rnd.snapsplit.CitiAPIManager;
 import com.rnd.snapsplit.R;
 import com.rnd.snapsplit.StorageManager;
 
@@ -27,7 +28,8 @@ public class LoginActivity extends Activity {
     private static final String TAG = "LoginActivity";
     private static final String DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN = "DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN";
     private static final int REQUEST_INTERNET_PERMISSION = 200;
-    private CitiAPIBase citiApiManagerBase;
+    private CitiAPIManager citiAPIManager;
+    private CitiAPIBase citiAPIBase;
     private StorageManager storageManager;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
@@ -46,10 +48,10 @@ public class LoginActivity extends Activity {
 //        }
 
         storageManager = new StorageManager(this);
-        citiApiManagerBase = new CitiAPIBase(this);
+        citiAPIManager = new CitiAPIManager(this);
+        citiAPIBase = new CitiAPIBase(this);
 
-//        storageManager.clearFile(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN);
-        citiApiManagerBase.API_Authorization_RefreshAccessToken();
+        citiAPIBase.API_Authorization_RefreshAccessToken();
         if (!storageManager.isFileEmpty(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN)) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -84,7 +86,7 @@ public class LoginActivity extends Activity {
            if (getIntent().getAction() != null) {
                if (getIntent().getAction().equals(Intent.ACTION_VIEW)) {
                    Uri uri = getIntent().getData();
-                   citiApiManagerBase.API_Authorization_RetrieveAccessToken(uri);
+                   citiAPIBase.API_Authorization_RetrieveAccessToken(uri);
                 }
             }
         }
@@ -95,7 +97,7 @@ public class LoginActivity extends Activity {
             requestPermissions(new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_PERMISSION);
             return;
         }
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(citiApiManagerBase.getAuthURL()));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(citiAPIBase.getAuthURL()));
         startActivity(intent);
     }
 

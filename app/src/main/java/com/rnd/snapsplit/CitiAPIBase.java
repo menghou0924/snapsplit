@@ -158,16 +158,16 @@ public class CitiAPIBase {
                         data = new JSONObject(json);
                         if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                             storageManager.saveFile(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, data.toString());
-                            Log.d(TAG, getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"));
-                            Log.d(TAG, getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "refresh_token"));
+                            Log.d(TAG, DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"));
+                            Log.d(TAG, DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "refresh_token"));
 
-                            // TODO: Create another layer CitiAPI instead of using api directly
-                            // TODO: move the intent to that layer, currently limiting this function only usable in login activity
+                            Profile profile = new Profile(context);
+
                             Intent intent2 = new Intent(context, MainActivity.class);
                             context.startActivity(intent2);
                         }
                         else {
-                            Log.e(TAG, "ERROR: " + data.toString());
+                            Log.e(TAG, "ERROR: " + DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN + data.toString());
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -176,7 +176,7 @@ public class CitiAPIBase {
             });
         }
         else {
-            Log.e(TAG, "ERROR: Incorrect state.");
+            Log.e(TAG, "ERROR: " + DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN + " Incorrect state.");
         }
     }
 
@@ -206,11 +206,11 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, data.toString());
-                        Log.d(TAG, getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"));
-                        Log.d(TAG, getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "refresh_token"));
+                        Log.d(TAG, DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "access_token"));
+                        Log.d(TAG, DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN + getStoredValues(DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN, "refresh_token"));
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN + data.toString());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -260,10 +260,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_ACCOUNTS_RETRIEVE_ACCOUNTS_SUMMARY, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_ACCOUNTS_RETRIEVE_ACCOUNTS_SUMMARY + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_ACCOUNTS_RETRIEVE_ACCOUNTS_SUMMARY + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -298,10 +298,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_ACCOUNTS_RETRIEVE_ACCOUNT_DETAILS, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_ACCOUNTS_RETRIEVE_ACCOUNT_DETAILS + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_ACCOUNTS_RETRIEVE_ACCOUNT_DETAILS + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -347,10 +347,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_ACCOUNTS_RETRIEVE_ACCOUNT_TRANSACTIONS, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_ACCOUNTS_RETRIEVE_ACCOUNT_TRANSACTIONS + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_ACCOUNTS_RETRIEVE_ACCOUNT_TRANSACTIONS + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -387,10 +387,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_CUSTOMER_RETRIEVE_CUSTOMER_BASIC_NAME, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_CUSTOMER_RETRIEVE_CUSTOMER_BASIC_NAME + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_CUSTOMER_RETRIEVE_CUSTOMER_BASIC_NAME + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -430,10 +430,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -471,10 +471,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_RETRIEVE_PAYEE_LIST, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_RETRIEVE_PAYEE_LIST + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_RETRIEVE_PAYEE_LIST + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -509,10 +509,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_PERSONAL, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_PERSONAL + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_PERSONAL + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -565,10 +565,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CREATE_PERSONAL_TRANSFER, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_CREATE_PERSONAL_TRANSFER + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CREATE_PERSONAL_TRANSFER + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -614,10 +614,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CONFIRM_PERSONAL_TRANSFER, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_CONFIRM_PERSONAL_TRANSFER + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CONFIRM_PERSONAL_TRANSFER + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -653,10 +653,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_INTERNAL, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_INTERNAL + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_INTERNAL + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -710,10 +710,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -759,10 +759,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CONFIRM_INTERNAL_TRANSFER, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_CONFIRM_INTERNAL_TRANSFER + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CONFIRM_INTERNAL_TRANSFER + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -798,10 +798,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_EXTERNAL, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_EXTERNAL + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_EXTERNAL + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -856,10 +856,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CREATE_EXTERNAL_TRANSFER, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_CREATE_EXTERNAL_TRANSFER + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CREATE_EXTERNAL_TRANSFER + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -905,10 +905,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CONFIRM_EXTERNAL_TRANSFER, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_CONFIRM_EXTERNAL_TRANSFER + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CONFIRM_EXTERNAL_TRANSFER + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -944,10 +944,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_BILL_PAYMENT, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_BILL_PAYMENT + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_BILL_PAYMENT + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -998,10 +998,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CREATE_BILL_PAYMENT, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_CREATE_BILL_PAYMENT + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CREATE_BILL_PAYMENT + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -1047,10 +1047,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CONFIRM_BILL_PAYMENT, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_MONEY_MOVEMENT_CONFIRM_BILL_PAYMENT + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CONFIRM_BILL_PAYMENT + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -1101,10 +1101,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_PAY_WITH_POINTS_ENROLL, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_PAY_WITH_POINTS_ENROLL + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_PAY_WITH_POINTS_ENROLL + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -1151,10 +1151,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_PAY_WITH_POINTS_TOKEN_ACTIVATION, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_PAY_WITH_POINTS_TOKEN_ACTIVATION + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_PAY_WITH_POINTS_TOKEN_ACTIVATION + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -1192,10 +1192,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_PAY_WITH_POINTS_RETRIEVE_REWARD_BALANCE, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_PAY_WITH_POINTS_RETRIEVE_REWARD_BALANCE + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_PAY_WITH_POINTS_RETRIEVE_REWARD_BALANCE + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -1251,10 +1251,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_PAY_WITH_POINTS_SUBMIT_REDEMPTION_REQUEST, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_PAY_WITH_POINTS_SUBMIT_REDEMPTION_REQUEST + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_PAY_WITH_POINTS_SUBMIT_REDEMPTION_REQUEST + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -1291,10 +1291,10 @@ public class CitiAPIBase {
                     data = new JSONObject(json);
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_REFERENCE_DATA_RETRIEVE_VALID_VALUES, data.toString());
-                        Log.d(TAG, "JSON DATA = " + data.toString());
+                        Log.d(TAG, DATA_REFERENCE_DATA_RETRIEVE_VALID_VALUES + "JSON DATA = " + data.toString());
                     }
                     else {
-                        Log.e(TAG, "ERROR: " + data.toString());
+                        Log.e(TAG, "ERROR: " + DATA_REFERENCE_DATA_RETRIEVE_VALID_VALUES + data.toString());
                     }
 
                 } catch (JSONException e) {
@@ -1303,6 +1303,4 @@ public class CitiAPIBase {
             }
         });
     }
-
-
 }

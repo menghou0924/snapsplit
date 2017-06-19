@@ -24,8 +24,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -55,15 +61,23 @@ import com.rnd.snapsplit.OcrGraphic;
 import com.rnd.snapsplit.R;
 import com.rnd.snapsplit.StorageManager;
 import com.rnd.snapsplit.Summary;
-import com.rnd.snapsplit.Transaction;
 import com.rnd.snapsplit.camera.CameraSource;
 import com.rnd.snapsplit.camera.CameraSourcePreview;
 import com.rnd.snapsplit.camera.GraphicOverlay;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.IntBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Activity for the Ocr Detecting app.  This app detects text and displays the value with the
@@ -79,6 +93,8 @@ public final class OcrCaptureFragment extends Fragment {
     boolean shouldContinue = true;
 
     int rotationAngle = 0;
+    int TAKE_PHOTO_CODE = 0;
+    public static int count = 0;
 
     // Permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
@@ -88,6 +104,8 @@ public final class OcrCaptureFragment extends Fragment {
     public static final String AutoFocus = "AutoFocus";
     public static final String UseFlash = "UseFlash";
     public static final String TextBlockObject = "String";
+    private static boolean picReceived = false;
+    private static String picPath = "";
 
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
@@ -116,6 +134,16 @@ public final class OcrCaptureFragment extends Fragment {
     /**
      * Initializes the UI and creates the detector pipeline.
      */
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == TAKE_PHOTO_CODE && resultCode == RESULT_OK) {
+//            Toast.makeText(getContext(), "pic saved", Toast.LENGTH_LONG).show();
+//            Log.d("CameraDemo", "Pic saved");
+//        }
+//    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -124,11 +152,16 @@ public final class OcrCaptureFragment extends Fragment {
         final Context context = getContext();
 
         ((Toolbar) activity.findViewById(R.id.tool_bar_hamburger)).setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
-
-//        shouldContinue = true;
+        final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/picFolder/";
+        File newdir = new File(dir);
+        newdir.mkdirs();
 
         mPreview = (CameraSourcePreview) view.findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<OcrGraphic>) view.findViewById(R.id.graphicOverlay);
+
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
         // Set good defaults for capturing text.
         boolean autoFocus = true;
@@ -142,12 +175,32 @@ public final class OcrCaptureFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (rotationAngle ==  0){ // arrow up
+                    //mCameraSource.takePicture(null, mPicture);
                     //mGraphicOverlay.clear();
 //                    mGraphicOverlay.clear();
 //                    mGraphicOverlay.amountItem = null;
                     onPause();
-                    upArrow.animate().rotation(180).setDuration(500).start();
                     //shouldContinue = false;
+                    //mCamera.takePicture(null, null, mPicture);
+
+                    File pictureFile = getOutputMediaFile();
+                    if (pictureFile == null) {
+                        return;
+                    }
+                    try {
+                        FileOutputStream fos = new FileOutputStream(pictureFile);
+                        Bitmap receiptBitmap = byteStreamToBitmap(mCameraSource.mostRecentBitmap);
+                        receiptBitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+                        picPath = pictureFile.getAbsolutePath();
+                        //fos.write(mCameraSource.mostRecentBitmap);
+                        fos.close();
+                    } catch (FileNotFoundException e) {
+
+                    } catch (IOException e) {
+                    }
+
+                    upArrow.animate().rotation(180).setDuration(500).start();
+
 
                     TextView amount = (TextView) view.findViewById(R.id.text_amount_value);
                     if (mGraphicOverlay.amountItem == null){
@@ -204,6 +257,13 @@ public final class OcrCaptureFragment extends Fragment {
                  Bundle bundle = new Bundle();
                  bundle.putSerializable("splitTransaction", t);
 
+//                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                 mCameraSource.mostRecentBitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
+//                 byte[] byteArray = stream.toByteArray();
+                 //Bitmap receiptBitmap = byteStreamToBitmap(mCameraSource.mostRecentBitmap);
+                 //bundle.putParcelable("receiptPicture",receiptBitmap);
+                 bundle.putString("receiptPicture", picPath);
+
                  FriendsSelectionFragment fragment = new FriendsSelectionFragment();
                  fragment.setArguments(bundle);
 
@@ -255,6 +315,28 @@ public final class OcrCaptureFragment extends Fragment {
      * showing a "Snackbar" message of why the permission is needed then
      * sending the request.
      */
+
+    private static File getOutputMediaFile() {
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                "MyCameraApp");
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("MyCameraApp", "failed to create directory");
+                return null;
+            }
+        }
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+                .format(new Date());
+        File mediaFile;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                + "IMG_" + timeStamp + ".jpg");
+
+        return mediaFile;
+    };
+
 
     private void createNewThread(){
         t = new Thread() {
@@ -588,5 +670,73 @@ public final class OcrCaptureFragment extends Fragment {
                 mCameraSource.doZoom(detector.getScaleFactor());
             }
         }
+    }
+
+    public Bitmap byteStreamToBitmap(byte[] data){
+        int imageWidth = mCameraSource.getPreviewSize().getWidth();
+        int imageHeight = mCameraSource.getPreviewSize().getHeight();
+//            YuvImage yuvimage=new YuvImage(data, ImageFormat.NV16, previewSizeW, previewSizeH, null);
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            yuvimage.compressToJpeg(new Rect(0, 0, previewSizeW, previewSizeH), 80, baos);
+//            byte[] jdata = baos.toByteArray();
+
+            Bitmap bitmap = Bitmap.createBitmap(imageWidth, imageHeight, Bitmap.Config.ARGB_8888);
+            int numPixels = imageWidth*imageHeight;
+
+// the buffer we fill up which we then fill the bitmap with
+            IntBuffer intBuffer = IntBuffer.allocate(imageWidth*imageHeight);
+// If you're reusing a buffer, next line imperative to refill from the start,
+// if not good practice
+            intBuffer.position(0);
+
+// Set the alpha for the image: 0 is transparent, 255 fully opaque
+            final byte alpha = (byte) 255;
+
+// Get each pixel, one at a time
+            for (int y = 0; y < imageHeight; y++) {
+                for (int x = 0; x < imageWidth; x++) {
+                    // Get the Y value, stored in the first block of data
+                    // The logical "AND 0xff" is needed to deal with the signed issue
+                    int Y = data[y*imageWidth + x] & 0xff;
+
+                    // Get U and V values, stored after Y values, one per 2x2 block
+                    // of pixels, interleaved. Prepare them as floats with correct range
+                    // ready for calculation later.
+                    int xby2 = x/2;
+                    int yby2 = y/2;
+
+                    // make this V for NV12/420SP
+                    float U = (float)(data[numPixels + 2*xby2 + yby2*imageWidth] & 0xff) - 128.0f;
+
+                    // make this U for NV12/420SP
+                    float V = (float)(data[numPixels + 2*xby2 + 1 + yby2*imageWidth] & 0xff) - 128.0f;
+
+                    // Do the YUV -> RGB conversion
+                    float Yf = 1.164f*((float)Y) - 16.0f;
+                    int R = (int)(Yf + 1.596f*V);
+                    int G = (int)(Yf - 0.813f*V - 0.391f*U);
+                    int B = (int)(Yf            + 2.018f*U);
+
+                    // Clip rgb values to 0-255
+                    R = R < 0 ? 0 : R > 255 ? 255 : R;
+                    G = G < 0 ? 0 : G > 255 ? 255 : G;
+                    B = B < 0 ? 0 : B > 255 ? 255 : B;
+
+                    // Put that pixel in the buffer
+                    intBuffer.put(alpha*16777216 + R*65536 + G*256 + B);
+                }
+            }
+
+// Get buffer ready to be read
+            intBuffer.flip();
+
+// Push the pixel information from the buffer onto the bitmap.
+            bitmap.copyPixelsFromBuffer(intBuffer);
+
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,imageWidth,imageHeight,true);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+            return rotatedBitmap;
     }
 }

@@ -18,13 +18,16 @@ import android.view.MenuItem;
 import android.content.res.Configuration;
 import android.view.View;
 
+import com.rnd.snapsplit.CitiAPIManager;
+import com.rnd.snapsplit.Profile;
 import com.rnd.snapsplit.R;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private CitiAPIManager citiAPIManager;
+    private Profile profile;
     private Toolbar toolBarHamburger;
-
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
@@ -33,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        citiAPIManager = new CitiAPIManager(this);
+        citiAPIManager.basicDataFetch();
+        profile = new Profile(this);
 
         toolBarHamburger = (Toolbar) findViewById(R.id.tool_bar_hamburger);
         setSupportActionBar(toolBarHamburger);
@@ -87,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 setTitle(menuItem.getTitle());
                 break;
             case R.id.nav_my_account:
-                fragmentClass = AddFriendsFragment.class;
+                fragmentClass = MyAccountFragment.class;
                 ((Toolbar) findViewById(R.id.tool_bar_hamburger)).setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 setTitle(menuItem.getTitle());
                 break;
@@ -97,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 setTitle(menuItem.getTitle());
                 break;
             case R.id.nav_sign_out:
-                fragmentClass = SignoutFragment.class;
+                fragmentClass = LogoutFragment.class;
                 ((Toolbar) findViewById(R.id.tool_bar_hamburger)).setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
                 setTitle("");
                 break;

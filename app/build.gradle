@@ -72,6 +72,9 @@ dependencies {
 
     // icon
     compile 'com.github.ivbaranov:materiallettericon:0.2.2'
+
+    // circle image view
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

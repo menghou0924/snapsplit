@@ -35,43 +35,39 @@
         android:layout_marginLeft="20dip" >
 
         <TextView
-            android:id="@+id/firstName"
+            android:id="@+id/txt_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:text="Dutkiewicz"
             android:textSize="16dip" />
 
-        <TextView
-            android:id="@+id/lastName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_toEndOf="@+id/firstName"
-            android:paddingLeft="3dp"
-            android:text="Dutkiewicz"
-            android:textSize="16dip" />
-
 
         <TextView
-            android:id="@+id/phoneNumber"
+            android:id="@+id/txt_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/lastName"
+            android:layout_below="@+id/txt_name"
             android:paddingTop="1dp"
             android:text="5660 0981"
             android:textSize="13dip" />
 
-        <TextView
+        <EditText
             android:id="@+id/splitAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/phoneNumber"
+            android:layout_below="@+id/txt_phone"
             android:paddingTop="1dp"
-            android:text="HKD100.00"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="100.00HKD"
             android:textColor="#27ae60"
             android:textSize="13dip"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:inputType="numberDecimal"
+            android:background="@android:color/transparent"/>
 
     </RelativeLayout>
 </RelativeLayout>

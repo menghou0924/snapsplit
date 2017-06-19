@@ -23,12 +23,14 @@
         android:layout_marginTop="56dp">
 
 
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:paddingStart="20dp"
-            android:src="@drawable/receipt_icon"
-            android:id="@+id/imageView" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/receipt_image"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/inv" />
 
         <TextView
             android:id="@+id/text_summary_shop"
@@ -36,21 +38,20 @@
             android:layout_height="wrap_content"
             android:paddingStart="15dp"
             android:paddingTop="13dp"
-            android:text=""
+            android:text="@string/shop_name"
             android:textColor="@android:color/black"
             android:textSize="22sp"
-            android:layout_toEndOf="@+id/imageView" />
+            android:layout_toEndOf="@+id/receipt_image" />
 
         <TextView
-            android:id="@+id/text_summary_amount"
+            android:id="@+id/text_summary_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_summary_shop"
+            android:layout_toEndOf="@+id/text_summary_amount_value"
             android:textSize="16sp"
-            android:paddingStart="15dp"
             android:text="HKD"
-            android:textColor="#696969"
-            android:layout_toEndOf="@+id/imageView" />
+            android:textColor="#696969" />
 
         <TextView
             android:id="@+id/text_summary_amount_value"
@@ -58,9 +59,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_summary_shop"
             android:textSize="16sp"
-            android:text=""
-            android:textColor="#696969"
-            android:layout_toEndOf="@+id/text_summary_amount" />
+            android:text="123"
+            android:paddingStart="15dp"
+            android:layout_toEndOf="@+id/receipt_image"
+            android:textColor="#696969" />
 
         <TextView
             android:id="@+id/text_selected_friends"
@@ -90,24 +92,24 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/text_each"
+            android:id="@+id/text_myShare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/text_summary_amount"
-            android:layout_alignBottom="@+id/text_summary_amount"
-            android:layout_toStartOf="@+id/text_each_price"
-            android:text="@string/each"
+            android:layout_alignBaseline="@+id/text_summary_amount_value"
+            android:layout_alignBottom="@+id/text_summary_amount_value"
+            android:layout_toStartOf="@+id/text_myShare_value"
+            android:text="My Share:"
             android:paddingRight="4dp"
             android:textColor="@color/colorAccent2"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/text_each_price"
+            android:id="@+id/text_myShare_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/text_summary_amount"
-            android:layout_alignBottom="@+id/text_summary_amount"
+            android:layout_alignBaseline="@+id/text_summary_amount_value"
+            android:layout_alignBottom="@+id/text_summary_amount_value"
             android:layout_toStartOf="@+id/text_selected_friends_no"
             android:layout_alignParentRight="true"
             android:text=""

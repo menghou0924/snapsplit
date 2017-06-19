@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Citi API String Values-->
+    <string-array name="citi_authorization">
+        <!--Authorization members-->
+        <item>DATA_AUTHORIZATION_RETRIEVE_ACCESS_REFRESH_TOKEN</item>
+    </string-array>
+    <!--Accounts members-->
+    <string-array name="citi_accounts">
+    <item>DATA_ACCOUNTS_RETRIEVE_ACCOUNTS_SUMMARY</item>
+        <item>DATA_ACCOUNTS_RETRIEVE_ACCOUNT_DETAILS</item>
+        <item>DATA_ACCOUNTS_RETRIEVE_ACCOUNT_TRANSACTIONS</item>
+    </string-array>
+    <!--Customer members-->
+    <string-array name="citi_customers">
+    <item>DATA_CUSTOMER_RETRIEVE_CUSTOMER_BASIC_NAME</item>
+    </string-array>
+    <!--Money Movement members-->
+    <string-array name="citi_moneymovement">
+    <item>DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT</item>
+        <item>DATA_MONEY_MOVEMENT_RETRIEVE_PAYEE_LIST</item>
+        <item>DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_PERSONAL</item>
+        <item>DATA_MONEY_MOVEMENT_CREATE_PERSONAL_TRANSFER</item>
+        <item>DATA_MONEY_MOVEMENT_CONFIRM_PERSONAL_TRANSFER</item>
+        <item>DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_INTERNAL</item>
+        <item>DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER</item>
+        <item>DATA_MONEY_MOVEMENT_CONFIRM_INTERNAL_TRANSFER</item>
+        <item>DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_EXTERNAL</item>
+        <item>DATA_MONEY_MOVEMENT_CREATE_EXTERNAL_TRANSFER</item>
+        <item>DATA_MONEY_MOVEMENT_CONFIRM_EXTERNAL_TRANSFER</item>
+        <item>DATA_MONEY_MOVEMENT_RETRIEVE_DEST_SRC_ACCOUNT_BILL_PAYMENT</item>
+        <item>DATA_MONEY_MOVEMENT_CREATE_BILL_PAYMENT</item>
+        <item>DATA_MONEY_MOVEMENT_CONFIRM_BILL_PAYMENT</item>
+    </string-array>
+    <!--Pay with points members-->
+    <string-array name="citi_paywithpoints">
+    <item>DATA_PAY_WITH_POINTS_ENROLL</item>
+        <item>DATA_PAY_WITH_POINTS_TOKEN_ACTIVATION</item>
+        <item>DATA_PAY_WITH_POINTS_RETRIEVE_REWARD_BALANCE</item>
+        <item>DATA_PAY_WITH_POINTS_SUBMIT_REDEMPTION_REQUEST</item>
+    </string-array>
+    <!--Reference Data members-->
+    <string-array name="citi_reference">
+    <item>DATA_REFERENCE_DATA_RETRIEVE_VALID_VALUES</item>
+    </string-array>
+    <string-array name="friends">
+        <item>FRIENDS_LIST</item>
+    </string-array>
+    <string-array name="profile">
+        <item>PERSONAL_PROFILE</item>
+    </string-array>
+</resources>

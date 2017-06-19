@@ -80,6 +80,7 @@ public class AddFriendsFragment extends ListFragment {
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     private Context context;
     private ArrayAdapter adapter;
+    private int[] mMaterialColors;
 
     private ArrayList<Friend> friendsList = new ArrayList<>();
 
@@ -96,6 +97,7 @@ public class AddFriendsFragment extends ListFragment {
             Friend.resetFriends(context);
         }
 
+        mMaterialColors = context.getResources().getIntArray(R.array.colors_icon);
         friendsList = Friend.getFriendsListFromFile(getContext());
         adapter = new FriendListAdapter(getContext(), R.layout.list_add_friend, friendsList, TAG);
         this.setListAdapter(adapter);
@@ -153,7 +155,7 @@ public class AddFriendsFragment extends ListFragment {
             String lastName = nameSplit.length < 2 ? "" : nameSplit[1];
             String phoneNumber = phone.getText().toString().substring(0, 4) + " " + phone.getText().toString().substring(4);
 
-            Friend newFriend = new Friend(firstName, lastName, phoneNumber, Integer.toString(RANDOM.nextInt(99999999)+10000000), 0);
+            Friend newFriend = new Friend(firstName, lastName, phoneNumber, Integer.toString(RANDOM.nextInt(99999999)+10000000), 0, mMaterialColors[RANDOM.nextInt(mMaterialColors.length)]);
 
             newFriend.saveSelfToFile(getContext());
 

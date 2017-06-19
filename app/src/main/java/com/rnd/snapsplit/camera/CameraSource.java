@@ -19,8 +19,13 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Build;
@@ -38,11 +43,13 @@ import com.google.android.gms.common.images.Size;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Frame;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.Thread.State;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,6 +85,7 @@ public class CameraSource {
     public static final int CAMERA_FACING_FRONT = CameraInfo.CAMERA_FACING_FRONT;
 
     private static final String TAG = "OpenCameraSource";
+    public byte[] mostRecentBitmap;
 
     /**
      * The dummy surface texture must be assigned a chosen name.  Since we never use an OpenGL
@@ -118,7 +126,7 @@ public class CameraSource {
     private final Object mCameraLock = new Object();
 
     // Guarded by mCameraLock
-    private Camera mCamera;
+    public Camera mCamera;
 
     private int mFacing = CAMERA_FACING_BACK;
 
@@ -1063,6 +1071,78 @@ public class CameraSource {
     private class CameraPreviewCallback implements Camera.PreviewCallback {
         @Override
         public void onPreviewFrame(byte[] data, Camera camera) {
+//            int imageWidth = mCamera.getParameters().getPreviewSize().width;
+//            int imageHeight = mCamera.getParameters().getPreviewSize().height;
+////            YuvImage yuvimage=new YuvImage(data, ImageFormat.NV16, previewSizeW, previewSizeH, null);
+////            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+////            yuvimage.compressToJpeg(new Rect(0, 0, previewSizeW, previewSizeH), 80, baos);
+////            byte[] jdata = baos.toByteArray();
+//
+//            Bitmap bitmap = Bitmap.createBitmap(imageWidth, imageHeight, Bitmap.Config.ARGB_8888);
+//            int numPixels = imageWidth*imageHeight;
+//
+//// the buffer we fill up which we then fill the bitmap with
+//            IntBuffer intBuffer = IntBuffer.allocate(imageWidth*imageHeight);
+//// If you're reusing a buffer, next line imperative to refill from the start,
+//// if not good practice
+//            intBuffer.position(0);
+//
+//// Set the alpha for the image: 0 is transparent, 255 fully opaque
+//            final byte alpha = (byte) 255;
+//
+//// Get each pixel, one at a time
+//            for (int y = 0; y < imageHeight; y++) {
+//                for (int x = 0; x < imageWidth; x++) {
+//                    // Get the Y value, stored in the first block of data
+//                    // The logical "AND 0xff" is needed to deal with the signed issue
+//                    int Y = data[y*imageWidth + x] & 0xff;
+//
+//                    // Get U and V values, stored after Y values, one per 2x2 block
+//                    // of pixels, interleaved. Prepare them as floats with correct range
+//                    // ready for calculation later.
+//                    int xby2 = x/2;
+//                    int yby2 = y/2;
+//
+//                    // make this V for NV12/420SP
+//                    float U = (float)(data[numPixels + 2*xby2 + yby2*imageWidth] & 0xff) - 128.0f;
+//
+//                    // make this U for NV12/420SP
+//                    float V = (float)(data[numPixels + 2*xby2 + 1 + yby2*imageWidth] & 0xff) - 128.0f;
+//
+//                    // Do the YUV -> RGB conversion
+//                    float Yf = 1.164f*((float)Y) - 16.0f;
+//                    int R = (int)(Yf + 1.596f*V);
+//                    int G = (int)(Yf - 0.813f*V - 0.391f*U);
+//                    int B = (int)(Yf            + 2.018f*U);
+//
+//                    // Clip rgb values to 0-255
+//                    R = R < 0 ? 0 : R > 255 ? 255 : R;
+//                    G = G < 0 ? 0 : G > 255 ? 255 : G;
+//                    B = B < 0 ? 0 : B > 255 ? 255 : B;
+//
+//                    // Put that pixel in the buffer
+//                    intBuffer.put(alpha*16777216 + R*65536 + G*256 + B);
+//                }
+//            }
+//
+//// Get buffer ready to be read
+//            intBuffer.flip();
+//
+//// Push the pixel information from the buffer onto the bitmap.
+//            bitmap.copyPixelsFromBuffer(intBuffer);
+//
+//            Matrix matrix = new Matrix();
+//            matrix.postRotate(90);
+//            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,imageWidth,imageHeight,true);
+//            Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+
+
+
+
+// Convert to Bitmap
+            mostRecentBitmap = data;
+            //mostRecentBitmap = BitmapFactory.decodeByteArray(jdata, 0, jdata.length);
+            //mostRecentBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             mFrameProcessor.setNextFrame(data, camera);
         }
     }

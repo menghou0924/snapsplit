@@ -16,6 +16,10 @@ package com.rnd.snapsplit.view;
  * limitations under the License.
  */
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.Fragment;
 import android.app.KeyguardManager;
 import android.content.Context;
@@ -30,8 +34,11 @@ import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -70,6 +77,8 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by Damian on 9/6/2017.
  */
@@ -84,6 +93,7 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
     private View view;
     private ProgressBar mProgressBar;
     private Fragment mFragment;
+    private Activity activity;
 
     // fingerprint vars
 
@@ -98,7 +108,6 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
     private SharedPreferences mSharedPreferences;
 
     public static OwedFragment newInstance() {
-
         return new OwedFragment();
     }
 
@@ -124,6 +133,7 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
         TextView from;
         TextView splitAmount;
         TextView date;
+        CircleImageView receiptIcon;
         String id;
         PaymentRequest pr;
 
@@ -133,6 +143,7 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
             from = (TextView) itemView.findViewById(R.id.from);
             splitAmount = (TextView) itemView.findViewById(R.id.splitAmount);
             date = (TextView) itemView.findViewById(R.id.date);
+            receiptIcon = (CircleImageView) itemView.findViewById(R.id.receiptIcon) ;
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -140,17 +151,36 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
                     mClickListener.onItemClick(v, getAdapterPosition(), id, pr);
                 }
             });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener(){
+
+                @Override
+                public boolean onLongClick(View v) {
+                    mLongClickListener.onLongClick(v, getAdapterPosition(), id, pr);
+                    return true;
+                }
+            });
         }
 
         private MessageViewHolder.ClickListener mClickListener;
+        private MessageViewHolder.LongClickListener mLongClickListener;
 
         //Interface to send callbacks...
         public interface ClickListener{
             public void onItemClick(View view, int position, String id, PaymentRequest pr);
+            //public void onLongItemClick(View view, int position, String id, PaymentRequest pr);
+        }
+        public interface LongClickListener{
+            //public void onItemClick(View view, int position, String id, PaymentRequest pr);
+            public void onLongClick(View view, int position, String id, PaymentRequest pr);
         }
 
         public void setOnClickListener(MessageViewHolder.ClickListener clickListener){
             mClickListener = clickListener;
+        }
+
+        public void setOnLongClickListener(MessageViewHolder.LongClickListener clickListener){
+            mLongClickListener = clickListener;
         }
 
     }
@@ -160,13 +190,14 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.activity_owed, container, false);
+        activity = getActivity();
         ((Toolbar) getActivity().findViewById(R.id.tool_bar_hamburger)).setVisibility(View.VISIBLE);
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         mMessageRecyclerView = (RecyclerView) view.findViewById(R.id.messageRecyclerView);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         //mLinearLayoutManager.setStackFromEnd(true);
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child("1234 5678");
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child("3423 5435");
         mFirebaseAdapter = new FirebaseRecyclerAdapter<PaymentRequest, MessageViewHolder>(
                 PaymentRequest.class,
                 R.layout.list_owed,
@@ -188,6 +219,13 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
                                               PaymentRequest pr, int position) {
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                 if (pr != null) {
+
+                    if (pr.getStrReceiptPic() != null && !pr.getStrReceiptPic().equals("")) {
+                        String encodedReceipt = pr.getStrReceiptPic();
+                        byte[] encodeByte = Base64.decode(encodedReceipt, Base64.DEFAULT);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                        viewHolder.receiptIcon.setImageBitmap(bitmap);
+                    }
                     viewHolder.pr = pr;
                     viewHolder.id = pr.getId();
                     viewHolder.description.setText(pr.getDescription());
@@ -208,6 +246,32 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
             @Override
             public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 MessageViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
+                viewHolder.setOnLongClickListener(new MessageViewHolder.LongClickListener(){
+                    @Override
+                    public void onLongClick(View view, int position, String id, PaymentRequest pr) {
+                        AlertDialog.Builder ImageDialog = new AlertDialog.Builder(getActivity());
+                        ImageDialog.setTitle("Receipt Preview - "+pr.getDescription());
+                        ImageView showImage = new ImageView(getActivity());
+                        Bitmap bitmap = null;
+                        if (pr.getStrReceiptPic() != null && !pr.getStrReceiptPic().equals("")) {
+                            String encodedReceipt = pr.getStrReceiptPic();
+                            byte[] encodeByte = Base64.decode(encodedReceipt, Base64.DEFAULT);
+                            bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                        }
+                        if (bitmap != null) {
+                            showImage.setImageBitmap(bitmap);
+                        }
+                        ImageDialog.setView(showImage);
+
+                        ImageDialog.setNegativeButton("Close Preview", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface arg0, int arg1)
+                            {
+                            }
+                        });
+                        ImageDialog.show();
+                        }
+                });
                 viewHolder.setOnClickListener(new MessageViewHolder.ClickListener() {
                     @Override
                     public void onItemClick(View view, int position, String id, PaymentRequest pr) {

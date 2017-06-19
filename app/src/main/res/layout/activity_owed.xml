@@ -11,19 +11,30 @@
     tools:context="com.rnd.snapsplit.view.OwedFragment">
 
     <TextView
-        android:id="@+id/text_outstanding"
+        android:id="@+id/text_longPress"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:text="Outstanding payment requests"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:text="Long press to view the receipt"
         android:textAlignment="center"
         android:paddingTop="16dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="#696969" />
 
+    <TextView
+        android:id="@+id/text_shortpress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_longPress"
+        android:text="Short press to pay"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="#696969" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/messageRecyclerView"
-        android:layout_below="@+id/text_outstanding"
-        android:paddingTop="16dp"
+        android:layout_below="@+id/text_shortpress"
+        android:paddingTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
