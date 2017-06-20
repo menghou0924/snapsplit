@@ -56,26 +56,31 @@ public class Profile {
 
             id = Integer.toString(RANDOM.nextInt(99999999) + 10000000);
             name = citiAPIManager.getEnglishName();
-            phoneNumber = Integer.toString(RANDOM.nextInt(99999999) + 10000000);
-            phoneNumber = phoneNumber.substring(0, 4) + " " + phoneNumber.substring(4);
+
             if (name.equals("AXDXEX JXNX AXNXT")) { // Sandboxuser1
                 name = "Damian Dutkiewicz";
                 displayPic = R.drawable.damian;
-                accountNumber = "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d"; // transfer from
+                accountNumber = "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d";
+                phoneNumber = "5660 0981"; // transfer from
             } else if (name.equals("CARSTEN K ANDREAS")) { // Sandboxuser2
                 name = "Raymond Sak";
                 displayPic = R.drawable.raymond;
-                accountNumber = "51327a46437565374770547776786c4348367545397331453164414177505a4e6d2b7131566d39476942303d"; // transfer to
+                accountNumber = "51327a46437565374770547776786c4348367545397331453164414177505a4e6d2b7131566d39476942303d";
+                phoneNumber = "5139 6515"; // transfer to
             }
             else if (name.equals("ROBYN L. MATRAVERS")) {
                 name = "James Dimon";
                 displayColor = context.getResources().getIntArray(R.array.colors_icon)[RANDOM.nextInt(10)];
-                accountNumber = "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d"; // transfer to
+                accountNumber = "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d";
+                phoneNumber = Integer.toString(RANDOM.nextInt(99999999) + 10000000);
+                phoneNumber = phoneNumber.substring(0, 4) + " " + phoneNumber.substring(4);// transfer to
             }
             else {
                 name = "Warren Buffett";
                 displayColor = context.getResources().getIntArray(R.array.colors_icon)[RANDOM.nextInt(10)];
-                accountNumber = "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d"; // transfer to
+                accountNumber = "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d";
+                phoneNumber = Integer.toString(RANDOM.nextInt(99999999) + 10000000);
+                phoneNumber = phoneNumber.substring(0, 4) + " " + phoneNumber.substring(4);// transfer to
             }
 
             if (!accountNumber.isEmpty()) {
