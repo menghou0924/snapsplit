@@ -54,8 +54,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.rnd.snapsplit.CitiAPIBase;
 import com.rnd.snapsplit.DialogClickListener;
+import com.rnd.snapsplit.History;
 import com.rnd.snapsplit.PaymentRequest;
+import com.rnd.snapsplit.Profile;
 import com.rnd.snapsplit.R;
 
 import java.io.IOException;
@@ -94,6 +97,7 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
     private ProgressBar mProgressBar;
     private Fragment mFragment;
     private Activity activity;
+    private Profile profile;
 
     // fingerprint vars
 
@@ -131,6 +135,7 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView description;
         TextView from;
+        TextView share;
         TextView splitAmount;
         TextView date;
         CircleImageView receiptIcon;
@@ -140,7 +145,8 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
         public MessageViewHolder(View v) {
             super(v);
             description = (TextView) itemView.findViewById(R.id.description);
-            from = (TextView) itemView.findViewById(R.id.from);
+            from = (TextView) itemView.findViewById(R.id.txt_person);
+            share = (TextView) itemView.findViewById(R.id.txt_share);
             splitAmount = (TextView) itemView.findViewById(R.id.splitAmount);
             date = (TextView) itemView.findViewById(R.id.date);
             receiptIcon = (CircleImageView) itemView.findViewById(R.id.receiptIcon) ;
@@ -191,13 +197,14 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
         //super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.activity_owed, container, false);
         activity = getActivity();
+        profile = new Profile(getContext());
         ((Toolbar) getActivity().findViewById(R.id.tool_bar_hamburger)).setVisibility(View.VISIBLE);
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         mMessageRecyclerView = (RecyclerView) view.findViewById(R.id.messageRecyclerView);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         //mLinearLayoutManager.setStackFromEnd(true);
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child("3423 5435");
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child(profile.getPhoneNumber()).child("unpaid_by_me");
         mFirebaseAdapter = new FirebaseRecyclerAdapter<PaymentRequest, MessageViewHolder>(
                 PaymentRequest.class,
                 R.layout.list_owed,
@@ -229,8 +236,9 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
                     viewHolder.pr = pr;
                     viewHolder.id = pr.getId();
                     viewHolder.description.setText(pr.getDescription());
-                    viewHolder.from.setText(pr.getRequestorName() + " - " + pr.getRequestorPhoneNumber());
-                    viewHolder.splitAmount.setText("HKD" + String.format("%.2f", pr.getShareAmount()));
+                    viewHolder.from.setText("Request sent by: " + pr.getRequestorName() + " - " + pr.getRequestorPhoneNumber());
+                    viewHolder.share.setText("Your Share: HKD" + String.format("%.2f", pr.getShareAmount()));
+                    viewHolder.splitAmount.setText("Total Amount: HKD" + String.format("%.2f", pr.getTotalAmount()));
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
                     String date = null;
                     Date temp = new Date(Long.parseLong(pr.getRequestEpochDate())*(-1));
@@ -416,12 +424,29 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
             // then show the confirmation message.
             assert cryptoObject != null;
             tryEncrypt(cryptoObject.getCipher());
-            mFirebaseDatabaseReference.child(pr.getId()).removeValue();
-            Toast.makeText(getActivity(), "Payment to " + pr.getRequestorName() + " successful!", Toast.LENGTH_LONG).show();
         } else {
             // Authentication happened with backup password. Just show the confirmation message.
             //showConfirmation(null);
         }
+        if (pr.getRequestorPhoneNumber().equals("5660 0981") && pr.getReceipientPhoneNo().equals("5139 6515")) {
+            if (profile.getAccountNumber().equals("3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d")) {
+                (new CitiAPIBase(getContext())).API_MoneyMovement_CreatePersonalTransfer(
+                        "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d"
+                        , Float.toString(pr.getShareAmount()), "SOURCE_ACCOUNT_CURRENCY"
+                        , "51327a46437565374770547776786c4348367545397331453164414177505a4e6d2b7131566d39476942303d"
+                        , "BENEFICIARY", "123456", pr.getDescription(), this, pr);
+//                (new CitiAPIBase(getContext())).API_MoneyMovement_CreateInternalTransfer("355a515030616a53576b6a65797359506a634175764a734a3238314e4668627349486a676f7449463949453d"
+//                , "3000", "SOURCE_ACCOUNT_CURRENCY", "7977557255484c7345546c4e53424766634b6c53756841672b556857626e395253334b70416449676b42673d"
+//                        , "BENEFICIARY", "123456", "remark", "MEDICAL_SERVICES", this, pr);
+
+            }
+        }
+    }
+
+    public void postSuccessfulPayment(PaymentRequest pr) {
+        mFirebaseDatabaseReference.child(pr.getId()).removeValue();
+        Toast.makeText(getActivity(), "Payment to " + pr.getRequestorName() + " successful!", Toast.LENGTH_LONG).show();
+        (new History(getContext())).setPaymentHistory(pr);
     }
 
     private void tryEncrypt(Cipher cipher) {

@@ -29,6 +29,14 @@
 
         </com.rnd.snapsplit.camera.CameraSourcePreview>
 
+        <ImageView
+            android:id="@+id/citi_logo"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginStart="400dp"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/citi" />
+
         <RelativeLayout
             android:id="@+id/recognition_box"
             android:layout_width="350dp"

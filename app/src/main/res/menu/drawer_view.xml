@@ -5,8 +5,11 @@
             android:id="@+id/nav_camera"
             android:title="@string/drawer_item_camera" />
         <item
-            android:id="@+id/nav_payment_requests"
-            android:title="@string/drawer_item_payment_requests" />
+            android:id="@+id/nav_received_requests"
+            android:title="@string/drawer_item_received_requests" />
+        <item
+            android:id="@+id/nav_sent_requests"
+            android:title="@string/drawer_item_sent_requests" />
         <item
             android:id="@+id/nav_my_account"
             android:title="@string/drawer_item_my_account" />

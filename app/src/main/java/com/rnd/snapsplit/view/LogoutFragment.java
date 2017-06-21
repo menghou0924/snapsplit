@@ -91,21 +91,25 @@ public class LogoutFragment extends Fragment {
 
     public void testAPI() {
         // Define what to get from citi api
-//        citiAPIBase.API_Accounts_RetrieveAccountsSummary();
+        citiAPIBase.API_Accounts_RetrieveAccountsSummary();
 //        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcct("ALL", "");
 //        citiAPIBase.API_MoneyMovement_RetrievePayeeList("ALL", "");
 //        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctPersonal();
 //        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctInternal("");
 //        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctExternal("");
 //        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctBillPayment("");
-
+//        (new CitiAPIBase(getContext())).API_MoneyMovement_CreateInternalTransfer(
+//                "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d"
+//                , "123.4", "SOURCE_ACCOUNT_CURRENCY"
+//                , "51327a46437565374770547776786c4348367545397331453164414177505a4e6d2b7131566d39476942303d"
+//                , "BENEFICIARY", "123456", "test", "test");
         // Define what to send to email
-        String[] xmlAuthorization = getResources().getStringArray(R.array.citi_authorization);
+//        String[] xmlAuthorization = getResources().getStringArray(R.array.citi_authorization);
         String[] xmlAccounts = getResources().getStringArray(R.array.citi_accounts);
-        String[] xmlCustomers = getResources().getStringArray(R.array.citi_customers);
-        String[] xmlMovement = getResources().getStringArray(R.array.citi_moneymovement);
-        String[] xmlPayWithPoints = getResources().getStringArray(R.array.citi_paywithpoints);
-        String[] xmlReference = getResources().getStringArray(R.array.citi_reference);
+//        String[] xmlCustomers = getResources().getStringArray(R.array.citi_customers);
+//        String[] xmlMovement = getResources().getStringArray(R.array.citi_moneymovement);
+//        String[] xmlPayWithPoints = getResources().getStringArray(R.array.citi_paywithpoints);
+//        String[] xmlReference = getResources().getStringArray(R.array.citi_reference);
 
         String emailBody = "";
 //        for (String file : xmlMovement) {
@@ -114,12 +118,12 @@ public class LogoutFragment extends Fragment {
 //            emailBody += storageManager.getFile(file);
 //            emailBody += "\n\n\n";
 //        }
-//        for (String file : xmlAccounts) {
-//            emailBody += file + "\n";
-//            emailBody += storageManager.getFileLastModifiedDate(file) + "\n";
-//            emailBody += storageManager.getFile(file);
-//            emailBody += "\n\n\n";
-//        }
+        for (String file : xmlAccounts) {
+            emailBody += file + "\n";
+            emailBody += storageManager.getFileLastModifiedDate(file) + "\n";
+            emailBody += storageManager.getFile(file);
+            emailBody += "\n\n\n";
+        }
 //
         emailBody += "getAccountDetails" + "\n";
         emailBody += storageManager.getFile("DATA_ACCOUNTS_RETRIEVE_ACCOUNT_DETAILS") + "\n";

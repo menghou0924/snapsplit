@@ -33,7 +33,7 @@ public class History {
         JSONObject history = new JSONObject();
         JSONArray friendArray = new JSONArray();
         try {
-            history.put("type", "request_history");
+            history.put("type", "history_request_made");
             // this puts personal profile information, id, name, phoneNumber, accountNumber, displayAccountNumber, displayPic
             JSONObject selfObject = self.getSelfAsJSONObject();
             Iterator<?> keys = selfObject.keys();
@@ -64,8 +64,32 @@ public class History {
         storageManager.appendFile(STORAGE_FILENAME, "history", history);
     }
 
-    public void setPaymentHistory() {
+    public void setPaymentHistory(PaymentRequest paymentRequest) {
+        JSONObject history = new JSONObject();
+        try {
+            history.put("type", "history_payment_made");
+            // this puts personal profile information, id, name, phoneNumber, accountNumber, displayAccountNumber, displayPic
+            JSONObject selfObject = self.getSelfAsJSONObject();
+            Iterator<?> keys = selfObject.keys();
 
+            while( keys.hasNext() ) {
+                String key = (String)keys.next();
+                history.put(key, selfObject.get(key));
+            }
+
+            // this puts paymentrequest id, requestorName, description, requestorPhoneNumber, requestEpochDate, receiptPicture, receipientPhoneNo, totalAmount
+            JSONObject paymentRequestObject = paymentRequest.getSelfWithTotalAsJsonObject(context);
+            keys = paymentRequestObject.keys();
+
+            while( keys.hasNext() ) {
+                String key = (String)keys.next();
+                history.put(key, paymentRequestObject.get(key));
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        storageManager.appendFile(STORAGE_FILENAME, "history", history);
     }
 
     public void setReceivePaymentHistory() {

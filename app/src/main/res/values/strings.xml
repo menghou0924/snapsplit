@@ -4,7 +4,8 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="drawer_item_camera">Home</string>
-    <string name="drawer_item_payment_requests">Payment Requests</string>
+    <string name="drawer_item_received_requests">Pay Your Friends</string>
+    <string name="drawer_item_sent_requests">Remind Your Friends</string>
     <string name="drawer_item_friends">Friends</string>
     <string name="drawer_item_my_account">My Account</string>
     <string name="drawer_item_sign_out">Sign out</string>

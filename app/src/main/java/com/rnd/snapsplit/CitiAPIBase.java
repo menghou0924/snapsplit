@@ -3,12 +3,14 @@ package com.rnd.snapsplit;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.net.Uri;
 
 import com.rnd.snapsplit.view.MainActivity;
+import com.rnd.snapsplit.view.OwedFragment;
 
 import org.apache.http.auth.AUTH;
 import org.json.JSONArray;
@@ -523,7 +525,8 @@ public class CitiAPIBase {
     }
 
     public void API_MoneyMovement_CreatePersonalTransfer(String sourceAccountId, String transactionAmount, String transferCurrencyIndicator
-            , String destinationAccountId, String chargeBearer, String fxDealReferenceNumber, String remark) {
+            , String destinationAccountId, String chargeBearer, String fxDealReferenceNumber, String remark
+            , final Fragment currentFragment, final PaymentRequest pr) {
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -566,6 +569,7 @@ public class CitiAPIBase {
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CREATE_PERSONAL_TRANSFER, data.toString());
                         Log.d(TAG, DATA_MONEY_MOVEMENT_CREATE_PERSONAL_TRANSFER + "JSON DATA = " + data.toString());
+                        ((OwedFragment) currentFragment).postSuccessfulPayment(pr);
                     }
                     else {
                         Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CREATE_PERSONAL_TRANSFER + data.toString());
@@ -667,7 +671,8 @@ public class CitiAPIBase {
     }
 
     public void API_MoneyMovement_CreateInternalTransfer(String sourceAccountId, String transactionAmount, String transferCurrencyIndicator
-            , String payeeId, String chargeBearer, String fxDealReferenceNumber, String remark, String transferPurpose) {
+            , String payeeId, String chargeBearer, String fxDealReferenceNumber, String remark, String transferPurpose
+            , final Fragment currentFragment, final PaymentRequest pr) {
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -711,6 +716,7 @@ public class CitiAPIBase {
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER, data.toString());
                         Log.d(TAG, DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER + "JSON DATA = " + data.toString());
+                        ((OwedFragment) currentFragment).postSuccessfulPayment(pr);
                     }
                     else {
                         Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER + data.toString());

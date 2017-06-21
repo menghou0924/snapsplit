@@ -60,6 +60,25 @@ public class Friend implements Serializable {
         return lastName;
     }
 
+    public String getName() {
+        if (firstName == null) {
+            if (lastName == null) {
+                return "";
+            }
+            else {
+                return lastName;
+            }
+        }
+        else {
+            if (lastName == null) {
+                return firstName;
+            }
+            else {
+                return firstName + " " + lastName;
+            }
+        }
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -158,7 +177,7 @@ public class Friend implements Serializable {
             JSONArray friendsArray = friendObj.getJSONArray("friends");
             for (int i = 0; i < friendsArray.length(); i++) {
                 JSONObject temp = friendsArray.getJSONObject(i);
-                if (temp.optString("phoneNumber").equals(phoneNumber)) {
+                if (temp.optString("friend_phoneNumber").equals(phoneNumber)) {
                     result = new Friend(
                             temp.optString("friend_firstName")
                             , temp.optString("friend_lastName")
@@ -189,14 +208,14 @@ public class Friend implements Serializable {
         removeAllFriends(ctx);
         Profile profile = new Profile(ctx);
         if (profile.getName().equals("Damian Dutkiewicz")) {
-            Friend fd1 = new Friend("Raymond", "Sak", "3423 5435", "51327a46437565374770547776786c4348367545397331453164414177505a4e6d2b7131566d39476942303d", R.drawable.raymond, 0);
+            Friend fd1 = new Friend("Raymond", "Sak", "5139 6515", "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d", R.drawable.raymond, 0);
             fd1.saveSelfToFile(ctx);
         }
         else if (profile.getName().equals("Raymond Sak")) {
-            Friend fd = new Friend("Damian", "Dutkiewicz", "5937 2478", "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d", R.drawable.damian, 0);
+            Friend fd = new Friend("Damian", "Dutkiewicz", "5660 0981", "51327a46437565374770547776786c4348367545397331453164414177505a4e6d2b7131566d39476942303d", R.drawable.damian, 0);
             fd.saveSelfToFile(ctx);
         }
-        Friend fd2 = new Friend("Megan", "Gibbs", "9053 24438", "", 0, ctx.getResources().getIntArray(R.array.colors_icon)[0]);
+        Friend fd2 = new Friend("Megan", "Gibbs", "9053 2443", "", 0, ctx.getResources().getIntArray(R.array.colors_icon)[0]);
         Friend fd3 = new Friend("Bryant", "Ryan", "5587 2988", "", 0, ctx.getResources().getIntArray(R.array.colors_icon)[5]);
         Friend fd4 = new Friend("Drew", "Jennings", "3557 7837", "", 0, ctx.getResources().getIntArray(R.array.colors_icon)[9]);
         fd2.saveSelfToFile(ctx);

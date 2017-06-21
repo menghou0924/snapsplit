@@ -88,8 +88,13 @@ public class MainActivity extends AppCompatActivity {
                 ((Toolbar) findViewById(R.id.tool_bar_hamburger)).setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
                 setTitle("");
                 break;
-            case R.id.nav_payment_requests:
+            case R.id.nav_received_requests:
                 fragmentClass = OwedFragment.class;
+                ((Toolbar) findViewById(R.id.tool_bar_hamburger)).setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+                setTitle(menuItem.getTitle());
+                break;
+            case R.id.nav_sent_requests:
+                fragmentClass = SentRequestFragment.class;
                 ((Toolbar) findViewById(R.id.tool_bar_hamburger)).setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 setTitle(menuItem.getTitle());
                 break;

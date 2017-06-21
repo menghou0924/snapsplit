@@ -7,7 +7,7 @@
     </string-array>
     <!--Accounts members-->
     <string-array name="citi_accounts">
-    <item>DATA_ACCOUNTS_RETRIEVE_ACCOUNTS_SUMMARY</item>
+        <item>DATA_ACCOUNTS_RETRIEVE_ACCOUNTS_SUMMARY</item>
         <item>DATA_ACCOUNTS_RETRIEVE_ACCOUNT_DETAILS</item>
         <item>DATA_ACCOUNTS_RETRIEVE_ACCOUNT_TRANSACTIONS</item>
     </string-array>

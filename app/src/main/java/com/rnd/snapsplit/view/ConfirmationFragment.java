@@ -33,6 +33,7 @@ import com.google.firebase.database.ServerValue;
 import com.rnd.snapsplit.Friend;
 import com.rnd.snapsplit.FriendListAdapter;
 import com.rnd.snapsplit.History;
+import com.rnd.snapsplit.Profile;
 import com.rnd.snapsplit.R;
 import com.rnd.snapsplit.PaymentRequest;
 
@@ -53,7 +54,7 @@ public class ConfirmationFragment extends ListFragment {
     private View view;
     private String description ="";
     private Bitmap bm;
-    private History history;
+    private Profile profile;
 
     ArrayList<Friend> selectedFriends = new ArrayList<Friend>();
 
@@ -81,7 +82,7 @@ public class ConfirmationFragment extends ListFragment {
         view = inflater.inflate(R.layout.view_confirmation, container, false);
         final Activity activity = getActivity();
         final Context context = getContext();
-        history = new History(context);
+        profile = new Profile(context);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -155,22 +156,23 @@ public class ConfirmationFragment extends ListFragment {
                 pr.setReceipientPhoneNo(fd.getPhoneNumber());
                 pr.setStrReceiptPic(receiptStr);
                 pr.setRequestEpochDate(String.valueOf(System.currentTimeMillis()*(-1)));
-                pr.setRequestorName("Damian Dutkiewicz");
-                pr.setRequestorPhoneNumber("5937 2478");
+                pr.setRequestorName(profile.getName());
+                pr.setRequestorPhoneNumber(profile.getPhoneNumber());
                 pr.setShareAmount(fd.getAmountToPay());
                 pr.setTotalAmount(bundle.getFloat("total"));
                 pr.setDesription(description);
-                mFirebaseDatabaseReference.child(fd.getPhoneNumber()).push().setValue(pr);
+                mFirebaseDatabaseReference.child(fd.getPhoneNumber()).child("unpaid_by_me").push().setValue(pr);
+                mFirebaseDatabaseReference.child(profile.getPhoneNumber()).child("unpaid_by_friends").push().setValue(pr);
             }
 
             PaymentRequest pr = new PaymentRequest();
             pr.setStrReceiptPic(receiptStr);
             pr.setRequestEpochDate(String.valueOf(System.currentTimeMillis()*(-1)));
-            pr.setRequestorName("Damian Dutkiewicz");
-            pr.setRequestorPhoneNumber("7849 8484");
+            pr.setRequestorName(profile.getName());
+            pr.setRequestorPhoneNumber(profile.getPhoneNumber());
             pr.setTotalAmount(bundle.getFloat("total"));
             pr.setDesription(description);
-            history.setRequestHistory(selectedFriends, pr);
+            (new History(getContext())).setRequestHistory(selectedFriends, pr);
 
             RelativeLayout rl1 = (RelativeLayout) view.findViewById(R.id.relative_summary);
             RelativeLayout rl2 = (RelativeLayout) view.findViewById(R.id.relative_fd_list);

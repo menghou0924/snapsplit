@@ -66,27 +66,28 @@ public class FriendListAdapter extends ArrayAdapter<Friend> implements View.OnTo
         {
             holder = (ViewHolder)row.getTag();
         }
-
-        row.setOnTouchListener((new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                EditText editText = (EditText) view.findViewById(R.id.splitAmount);
-                editText.setFocusable(false);
-                editText.setFocusableInTouchMode(false);
-                return false;
-            }
-        }));
-        if (holder.mAmount != null){
-            holder.mAmount.setOnTouchListener((new View.OnTouchListener() {
+        if (fragmentTag == "FriendSelectionFragment") {
+            row.setOnTouchListener((new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
-                    EditText editText = (EditText) view;
-                    editText.setFocusable(true);
-                    editText.setFocusableInTouchMode(true);
+                    EditText editText = (EditText) view.findViewById(R.id.splitAmount);
+                    editText.setFocusable(false);
+                    editText.setFocusableInTouchMode(false);
                     return false;
                 }
             }));
+            if (holder.mAmount != null) {
+                holder.mAmount.setOnTouchListener((new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent event) {
+                        EditText editText = (EditText) view;
+                        editText.setFocusable(true);
+                        editText.setFocusableInTouchMode(true);
+                        return false;
+                    }
+                }));
 
+            }
         }
 
         Friend friend = data.get(position);

@@ -44,13 +44,13 @@ public class Profile {
 
         if (!storageManager.getFile(STORAGE_FILE_NAME).isEmpty()) {
             JSONObject person = storageManager.getJSONObjectFromFile(STORAGE_FILE_NAME);
-            id = person.optString("id");
-            name = person.optString("name");
-            phoneNumber = person.optString("phoneNumber");
-            accountNumber = person.optString("accountNumber");
-            displayAccountNumber = person.optString("displayAccountNumber");
-            displayPic = person.optInt("displayPic");
-            displayColor = person.optInt("displayColor");
+            id = person.optString("profile_id");
+            name = person.optString("profile_name");
+            phoneNumber = person.optString("profile_phoneNumber");
+            accountNumber = person.optString("profile_accountNumber");
+            displayAccountNumber = person.optString("profile_displayAccountNumber");
+            displayPic = person.optInt("profile_displayPic");
+            displayColor = person.optInt("profile_displayColor");
         }
         if (storageManager.getFile(STORAGE_FILE_NAME).isEmpty() || citiAPIManager.getEnglishName().isEmpty() || name.equals("Warren Buffett")) {
 
@@ -58,22 +58,16 @@ public class Profile {
             name = citiAPIManager.getEnglishName();
 
             if (name.equals("AXDXEX JXNX AXNXT")) { // Sandboxuser1
-                name = "Damian Dutkiewicz";
-                displayPic = R.drawable.damian;
-                accountNumber = "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d";
-                phoneNumber = "5660 0981"; // transfer from
-            } else if (name.equals("CARSTEN K ANDREAS")) { // Sandboxuser2
                 name = "Raymond Sak";
                 displayPic = R.drawable.raymond;
-                accountNumber = "51327a46437565374770547776786c4348367545397331453164414177505a4e6d2b7131566d39476942303d";
-                phoneNumber = "5139 6515"; // transfer to
-            }
-            else if (name.equals("ROBYN L. MATRAVERS")) {
-                name = "James Dimon";
-                displayColor = context.getResources().getIntArray(R.array.colors_icon)[RANDOM.nextInt(10)];
-                accountNumber = "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d";
-                phoneNumber = Integer.toString(RANDOM.nextInt(99999999) + 10000000);
-                phoneNumber = phoneNumber.substring(0, 4) + " " + phoneNumber.substring(4);// transfer to
+                phoneNumber = "5139 6515";
+                accountNumber = "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d"; // transfer from
+
+            } else if (name.equals("CARSTEN K ANDREAS")) { // Sandboxuser2
+                name = "Damian Dutkiewicz";
+                displayPic = R.drawable.damian;
+                phoneNumber = "5660 0981";
+                accountNumber = "51327a46437565374770547776786c4348367545397331453164414177505a4e6d2b7131566d39476942303d"; // transfer to
             }
             else {
                 name = "Warren Buffett";
@@ -91,13 +85,13 @@ public class Profile {
 
             JSONObject profile = new JSONObject();
             try {
-                profile.put("id", id);
-                profile.put("name", name);
-                profile.put("phoneNumber", phoneNumber);
-                profile.put("accountNumber", accountNumber);
-                profile.put("displayAccountNumber", displayAccountNumber);
-                profile.put("displayPic", displayPic);
-                profile.put("displayColor", displayColor);
+                profile.put("profile_id", id);
+                profile.put("profile_name", name);
+                profile.put("profile_phoneNumber", phoneNumber);
+                profile.put("profile_accountNumber", accountNumber);
+                profile.put("profile_displayAccountNumber", displayAccountNumber);
+                profile.put("profile_displayPic", displayPic);
+                profile.put("profile_displayColor", displayColor);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -40,6 +40,8 @@ public class CitiAPIManager {
         String[] xmlMovement = context.getResources().getStringArray(R.array.citi_moneymovement);
         String[] xmlPayWithPoints = context.getResources().getStringArray(R.array.citi_paywithpoints);
         String[] xmlReference = context.getResources().getStringArray(R.array.citi_reference);
+        String[] xmlProfile = context.getResources().getStringArray(R.array.profile);
+        String[] xmlFriends = context.getResources().getStringArray(R.array.friends);
 
         for (String file: xmlAuthorization) {
             storageManager.clearFile(file);
@@ -57,6 +59,12 @@ public class CitiAPIManager {
             storageManager.clearFile(file);
         }
         for (String file: xmlReference) {
+            storageManager.clearFile(file);
+        }
+        for (String file: xmlProfile) {
+            storageManager.clearFile(file);
+        }
+        for (String file: xmlFriends) {
             storageManager.clearFile(file);
         }
     }
