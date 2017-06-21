@@ -161,8 +161,7 @@ public class ConfirmationFragment extends ListFragment {
                 pr.setShareAmount(fd.getAmountToPay());
                 pr.setTotalAmount(bundle.getFloat("total"));
                 pr.setDesription(description);
-                mFirebaseDatabaseReference.child(fd.getPhoneNumber()).child("unpaid_by_me").push().setValue(pr);
-                mFirebaseDatabaseReference.child(profile.getPhoneNumber()).child("unpaid_by_friends").push().setValue(pr);
+                mFirebaseDatabaseReference.child("requests").push().setValue(pr);
             }
 
             PaymentRequest pr = new PaymentRequest();
@@ -172,7 +171,7 @@ public class ConfirmationFragment extends ListFragment {
             pr.setRequestorPhoneNumber(profile.getPhoneNumber());
             pr.setTotalAmount(bundle.getFloat("total"));
             pr.setDesription(description);
-            (new History(getContext())).setRequestHistory(selectedFriends, pr);
+//            (new History(getContext())).setRequestHistory(selectedFriends, pr);
 
             RelativeLayout rl1 = (RelativeLayout) view.findViewById(R.id.relative_summary);
             RelativeLayout rl2 = (RelativeLayout) view.findViewById(R.id.relative_fd_list);

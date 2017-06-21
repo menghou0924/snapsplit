@@ -2,6 +2,13 @@ package com.rnd.snapsplit;
 
 import android.content.Context;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,10 +28,12 @@ public class Profile {
     private String displayAccountNumber = "";
     private int displayPic = 0;
     private int displayColor = 0;
+    private String accountBalance = "";
     private final static String STORAGE_FILE_NAME = "PERSONAL_PROFILE";
     private CitiAPIManager citiAPIManager;
     private CitiAPIBase citiAPIBase;
     private StorageManager storageManager;
+    private DatabaseReference databaseReference;
     private final static Random RANDOM = new Random();
 
     public Profile(Context ctx) {
@@ -32,6 +41,7 @@ public class Profile {
         citiAPIManager = new CitiAPIManager(ctx);
         citiAPIBase = new CitiAPIBase(ctx);
         storageManager = new StorageManager(ctx);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         citiAPIBase.API_Accounts_RetrieveAccountsSummary();
         citiAPIBase.API_Customers_RetrieveCustomerBasicName();
@@ -51,6 +61,29 @@ public class Profile {
             displayAccountNumber = person.optString("profile_displayAccountNumber");
             displayPic = person.optInt("profile_displayPic");
             displayColor = person.optInt("profile_displayColor");
+            if (!accountNumber.isEmpty()) {
+                citiAPIBase.API_Accounts_RetrieveAccountDetails(accountNumber);
+            }
+            FirebaseDatabase.getInstance().getReference().child(phoneNumber).addListenerForSingleValueEvent
+                    (new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            if (snapshot.getValue() != null) {
+                                String updatedRequestorBalance = (String) ((HashMap<String, String>) snapshot.getValue()).get("accountBalance");
+                                JSONObject jsonObject = storageManager.getJSONObjectFromFile(STORAGE_FILE_NAME);
+                                try {
+                                    jsonObject.put("profile_accountBalance", updatedRequestorBalance);
+                                    storageManager.saveFile(STORAGE_FILE_NAME, jsonObject.toString());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
+            accountBalance = person.optString("profile_accountBalance");
         }
         if (storageManager.getFile(STORAGE_FILE_NAME).isEmpty() || citiAPIManager.getEnglishName().isEmpty() || name.equals("Warren Buffett")) {
 
@@ -58,25 +91,45 @@ public class Profile {
             name = citiAPIManager.getEnglishName();
 
             if (name.equals("AXDXEX JXNX AXNXT")) { // Sandboxuser1
-                name = "Raymond Sak";
+                name = "Raymond Sak"; // transfer from
                 displayPic = R.drawable.raymond;
                 phoneNumber = "5139 6515";
-                accountNumber = "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d"; // transfer from
-
-            } else if (name.equals("CARSTEN K ANDREAS")) { // Sandboxuser2
-                name = "Damian Dutkiewicz";
+                accountNumber = "355a515030616a53576b6a65797359506a634175764a734a3238314e4668627349486a676f7449463949453d";
+            }
+            else if (name.equals("CARSTEN K ANDREAS")) { // Sandboxuser2
+                name = "Damian Dutkiewicz"; // transfer to
                 displayPic = R.drawable.damian;
                 phoneNumber = "5660 0981";
-                accountNumber = "51327a46437565374770547776786c4348367545397331453164414177505a4e6d2b7131566d39476942303d"; // transfer to
+                accountNumber = "7977557255484c7345546c4e53424766634b6c53756841672b556857626e395253334b70416449676b42673d";
             }
             else {
                 name = "Warren Buffett";
                 displayColor = context.getResources().getIntArray(R.array.colors_icon)[RANDOM.nextInt(10)];
-                accountNumber = "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d";
+                accountNumber = "7977557255484c7345546c4e53424766634b6c53756841672b556857626e395253334b70416449676b42673d";
                 phoneNumber = Integer.toString(RANDOM.nextInt(99999999) + 10000000);
                 phoneNumber = phoneNumber.substring(0, 4) + " " + phoneNumber.substring(4);// transfer to
             }
+            FirebaseDatabase.getInstance().getReference().child(phoneNumber).addListenerForSingleValueEvent
+                    (new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            if (snapshot.getValue() != null) {
+                                String updatedRequestorBalance = (String) ((HashMap<String, String>) snapshot.getValue()).get("accountBalance");
+                                JSONObject jsonObject = storageManager.getJSONObjectFromFile(STORAGE_FILE_NAME);
+                                try {
+                                    jsonObject.put("profile_accountBalance", updatedRequestorBalance);
+                                    storageManager.saveFile(STORAGE_FILE_NAME, jsonObject.toString());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
 
+//            FirebaseDatabase.getInstance().getReference().child(phoneNumber).child("accountBalance").setValue(accountBalance);
             if (!accountNumber.isEmpty()) {
                 citiAPIBase.API_Accounts_RetrieveAccountDetails(accountNumber);
             }
@@ -92,6 +145,7 @@ public class Profile {
                 profile.put("profile_displayAccountNumber", displayAccountNumber);
                 profile.put("profile_displayPic", displayPic);
                 profile.put("profile_displayColor", displayColor);
+                profile.put("profile_accountBalance", accountBalance);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -130,6 +184,14 @@ public class Profile {
         return displayColor;
     }
 
+    public String getAccountBalance() {
+        return accountBalance;
+    }
+
+    public void setAccountBalance(String newBalance) {
+        accountBalance = newBalance;
+    }
+
     public JSONObject getSelfAsJSONObject() {
         JSONObject self = new JSONObject();
         try {
@@ -140,6 +202,7 @@ public class Profile {
             self.put("profile_displayAccountNumber", displayAccountNumber);
             self.put("profile_displayPic", displayPic);
             self.put("profile_displayColor", displayColor);
+            self.put("profile_accountBalance", accountBalance);
         }
         catch (JSONException e) {
             e.printStackTrace();

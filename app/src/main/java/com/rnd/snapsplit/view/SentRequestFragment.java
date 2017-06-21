@@ -128,6 +128,7 @@ public class SentRequestFragment extends Fragment implements GoogleApiClient.OnC
 
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
+        View item;
         TextView description;
         TextView toPerson;
         TextView splitAmount;
@@ -139,6 +140,7 @@ public class SentRequestFragment extends Fragment implements GoogleApiClient.OnC
 
         public MessageViewHolder(View v) {
             super(v);
+            item = itemView;
             description = (TextView) itemView.findViewById(R.id.description);
             toPerson = (TextView) itemView.findViewById(R.id.txt_person);
             splitAmount = (TextView) itemView.findViewById(R.id.splitAmount);
@@ -203,10 +205,10 @@ public class SentRequestFragment extends Fragment implements GoogleApiClient.OnC
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         //mLinearLayoutManager.setStackFromEnd(true);
         //Raymonds phone number here
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child(profile.getPhoneNumber()).child("unpaid_by_friends");
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child("requests");
         mFirebaseAdapter = new FirebaseRecyclerAdapter<PaymentRequest, MessageViewHolder>(
                 PaymentRequest.class,
-                R.layout.list_owed,
+                R.layout.list_sent_requests,
                 MessageViewHolder.class,
                 mFirebaseDatabaseReference.orderByChild("requestEpochDate")) {
 
@@ -224,7 +226,7 @@ public class SentRequestFragment extends Fragment implements GoogleApiClient.OnC
             protected void populateViewHolder(final MessageViewHolder viewHolder,
                                               PaymentRequest pr, int position) {
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                if (pr != null) {
+                if (pr != null && pr.getRequestorPhoneNumber().equals(profile.getPhoneNumber())) {
 
                     if (pr.getStrReceiptPic() != null && !pr.getStrReceiptPic().equals("")) {
                         String encodedReceipt = pr.getStrReceiptPic();
@@ -242,6 +244,11 @@ public class SentRequestFragment extends Fragment implements GoogleApiClient.OnC
                     Date temp = new Date(Long.parseLong(pr.getRequestEpochDate()) * (-1));
                     date = simpleDateFormat.format(temp);
                     viewHolder.date.setText(date);
+                }
+                else {
+                    ViewGroup.LayoutParams params = view.getLayoutParams();
+                    params.height = 0;
+                    viewHolder.item.setLayoutParams(params);
                 }
 
                 // log a view action on it

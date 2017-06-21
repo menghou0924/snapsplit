@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  * Created by Damian on 10/6/2017.
@@ -17,10 +18,12 @@ public class PaymentRequest implements Serializable {
     private String requestorPhoneNumber = "";
     private String requestEpochDate = "";
     private String receipientPhoneNo = "";
-    private String id ="";
+    private String id = "";
     private String strReceiptPic="";
     private float shareAmount = 0f;
     private float totalAmount = 0f;
+//    private Boolean isPaid = false;
+    private final static Random RANDOM = new Random();
 
     public PaymentRequest() {
     }

@@ -35,7 +35,7 @@ public class History {
         try {
             history.put("type", "history_request_made");
             // this puts personal profile information, id, name, phoneNumber, accountNumber, displayAccountNumber, displayPic
-            JSONObject selfObject = self.getSelfAsJSONObject();
+            JSONObject selfObject = self.getSelfAsJSONObject(); // self is the one who made the request
             Iterator<?> keys = selfObject.keys();
 
             while( keys.hasNext() ) {
@@ -69,7 +69,7 @@ public class History {
         try {
             history.put("type", "history_payment_made");
             // this puts personal profile information, id, name, phoneNumber, accountNumber, displayAccountNumber, displayPic
-            JSONObject selfObject = self.getSelfAsJSONObject();
+            JSONObject selfObject = self.getSelfAsJSONObject(); // self is the one who made the payment
             Iterator<?> keys = selfObject.keys();
 
             while( keys.hasNext() ) {
@@ -92,9 +92,31 @@ public class History {
         storageManager.appendFile(STORAGE_FILENAME, "history", history);
     }
 
-    public void setReceivePaymentHistory() {
+    public void setReceivePaymentHistory(Friend friend, PaymentRequest paymentRequest) {
+        JSONObject history = new JSONObject();
+        try {
+            history.put("type", "history_payment_received");
+            // this puts personal profile information, id, name, phoneNumber, accountNumber, displayAccountNumber, displayPic
+            JSONArray friendArray = new JSONArray(); // friend is the one who received the payment
+            friendArray.put(friend.getSelfAsJSONObject(context));
+            history.put("friends", friendArray);
 
+            // this puts paymentrequest id, requestorName, description, requestorPhoneNumber, requestEpochDate, receiptPicture, receipientPhoneNo, totalAmount
+            JSONObject paymentRequestObject = paymentRequest.getSelfWithTotalAsJsonObject(context);
+            Iterator<?> keys = paymentRequestObject.keys();
+
+            while( keys.hasNext() ) {
+                String key = (String)keys.next();
+                history.put(key, paymentRequestObject.get(key));
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        storageManager.appendFile(STORAGE_FILENAME, "history", history);
     }
 
-
+//    public String getRelevantHistory() {
+//        JSONObject historyObject =
+//    }
 }

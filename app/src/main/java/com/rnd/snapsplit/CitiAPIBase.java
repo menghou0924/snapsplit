@@ -569,7 +569,7 @@ public class CitiAPIBase {
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CREATE_PERSONAL_TRANSFER, data.toString());
                         Log.d(TAG, DATA_MONEY_MOVEMENT_CREATE_PERSONAL_TRANSFER + "JSON DATA = " + data.toString());
-                        ((OwedFragment) currentFragment).postSuccessfulPayment(pr);
+//                        ((OwedFragment) currentFragment).postSuccessfulPayment(pr);
                     }
                     else {
                         Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CREATE_PERSONAL_TRANSFER + data.toString());
@@ -672,7 +672,7 @@ public class CitiAPIBase {
 
     public void API_MoneyMovement_CreateInternalTransfer(String sourceAccountId, String transactionAmount, String transferCurrencyIndicator
             , String payeeId, String chargeBearer, String fxDealReferenceNumber, String remark, String transferPurpose
-            , final Fragment currentFragment, final PaymentRequest pr) {
+            , final Fragment currentFragment, final PaymentRequest paymentRequest) {
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -716,7 +716,12 @@ public class CitiAPIBase {
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER, data.toString());
                         Log.d(TAG, DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER + "JSON DATA = " + data.toString());
-                        ((OwedFragment) currentFragment).postSuccessfulPayment(pr);
+                        if (storageManager.getJSONObjectFromFile(DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER)
+                                .optJSONObject("debitDetails").optString("transactionDebitAmount")
+                                .equals(paymentRequest.getShareAmount())) {
+//                            API_MoneyMovement_ConfirmInternalTransfer(storageManager.getValueFromFile(
+//                                    DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER, "controlFlowId"), currentFragment, paymentRequest);
+                        }
                     }
                     else {
                         Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CREATE_INTERNAL_TRANSFER + data.toString());
@@ -729,7 +734,8 @@ public class CitiAPIBase {
         });
     }
 
-    public void API_MoneyMovement_ConfirmInternalTransfer(String controlFlowId) {
+    public void API_MoneyMovement_ConfirmInternalTransfer(String controlFlowId
+            , final Fragment currentFragment, final PaymentRequest paymentRequest) {
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -766,6 +772,7 @@ public class CitiAPIBase {
                     if (response.code() == SUCCESSFUL_RESPONSE_CODE) {
                         storageManager.saveFile(DATA_MONEY_MOVEMENT_CONFIRM_INTERNAL_TRANSFER, data.toString());
                         Log.d(TAG, DATA_MONEY_MOVEMENT_CONFIRM_INTERNAL_TRANSFER + "JSON DATA = " + data.toString());
+//                        ((OwedFragment) currentFragment).postSuccessfulPayment(paymentRequest);
                     }
                     else {
                         Log.e(TAG, "ERROR: " + DATA_MONEY_MOVEMENT_CONFIRM_INTERNAL_TRANSFER + data.toString());

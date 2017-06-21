@@ -60,8 +60,14 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
             TextBlock item = items.valueAt(i);
              OcrGraphic graphic = null;
 //            if (item != null && item.getValue().contains("Total")) {
-             if (item.getValue().toLowerCase().contains("starbucks")) {
+             if (item.getValue().toLowerCase().contains("starbucks") || item.getValue().toLowerCase().contains("simplylife")) {
                  graphic = new OcrGraphic(mGraphicOverlay, item, Color.GREEN);
+                 if (item.getValue().toLowerCase().contains("starbucks")){
+                     mGraphicOverlay.description = "STARBUCKS";
+                 }
+                 else {
+                     mGraphicOverlay.description = "simplylife";
+                 }
                  mGraphicOverlay.add(graphic);
              }
               if (item!= null && (getFloatAmount(item) != 0f)){
@@ -71,7 +77,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
                       graphic = new OcrGraphic(mGraphicOverlay, item, Color.GREEN);
                       mGraphicOverlay.amountItem = graphic;
                       mGraphicOverlay.amountItemAfterFormat = getFloatAmount(item);
-                      mGraphicOverlay.description = "STARBUCKS";
+                      //mGraphicOverlay.description = "STARBUCKS";
                       mGraphicOverlay.add(graphic);
                   }
 

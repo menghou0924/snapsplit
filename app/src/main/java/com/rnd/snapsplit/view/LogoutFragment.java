@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.rnd.snapsplit.CitiAPIBase;
 import com.rnd.snapsplit.CitiAPIManager;
 import com.rnd.snapsplit.R;
@@ -90,8 +91,12 @@ public class LogoutFragment extends Fragment {
     }
 
     public void testAPI() {
+        storageManager.clearFile("history");
+        FirebaseDatabase.getInstance().getReference().child("5139 6515").setValue(null);
+        FirebaseDatabase.getInstance().getReference().child("5660 0981").setValue(null);
+        FirebaseDatabase.getInstance().getReference().setValue(null);
         // Define what to get from citi api
-        citiAPIBase.API_Accounts_RetrieveAccountsSummary();
+//        citiAPIBase.API_Accounts_RetrieveAccountsSummary();
 //        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcct("ALL", "");
 //        citiAPIBase.API_MoneyMovement_RetrievePayeeList("ALL", "");
 //        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctPersonal();
@@ -105,38 +110,38 @@ public class LogoutFragment extends Fragment {
 //                , "BENEFICIARY", "123456", "test", "test");
         // Define what to send to email
 //        String[] xmlAuthorization = getResources().getStringArray(R.array.citi_authorization);
-        String[] xmlAccounts = getResources().getStringArray(R.array.citi_accounts);
+//        String[] xmlAccounts = getResources().getStringArray(R.array.citi_accounts);
 //        String[] xmlCustomers = getResources().getStringArray(R.array.citi_customers);
 //        String[] xmlMovement = getResources().getStringArray(R.array.citi_moneymovement);
 //        String[] xmlPayWithPoints = getResources().getStringArray(R.array.citi_paywithpoints);
 //        String[] xmlReference = getResources().getStringArray(R.array.citi_reference);
 
-        String emailBody = "";
+//        String emailBody = "";
 //        for (String file : xmlMovement) {
 //            emailBody += file + "\n";
 //            emailBody += storageManager.getFileLastModifiedDate(file) + "\n";
 //            emailBody += storageManager.getFile(file);
 //            emailBody += "\n\n\n";
 //        }
-        for (String file : xmlAccounts) {
-            emailBody += file + "\n";
-            emailBody += storageManager.getFileLastModifiedDate(file) + "\n";
-            emailBody += storageManager.getFile(file);
-            emailBody += "\n\n\n";
-        }
-//
-        emailBody += "getAccountDetails" + "\n";
-        emailBody += storageManager.getFile("DATA_ACCOUNTS_RETRIEVE_ACCOUNT_DETAILS") + "\n";
-        emailBody += "\n\n\n";
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"menghou0924@gmail.com"});
-        i.putExtra(Intent.EXTRA_SUBJECT, "Debug Snapsplit");
-        i.putExtra(Intent.EXTRA_TEXT   , emailBody);
-        try {
-            getActivity().startActivity(Intent.createChooser(i, "Send mail..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-        }
+//        for (String file : xmlAccounts) {
+//            emailBody += file + "\n";
+//            emailBody += storageManager.getFileLastModifiedDate(file) + "\n";
+//            emailBody += storageManager.getFile(file);
+//            emailBody += "\n\n\n";
+//        }
+////
+//        emailBody += "getAccountDetails" + "\n";
+//        emailBody += storageManager.getFile("DATA_ACCOUNTS_RETRIEVE_ACCOUNT_DETAILS") + "\n";
+//        emailBody += "\n\n\n";
+//        Intent i = new Intent(Intent.ACTION_SEND);
+//        i.setType("message/rfc822");
+//        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"menghou0924@gmail.com"});
+//        i.putExtra(Intent.EXTRA_SUBJECT, "Debug Snapsplit");
+//        i.putExtra(Intent.EXTRA_TEXT   , emailBody);
+//        try {
+//            getActivity().startActivity(Intent.createChooser(i, "Send mail..."));
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            Toast.makeText(getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+//        }
     }
 }

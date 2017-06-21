@@ -304,7 +304,8 @@ public class FriendsSelectionFragment extends ListFragment {
         for (int pos = 0; pos < l.getCount(); pos++) {
             Friend f = (Friend)l.getItemAtPosition(pos);
             if (selectedFriendsMap.containsKey(f)) {
-                View updatedElement= l.getChildAt(pos);
+                View updatedElement= l.getChildAt(pos - l.getFirstVisiblePosition());
+
                 EditText updatedAmount = (EditText) updatedElement.findViewById(R.id.splitAmount);
                 String updateAmountStr = updatedAmount.getText().toString();
                 float updateAmountFloat = Float.valueOf(updateAmountStr);

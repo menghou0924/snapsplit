@@ -66,14 +66,15 @@
             android:id="@+id/splitAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/txt_share"
             android:paddingTop="1dp"
+            android:paddingLeft="4dp"
             android:text="HKD100.00"
             android:textColor="#27ae60"
             android:textSize="13dip"
             android:visibility="visible"
-            android:layout_below="@+id/txt_share"
-            android:layout_alignStart="@+id/txt_share"/>
+            android:layout_alignBaseline="@+id/txt_share"
+            android:layout_alignBottom="@+id/txt_share"
+            android:layout_toEndOf="@+id/txt_share" />
 
 
     </RelativeLayout>

@@ -208,11 +208,11 @@ public class Friend implements Serializable {
         removeAllFriends(ctx);
         Profile profile = new Profile(ctx);
         if (profile.getName().equals("Damian Dutkiewicz")) {
-            Friend fd1 = new Friend("Raymond", "Sak", "5139 6515", "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d", R.drawable.raymond, 0);
+            Friend fd1 = new Friend("Raymond", "Sak", "5139 6515", "355a515030616a53576b6a65797359506a634175764a734a3238314e4668627349486a676f7449463949453d", R.drawable.raymond, 0);
             fd1.saveSelfToFile(ctx);
         }
         else if (profile.getName().equals("Raymond Sak")) {
-            Friend fd = new Friend("Damian", "Dutkiewicz", "5660 0981", "51327a46437565374770547776786c4348367545397331453164414177505a4e6d2b7131566d39476942303d", R.drawable.damian, 0);
+            Friend fd = new Friend("Damian", "Dutkiewicz", "5660 0981", "7977557255484c7345546c4e53424766634b6c53756841672b556857626e395253334b70416449676b42673d", R.drawable.damian, 0);
             fd.saveSelfToFile(ctx);
         }
         Friend fd2 = new Friend("Megan", "Gibbs", "9053 2443", "", 0, ctx.getResources().getIntArray(R.array.colors_icon)[0]);

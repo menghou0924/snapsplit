@@ -58,7 +58,7 @@ public class MyAccountFragment extends Fragment {
         ((TextView) view.findViewById(R.id.txt_name)).setText(profile.getName());
         ((TextView) view.findViewById(R.id.txt_phone)).setText(profile.getPhoneNumber());
         ((TextView) view.findViewById(R.id.txt_account_no)).setText(profile.getDisplayAccountNumber());
-        ((TextView) view.findViewById(R.id.txt_balance_value)).setText(citiAPIManager.getAccountBalance());
+        ((TextView) view.findViewById(R.id.txt_balance_value)).setText(profile.getAccountBalance());
 
         ((MaterialLetterIcon) view.findViewById(R.id.text_icon)).setInitials(true);
         ((MaterialLetterIcon) view.findViewById(R.id.text_icon)).setInitialsNumber(2);

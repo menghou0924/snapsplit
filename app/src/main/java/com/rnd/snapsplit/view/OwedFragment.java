@@ -52,14 +52,18 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.rnd.snapsplit.CitiAPIBase;
 import com.rnd.snapsplit.DialogClickListener;
+import com.rnd.snapsplit.Friend;
 import com.rnd.snapsplit.History;
 import com.rnd.snapsplit.PaymentRequest;
 import com.rnd.snapsplit.Profile;
 import com.rnd.snapsplit.R;
+import com.rnd.snapsplit.StorageManager;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -72,6 +76,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -133,6 +138,7 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
     }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
+        View item;
         TextView description;
         TextView from;
         TextView share;
@@ -144,6 +150,7 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
 
         public MessageViewHolder(View v) {
             super(v);
+            item = itemView;
             description = (TextView) itemView.findViewById(R.id.description);
             from = (TextView) itemView.findViewById(R.id.txt_person);
             share = (TextView) itemView.findViewById(R.id.txt_share);
@@ -204,7 +211,7 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
         mMessageRecyclerView = (RecyclerView) view.findViewById(R.id.messageRecyclerView);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         //mLinearLayoutManager.setStackFromEnd(true);
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child(profile.getPhoneNumber()).child("unpaid_by_me");
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference().child("requests");
         mFirebaseAdapter = new FirebaseRecyclerAdapter<PaymentRequest, MessageViewHolder>(
                 PaymentRequest.class,
                 R.layout.list_owed,
@@ -225,7 +232,7 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
             protected void populateViewHolder(final MessageViewHolder viewHolder,
                                               PaymentRequest pr, int position) {
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                if (pr != null) {
+                if (pr != null && pr.getReceipientPhoneNo().equals(profile.getPhoneNumber())) {
 
                     if (pr.getStrReceiptPic() != null && !pr.getStrReceiptPic().equals("")) {
                         String encodedReceipt = pr.getStrReceiptPic();
@@ -245,6 +252,12 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
                     date = simpleDateFormat.format(temp);
                     viewHolder.date.setText(date);
                 }
+                else {
+                    ViewGroup.LayoutParams params = view.getLayoutParams();
+                    params.height = 0;
+                    viewHolder.item.setLayoutParams(params);
+                }
+
 
                 // log a view action on it
                 //FirebaseUserActions.getInstance().end(getMessageViewAction(fd));
@@ -418,7 +431,7 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
     }
 
     public void onPurchased(boolean withFingerprint,
-                            @Nullable FingerprintManager.CryptoObject cryptoObject, PaymentRequest pr) {
+                            @Nullable FingerprintManager.CryptoObject cryptoObject, final PaymentRequest pr) {
         if (withFingerprint) {
             // If the user has authenticated with fingerprint, verify that using cryptography and
             // then show the confirmation message.
@@ -428,25 +441,47 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
             // Authentication happened with backup password. Just show the confirmation message.
             //showConfirmation(null);
         }
-        if (pr.getRequestorPhoneNumber().equals("5660 0981") && pr.getReceipientPhoneNo().equals("5139 6515")) {
-            if (profile.getAccountNumber().equals("3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d")) {
-                (new CitiAPIBase(getContext())).API_MoneyMovement_CreatePersonalTransfer(
-                        "3739334c4d3463614356474f6d7650667a737656664652677747796855646c5552745a43346d37423653553d"
-                        , Float.toString(pr.getShareAmount()), "SOURCE_ACCOUNT_CURRENCY"
-                        , "51327a46437565374770547776786c4348367545397331453164414177505a4e6d2b7131566d39476942303d"
-                        , "BENEFICIARY", "123456", pr.getDescription(), this, pr);
-//                (new CitiAPIBase(getContext())).API_MoneyMovement_CreateInternalTransfer("355a515030616a53576b6a65797359506a634175764a734a3238314e4668627349486a676f7449463949453d"
-//                , "3000", "SOURCE_ACCOUNT_CURRENCY", "7977557255484c7345546c4e53424766634b6c53756841672b556857626e395253334b70416449676b42673d"
-//                        , "BENEFICIARY", "123456", "remark", "MEDICAL_SERVICES", this, pr);
-
-            }
-        }
-    }
-
-    public void postSuccessfulPayment(PaymentRequest pr) {
-        mFirebaseDatabaseReference.child(pr.getId()).removeValue();
+        // Citi API doesn't work as the five fake accounts all belong to the same person
+        // cannot see the updated balance on the other person and also the transaction amount is somehow wrong
+//                (new CitiAPIBase(getContext())).API_MoneyMovement_CreateInternalTransfer(
+//                        "355a515030616a53576b6a65797359506a634175764a734a3238314e4668627349486a676f7449463949453d"
+//                        , Float.toString(pr.getShareAmount()), "SOURCE_ACCOUNT_CURRENCY"
+//                        , "7977557255484c7345546c4e53424766634b6c53756841672b556857626e395253334b70416449676b42673d"
+//                        , "BENEFICIARY", "123456", pr.getDescription(), "MEDICAL_SERVICES", this, pr);
+//
         Toast.makeText(getActivity(), "Payment to " + pr.getRequestorName() + " successful!", Toast.LENGTH_LONG).show();
+
+        // set account balance, "I" paid here so I am the receipt of the request
+        FirebaseDatabase.getInstance().getReference().child(pr.getRequestorPhoneNumber()).addListenerForSingleValueEvent
+                (new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        String updatedRequestorBalance = Float.toString(Float.valueOf((String) ((HashMap<String,String>) snapshot.getValue()).get("accountBalance")) + pr.getShareAmount());
+                        FirebaseDatabase.getInstance().getReference().child(pr.getRequestorPhoneNumber()).child("accountBalance").setValue(updatedRequestorBalance);
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+        });
+        FirebaseDatabase.getInstance().getReference().child(pr.getReceipientPhoneNo()).addListenerForSingleValueEvent
+                (new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        String updatedRecipientBalance = Float.toString(Float.valueOf((String) ((HashMap<String,String>) snapshot.getValue()).get("accountBalance")) - pr.getShareAmount());
+                        FirebaseDatabase.getInstance().getReference().child(pr.getReceipientPhoneNo()).child("accountBalance").setValue(updatedRecipientBalance);
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+        // remove the request so that it becomes paid
+        mFirebaseDatabaseReference.child(pr.getId()).removeValue();
+
+        // set history
         (new History(getContext())).setPaymentHistory(pr);
+        (new History(getContext())).setReceivePaymentHistory(Friend.getFriendByPhoneNumber(getContext(), pr.getRequestorPhoneNumber()), pr);
+        FirebaseDatabase.getInstance().getReference().child(pr.getRequestorPhoneNumber()).child("history").setValue((new StorageManager(getContext()).getFile("history")));
     }
 
     private void tryEncrypt(Cipher cipher) {

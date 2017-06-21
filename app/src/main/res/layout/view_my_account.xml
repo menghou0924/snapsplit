@@ -10,7 +10,7 @@
 
     <RelativeLayout
         android:id="@+id/relative_myaccount"
-        android:layout_width="400dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/relative_summary"
         android:layout_centerHorizontal="true"
@@ -130,7 +130,7 @@
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/relative_transaction"
-        android:layout_width="400dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:background="@color/colorBackground"
         android:orientation="vertical"
