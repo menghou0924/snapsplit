@@ -45,12 +45,12 @@ public class Profile {
 
         citiAPIBase.API_Accounts_RetrieveAccountsSummary();
         citiAPIBase.API_Customers_RetrieveCustomerBasicName();
-        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcct("ALL", "");
-        citiAPIBase.API_MoneyMovement_RetrievePayeeList("ALL", "");
-        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctPersonal();
-        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctInternal("");
-        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctExternal("");
-        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctBillPayment("");
+//        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcct("ALL", "");
+//        citiAPIBase.API_MoneyMovement_RetrievePayeeList("ALL", "");
+//        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctPersonal();
+//        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctInternal("");
+//        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctExternal("");
+//        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcctBillPayment("");
 
         if (!storageManager.getFile(STORAGE_FILE_NAME).isEmpty()) {
             JSONObject person = storageManager.getJSONObjectFromFile(STORAGE_FILE_NAME);

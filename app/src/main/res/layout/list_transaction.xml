@@ -8,25 +8,23 @@
     android:orientation="horizontal"
     android:padding="3dip" >
 
-    <ImageView
-        android:id="@+id/image_icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/receiptIcon"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginStart="15dp"
-        android:scaleType="centerInside"
+        android:layout_centerVertical="true"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:src="@drawable/receipt_icon" />
 
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/image_icon"
+        android:layout_toEndOf="@+id/receiptIcon"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="20dip"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:id="@+id/relativeLayout2">
 
         <TextView
@@ -34,17 +32,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="description"
+            android:text="Description"
             android:textSize="16dip" />
 
 
         <TextView
-            android:id="@+id/date"
+            android:id="@+id/txt_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txt_description"
             android:paddingTop="1dp"
-            android:text="15/06/2017 22:50:13"
+            android:text="22/06/2017"
             android:textSize="13dip" />
     </RelativeLayout>
 

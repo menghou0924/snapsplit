@@ -253,7 +253,7 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
                     viewHolder.date.setText(date);
                 }
                 else {
-                    ViewGroup.LayoutParams params = view.getLayoutParams();
+                    ViewGroup.LayoutParams params = viewHolder.item.getLayoutParams();
                     params.height = 0;
                     viewHolder.item.setLayoutParams(params);
                 }
@@ -480,8 +480,7 @@ public class OwedFragment extends Fragment implements GoogleApiClient.OnConnecti
 
         // set history
         (new History(getContext())).setPaymentHistory(pr);
-        (new History(getContext())).setReceivePaymentHistory(Friend.getFriendByPhoneNumber(getContext(), pr.getRequestorPhoneNumber()), pr);
-        FirebaseDatabase.getInstance().getReference().child(pr.getRequestorPhoneNumber()).child("history").setValue((new StorageManager(getContext()).getFile("history")));
+        (new History(getContext())).setFriendReceivePaymentHistory(pr);
     }
 
     private void tryEncrypt(Cipher cipher) {

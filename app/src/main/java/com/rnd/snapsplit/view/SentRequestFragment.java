@@ -246,7 +246,7 @@ public class SentRequestFragment extends Fragment implements GoogleApiClient.OnC
                     viewHolder.date.setText(date);
                 }
                 else {
-                    ViewGroup.LayoutParams params = view.getLayoutParams();
+                    ViewGroup.LayoutParams params = viewHolder.item.getLayoutParams();
                     params.height = 0;
                     viewHolder.item.setLayoutParams(params);
                 }

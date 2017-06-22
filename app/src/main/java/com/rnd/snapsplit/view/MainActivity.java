@@ -19,8 +19,10 @@ import android.content.res.Configuration;
 import android.view.View;
 
 import com.rnd.snapsplit.CitiAPIManager;
+import com.rnd.snapsplit.Friend;
 import com.rnd.snapsplit.Profile;
 import com.rnd.snapsplit.R;
+import com.rnd.snapsplit.StorageManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         citiAPIManager = new CitiAPIManager(this);
         citiAPIManager.basicDataFetch();
         profile = new Profile(this);
+
+        if ((new StorageManager(this)).isFileEmpty("FRIENDS_LIST")) {
+            Friend.resetFriends(this);
+        }
 
         toolBarHamburger = (Toolbar) findViewById(R.id.tool_bar_hamburger);
         setSupportActionBar(toolBarHamburger);

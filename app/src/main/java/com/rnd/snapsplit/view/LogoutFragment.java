@@ -92,9 +92,13 @@ public class LogoutFragment extends Fragment {
 
     public void testAPI() {
         storageManager.clearFile("history");
-        FirebaseDatabase.getInstance().getReference().child("5139 6515").setValue(null);
-        FirebaseDatabase.getInstance().getReference().child("5660 0981").setValue(null);
-        FirebaseDatabase.getInstance().getReference().setValue(null);
+//        FirebaseDatabase.getInstance().getReference().setValue(null);
+        FirebaseDatabase.getInstance().getReference().child("5139 6515").child("accountBalance").setValue("43678.9");
+        FirebaseDatabase.getInstance().getReference().child("5660 0981").child("accountBalance").setValue("17893.6");
+        FirebaseDatabase.getInstance().getReference().child("5139 6515").child("history").setValue(null);
+        FirebaseDatabase.getInstance().getReference().child("5660 0981").child("history").setValue(null);
+
+
         // Define what to get from citi api
 //        citiAPIBase.API_Accounts_RetrieveAccountsSummary();
 //        citiAPIBase.API_MoneyMovement_RetrieveDestSrcAcct("ALL", "");

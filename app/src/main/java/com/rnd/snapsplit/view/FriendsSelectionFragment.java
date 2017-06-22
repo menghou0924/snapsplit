@@ -86,7 +86,7 @@ public class FriendsSelectionFragment extends ListFragment {
 
         ((Toolbar) activity.findViewById(R.id.tool_bar_hamburger)).setVisibility(View.INVISIBLE);
         ((Toolbar) view.findViewById(R.id.tool_bar_process)).setVisibility(View.VISIBLE);
-        ((TextView) view.findViewById(R.id.text_title)).setText(R.string.friends_selection);
+        ((TextView) view.findViewById(R.id.text_title)).setText(R.string.split_with);
 
         Bundle bundle = this.getArguments();
         splitTransaction = (Summary) bundle.getSerializable("splitTransaction");
