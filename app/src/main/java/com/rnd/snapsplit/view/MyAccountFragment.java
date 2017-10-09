@@ -167,7 +167,7 @@ public class MyAccountFragment extends Fragment implements GoogleApiClient.OnCon
                     else if (historyType.equals(History.HISTORY_TYPE_PAYMENT_RECEIVED)) {
 //                        viewHolder.item.setBackground(ContextCompat.getDrawable(context, R.drawable.border_accent_color));
                         description = "You received $" + Float.toString(history.getShareAmount()) + " from "
-                                + Friend.getFriendByPhoneNumber(context, history.getReceipientPhoneNo()).getName()
+                                + history.getReceipientName()
                                 + " for " + history.getDescription();
                     }
                     viewHolder.description.setText(description);

@@ -84,6 +84,9 @@ public class Profile {
                         }
                     });
             accountBalance = person.optString("profile_accountBalance");
+            if (Friend.getFriendCount(context) == 1) {
+                Friend.resetFriends(context);
+            }
         }
         if (storageManager.getFile(STORAGE_FILE_NAME).isEmpty() || citiAPIManager.getEnglishName().isEmpty() || name.equals("Warren Buffett")) {
 
@@ -95,12 +98,14 @@ public class Profile {
                 displayPic = R.drawable.raymond;
                 phoneNumber = "5139 6515";
                 accountNumber = "355a515030616a53576b6a65797359506a634175764a734a3238314e4668627349486a676f7449463949453d";
+                Friend.resetFriends(context);
             }
             else if (name.equals("CARSTEN K ANDREAS")) { // Sandboxuser2
                 name = "Damian Dutkiewicz"; // transfer to
                 displayPic = R.drawable.damian;
                 phoneNumber = "5660 0981";
                 accountNumber = "7977557255484c7345546c4e53424766634b6c53756841672b556857626e395253334b70416449676b42673d";
+                Friend.resetFriends(context);
             }
             else {
                 name = "Warren Buffett";

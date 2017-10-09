@@ -33,6 +33,7 @@ public class History implements Serializable {
     private String requestorPhoneNumber = "";
     private String requestEpochDate = "";
     private String receipientPhoneNo = "";
+    private String receipientName = "";
     private String strReceiptPic="";
     private float shareAmount = 0f;
     private float totalAmount = 0f;
@@ -68,6 +69,10 @@ public class History implements Serializable {
 
     public String getRequestorName() {
         return requestorName;
+    }
+
+    public String getReceipientName() {
+        return receipientName;
     }
 
     public String getRequestorPhoneNumber() {
@@ -112,6 +117,10 @@ public class History implements Serializable {
 
     public void setRequestorName(String requestorName) {
         this.requestorName = requestorName;
+    }
+
+    public void setReceipientName(String receipientName) {
+        this.receipientName = receipientName;
     }
 
     public void setRequestorPhoneNumber(String requestorPhoneNumber) {
@@ -182,6 +191,7 @@ public class History implements Serializable {
         this.requestorPhoneNumber = paymentRequest.getRequestorPhoneNumber();
         this.requestEpochDate = paymentRequest.getRequestEpochDate();
         this.receipientPhoneNo = paymentRequest.getReceipientPhoneNo();
+        this.receipientName = (Friend.getFriendByPhoneNumber(context, paymentRequest.getReceipientPhoneNo())).getName();
         this.strReceiptPic= paymentRequest.getStrReceiptPic();
         this.shareAmount = paymentRequest.getShareAmount();
         this.totalAmount = paymentRequest.getTotalAmount();
@@ -198,6 +208,7 @@ public class History implements Serializable {
         this.requestorPhoneNumber = paymentRequest.getRequestorPhoneNumber();
         this.requestEpochDate = paymentRequest.getRequestEpochDate();
         this.receipientPhoneNo = paymentRequest.getReceipientPhoneNo();
+        this.receipientName = (Friend.getFriendByPhoneNumber(context, paymentRequest.getReceipientPhoneNo())).getName();
         this.strReceiptPic= paymentRequest.getStrReceiptPic();
         this.shareAmount = paymentRequest.getShareAmount();
         this.totalAmount = paymentRequest.getTotalAmount();

@@ -222,4 +222,9 @@ public class Friend implements Serializable {
         fd3.saveSelfToFile(ctx);
         fd4.saveSelfToFile(ctx);
     }
+
+    public static Integer getFriendCount(Context ctx) {
+        ArrayList<Friend> friendArrayList = getFriendsListFromFile(ctx);
+        return friendArrayList.size();
+    }
 }

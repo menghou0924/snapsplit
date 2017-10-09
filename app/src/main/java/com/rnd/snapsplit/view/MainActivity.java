@@ -43,10 +43,6 @@ public class MainActivity extends AppCompatActivity {
         citiAPIManager.basicDataFetch();
         profile = new Profile(this);
 
-        if ((new StorageManager(this)).isFileEmpty("FRIENDS_LIST")) {
-            Friend.resetFriends(this);
-        }
-
         toolBarHamburger = (Toolbar) findViewById(R.id.tool_bar_hamburger);
         setSupportActionBar(toolBarHamburger);
 
